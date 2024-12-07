@@ -1,0 +1,57 @@
+#pragma once
+/// 게임엔진의 헤더 모음
+
+#include "World.h"
+#include "Scene.h"
+#include "Entity.h"
+#include "Component.h"
+
+#include "Event.h"
+#include "EventListener.h"
+#include "Utility.h"
+
+// Component
+#include "BoneGroupComponent.h"
+#include "TargetBoneComponent.h"
+#include "AnimationComponent.h"
+#include "GeometryRenderer.h"
+#include "LightComponent.h"
+#include "MeshRenderer.h"
+#include "Transform.h"
+#include "Rigidbody.h"
+#include "BoxCollider.h"
+#include "CapsuleCollider.h"
+#include "SphereCollider.h"
+#include "CameraComponent.h"
+#include "LightComponent.h"
+#include "Texture2D.h"
+#include "Texture3D.h"
+#include "Text.h"
+#include "Button.h"
+#include "Collider.h"
+#include "PlaneComponent.h"
+#include "CharacterController.h"
+#include "WeaponComponent.h"
+#include "Name.h"
+#include "EquipmentComponent.h"
+#include "OutlineComponent.h"
+#include "CubeMapComponent.h"
+#include "AlphaBlendComponent.h"
+#include "FlowTextureComponent.h"
+#include "ParticleComponent.h"
+
+// manager
+#include "GameEngine.h"
+#include "IManager.h"
+#include "EventManager.h"
+#include "InputManager.h"
+#include "TimeManager.h"
+#include "SoundManager.h"
+#include "UIManager.h"
+#include "WorldManager.h"
+#include "RenderManager.h"
+// #include "PhysicsManager.h"
+#include "EntityManager.h"
+
+//
+#include "IData.h"

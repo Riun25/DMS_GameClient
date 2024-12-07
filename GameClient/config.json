@@ -1,0 +1,29 @@
+{
+    "audio": {
+        "bgmVolume": 3,
+        "masterVolume": 3,
+        "sfxVolume": 3
+    },
+    "config": {
+        "fps": 60
+    },
+    "debug": {
+        "drawCameraInfo": false,
+        "drawCollider": false,
+        "drawFps": false,
+        "flyingCamera": false,
+        "inputSceneChange": true,
+        "logging": false
+    },
+    "gameplay": {
+        "moneyAmount": 30,
+        "moneySpeed": 1.5,
+        "projectileSpeed": 1.0
+    },
+    "graphics": {
+        "drawShadow": true,
+        "fullscreen": false,
+        "screenResolution": "1920x1080",
+        "vsync": false
+    }
+}

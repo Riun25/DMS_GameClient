@@ -1,0 +1,536 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="World">
+      <UniqueIdentifier>{53382b46-8bed-40d7-a9b0-669d5c69d9d4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Component">
+      <UniqueIdentifier>{cc151c49-8850-493c-8a17-df13e64b7f6c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Manager">
+      <UniqueIdentifier>{bf28cfa0-f771-4126-8f40-1eddbea5f708}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scene">
+      <UniqueIdentifier>{c5844af4-c7cb-47e3-8ec9-7ae2d8293045}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="샘플 코드">
+      <UniqueIdentifier>{dfac5a3a-d6da-4608-8454-f0c01f585d69}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Project D">
+      <UniqueIdentifier>{33746429-e49c-467c-92f3-73d0a92491f5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Project D\GameProcessor">
+      <UniqueIdentifier>{331fcddd-8571-413e-90bb-ccba74428368}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Documents">
+      <UniqueIdentifier>{7bd1eced-7a33-48c6-8b9e-44e101a91015}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PhysicsObjects">
+      <UniqueIdentifier>{8481af93-f037-4de2-9d4b-8077760588ac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PhysicsObjects\CallBack">
+      <UniqueIdentifier>{0181b739-fdd7-4605-91fd-152a1f491a65}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PhysicsObjects\Filter">
+      <UniqueIdentifier>{3ab871a6-7d2b-43e0-ae5a-254e638ec0bd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="FSM">
+      <UniqueIdentifier>{7e4fa6c2-3adb-46e1-b3c7-86ed4f927616}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="System">
+      <UniqueIdentifier>{5e4aabfe-6507-4d51-94b3-d2b60344bf5a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="FSM\Boss">
+      <UniqueIdentifier>{a80a3087-b646-4e4f-ab3e-49a1f0e22b61}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="System\Status">
+      <UniqueIdentifier>{fd69364b-a328-44ca-88f8-60eed30bfd90}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="System\WeaponSystem">
+      <UniqueIdentifier>{89ad2dae-d041-44de-b51f-5c350327b459}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="System\Equipment">
+      <UniqueIdentifier>{70beb872-79e8-4a98-a3b5-5724b7cfad1b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scene\TestScene">
+      <UniqueIdentifier>{d7359d41-12a2-49e8-bebb-3c4703f5c4de}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="World\UserData">
+      <UniqueIdentifier>{3bd0e24b-b7d6-472d-a2d4-24d9fe22853a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Project D\Resource">
+      <UniqueIdentifier>{da4e623c-3b4e-4bd2-9569-c2e49d7e3fd8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scene\SceneData">
+      <UniqueIdentifier>{b4c6a0b8-ab7a-430a-bbd2-7f8a3f1e50f3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Level">
+      <UniqueIdentifier>{b617a994-75b3-436a-8d04-ce82ada109c1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="FSM\Common">
+      <UniqueIdentifier>{0b3b172a-49f9-4d61-8b46-f162ae49c7fb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="FSM\EnemyState">
+      <UniqueIdentifier>{5b2ccf28-e17b-4e20-80ba-04d3f7f3f6f2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="FSM\Player">
+      <UniqueIdentifier>{d662e6d2-b0f8-4d37-bef3-08eac1cab044}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="FSM\Player\States">
+      <UniqueIdentifier>{b2062ab5-9cf5-4bc2-a8b8-a7ed62ff27bc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Table">
+      <UniqueIdentifier>{ade82657-0b1d-412b-ad09-6397839f44d0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="System\Unit">
+      <UniqueIdentifier>{f946b9ff-ff04-47e8-91c4-e6ca4ef8f195}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="System\Unit\NPC">
+      <UniqueIdentifier>{0b43772a-32a5-4756-a0ae-fd29577f3918}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="System\Unit\Player">
+      <UniqueIdentifier>{067903fa-9454-4a18-b6a8-9d41b2cdcd60}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Enum">
+      <UniqueIdentifier>{1dc22ad1-ba2f-40aa-b0ad-1e5a9cdf0804}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scene\Stage">
+      <UniqueIdentifier>{f4b4ae45-6a2a-4fc9-b0c3-d218fdb73b6a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scene\BasicScene">
+      <UniqueIdentifier>{f6be61bf-4e8e-488d-8d1c-5dd5962ab836}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="GameWorld.cpp">
+      <Filter>World</Filter>
+    </ClCompile>
+    <ClCompile Include="SampleManager.cpp">
+      <Filter>샘플 코드</Filter>
+    </ClCompile>
+    <ClCompile Include="SampleScene.cpp">
+      <Filter>샘플 코드</Filter>
+    </ClCompile>
+    <ClCompile Include="Project D.cpp">
+      <Filter>Project D</Filter>
+    </ClCompile>
+    <ClCompile Include="GameProcessor.cpp">
+      <Filter>Project D\GameProcessor</Filter>
+    </ClCompile>
+    <ClCompile Include="CustomCallback.cpp">
+      <Filter>PhysicsObjects\CallBack</Filter>
+    </ClCompile>
+    <ClCompile Include="CustomFilter.cpp">
+      <Filter>PhysicsObjects\Filter</Filter>
+    </ClCompile>
+    <ClCompile Include="Transition.cpp">
+      <Filter>FSM</Filter>
+    </ClCompile>
+    <ClCompile Include="AttackState.cpp">
+      <Filter>FSM\Player\States</Filter>
+    </ClCompile>
+    <ClCompile Include="DeadState.cpp">
+      <Filter>FSM\Player\States</Filter>
+    </ClCompile>
+    <ClCompile Include="IdleState.cpp">
+      <Filter>FSM\Player\States</Filter>
+    </ClCompile>
+    <ClCompile Include="MoveState.cpp">
+      <Filter>FSM\Player\States</Filter>
+    </ClCompile>
+    <ClCompile Include="AStar.cpp">
+      <Filter>FSM</Filter>
+    </ClCompile>
+    <ClCompile Include="GameOverScene.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerSystem.cpp">
+      <Filter>System\Unit\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="ClassManager.cpp">
+      <Filter>System\Status</Filter>
+    </ClCompile>
+    <ClCompile Include="MoneyComponent.h">
+      <Filter>Component</Filter>
+    </ClCompile>
+    <ClCompile Include="BossFSM.cpp">
+      <Filter>FSM\Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="LootState.cpp">
+      <Filter>FSM\Player\States</Filter>
+    </ClCompile>
+    <ClCompile Include="StatusManager.cpp">
+      <Filter>System\Status</Filter>
+    </ClCompile>
+    <ClCompile Include="DamagedState.cpp">
+      <Filter>FSM\Player\States</Filter>
+    </ClCompile>
+    <ClCompile Include="CustomFunctions.cpp">
+      <Filter>FSM</Filter>
+    </ClCompile>
+    <ClCompile Include="ProjectileSystem.cpp">
+      <Filter>System\WeaponSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="WeaponManager.cpp">
+      <Filter>System\WeaponSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="EquipmentManager.cpp">
+      <Filter>System\Equipment</Filter>
+    </ClCompile>
+    <ClCompile Include="AnimationTestScene.cpp">
+      <Filter>Scene\TestScene</Filter>
+    </ClCompile>
+    <ClCompile Include="BattleScene.cpp">
+      <Filter>Scene\TestScene</Filter>
+    </ClCompile>
+    <ClCompile Include="TutorialScene.cpp">
+      <Filter>Scene\TestScene</Filter>
+    </ClCompile>
+    <ClCompile Include="TutorialScene2.cpp">
+      <Filter>Scene\TestScene</Filter>
+    </ClCompile>
+    <ClCompile Include="ShoppingScene.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneData.cpp">
+      <Filter>Scene\SceneData</Filter>
+    </ClCompile>
+    <ClCompile Include="LevelManager.cpp">
+      <Filter>Level</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyData.h">
+      <Filter>Level</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyFSM.cpp">
+      <Filter>FSM</Filter>
+    </ClCompile>
+    <ClCompile Include="AllyFSM.cpp">
+      <Filter>FSM</Filter>
+    </ClCompile>
+    <ClCompile Include="AttackStateE.cpp">
+      <Filter>FSM\EnemyState</Filter>
+    </ClCompile>
+    <ClCompile Include="DamagedStateE.cpp">
+      <Filter>FSM\EnemyState</Filter>
+    </ClCompile>
+    <ClCompile Include="DeadStateE.cpp">
+      <Filter>FSM\EnemyState</Filter>
+    </ClCompile>
+    <ClCompile Include="IdleStateE.cpp">
+      <Filter>FSM\EnemyState</Filter>
+    </ClCompile>
+    <ClCompile Include="LootStateE.cpp">
+      <Filter>FSM\EnemyState</Filter>
+    </ClCompile>
+    <ClCompile Include="MoveStateE.cpp">
+      <Filter>FSM\EnemyState</Filter>
+    </ClCompile>
+    <ClCompile Include="FSMHelper.cpp">
+      <Filter>FSM</Filter>
+    </ClCompile>
+    <ClCompile Include="NPCSystem.cpp">
+      <Filter>System\Unit\NPC</Filter>
+    </ClCompile>
+    <ClCompile Include="CharacterMeshInfo.h">
+      <Filter>Table</Filter>
+    </ClCompile>
+    <ClCompile Include="WeaponMeshInfo.h">
+      <Filter>Table</Filter>
+    </ClCompile>
+    <ClCompile Include="EquipmentMeshInfo.h">
+      <Filter>Table</Filter>
+    </ClCompile>
+    <ClCompile Include="NPCMeshInfo.h">
+      <Filter>Table</Filter>
+    </ClCompile>
+    <ClCompile Include="StatusTable.h">
+      <Filter>Table</Filter>
+    </ClCompile>
+    <ClCompile Include="UnitSystem.cpp">
+      <Filter>System\Unit</Filter>
+    </ClCompile>
+    <ClCompile Include="UITable.h">
+      <Filter>Table</Filter>
+    </ClCompile>
+    <ClCompile Include="FadeInOut.cpp">
+      <Filter>Component</Filter>
+    </ClCompile>
+    <ClCompile Include="CreditScene.cpp">
+      <Filter>Scene\BasicScene</Filter>
+    </ClCompile>
+    <ClCompile Include="LoadingScene.cpp">
+      <Filter>Scene\BasicScene</Filter>
+    </ClCompile>
+    <ClCompile Include="LogoScene.cpp">
+      <Filter>Scene\BasicScene</Filter>
+    </ClCompile>
+    <ClCompile Include="MainMenuScene.cpp">
+      <Filter>Scene\BasicScene</Filter>
+    </ClCompile>
+    <ClCompile Include="StageScene1_2.cpp">
+      <Filter>Scene\Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="StageScene1_3.cpp">
+      <Filter>Scene\Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="ExampleScene.cpp">
+      <Filter>Scene\BasicScene</Filter>
+    </ClCompile>
+    <ClCompile Include="UserData.cpp">
+      <Filter>World\UserData</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="GameWorld.h">
+      <Filter>World</Filter>
+    </ClInclude>
+    <ClInclude Include="SampleComponent.h">
+      <Filter>샘플 코드</Filter>
+    </ClInclude>
+    <ClInclude Include="SampleManager.h">
+      <Filter>샘플 코드</Filter>
+    </ClInclude>
+    <ClInclude Include="SampleScene.h">
+      <Filter>샘플 코드</Filter>
+    </ClInclude>
+    <ClInclude Include="GameProcessor.h">
+      <Filter>Project D\GameProcessor</Filter>
+    </ClInclude>
+    <ClInclude Include="TempComponent.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="ProjectileComponent.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="CustomCallback.h">
+      <Filter>PhysicsObjects\CallBack</Filter>
+    </ClInclude>
+    <ClInclude Include="CustomFilter.h">
+      <Filter>PhysicsObjects\Filter</Filter>
+    </ClInclude>
+    <ClInclude Include="AttackState.h">
+      <Filter>FSM\Player\States</Filter>
+    </ClInclude>
+    <ClInclude Include="Transition.h">
+      <Filter>FSM</Filter>
+    </ClInclude>
+    <ClInclude Include="DeadState.h">
+      <Filter>FSM\Player\States</Filter>
+    </ClInclude>
+    <ClInclude Include="IdleState.h">
+      <Filter>FSM\Player\States</Filter>
+    </ClInclude>
+    <ClInclude Include="MoveState.h">
+      <Filter>FSM\Player\States</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerComponent.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyComponent.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="AStar.h">
+      <Filter>FSM</Filter>
+    </ClInclude>
+    <ClInclude Include="GameOverScene.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerSystem.h">
+      <Filter>System\Unit\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="ClassManager.h">
+      <Filter>System\Status</Filter>
+    </ClInclude>
+    <ClInclude Include="MoneyGunComponent.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="BossFSM.h">
+      <Filter>FSM\Boss</Filter>
+    </ClInclude>
+    <ClInclude Include="LootState.h">
+      <Filter>FSM\Player\States</Filter>
+    </ClInclude>
+    <ClInclude Include="StatusManager.h">
+      <Filter>System\Status</Filter>
+    </ClInclude>
+    <ClInclude Include="DamagedState.h">
+      <Filter>FSM\Player\States</Filter>
+    </ClInclude>
+    <ClInclude Include="CustomFunctions.h">
+      <Filter>FSM</Filter>
+    </ClInclude>
+    <ClInclude Include="ProjectileSystem.h">
+      <Filter>System\WeaponSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="WeaponManager.h">
+      <Filter>System\WeaponSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="WeaponCollider.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="EquipmentManager.h">
+      <Filter>System\Equipment</Filter>
+    </ClInclude>
+    <ClInclude Include="AnimationTestScene.h">
+      <Filter>Scene\TestScene</Filter>
+    </ClInclude>
+    <ClInclude Include="BattleScene.h">
+      <Filter>Scene\TestScene</Filter>
+    </ClInclude>
+    <ClInclude Include="TutorialScene2.h">
+      <Filter>Scene\TestScene</Filter>
+    </ClInclude>
+    <ClInclude Include="TutorialScene.h">
+      <Filter>Scene\TestScene</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerData.h">
+      <Filter>World\UserData</Filter>
+    </ClInclude>
+    <ClInclude Include="UserData.h">
+      <Filter>World\UserData</Filter>
+    </ClInclude>
+    <ClInclude Include="ShoppingScene.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneData.h">
+      <Filter>Scene\SceneData</Filter>
+    </ClInclude>
+    <ClInclude Include="LevelManager.h">
+      <Filter>Level</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyFSM.h">
+      <Filter>FSM</Filter>
+    </ClInclude>
+    <ClInclude Include="AllyFSM.h">
+      <Filter>FSM</Filter>
+    </ClInclude>
+    <ClInclude Include="AttackStateE.h">
+      <Filter>FSM\EnemyState</Filter>
+    </ClInclude>
+    <ClInclude Include="DamagedStateE.h">
+      <Filter>FSM\EnemyState</Filter>
+    </ClInclude>
+    <ClInclude Include="DeadStateE.h">
+      <Filter>FSM\EnemyState</Filter>
+    </ClInclude>
+    <ClInclude Include="IdleStateE.h">
+      <Filter>FSM\EnemyState</Filter>
+    </ClInclude>
+    <ClInclude Include="LootStateE.h">
+      <Filter>FSM\EnemyState</Filter>
+    </ClInclude>
+    <ClInclude Include="MoveStateE.h">
+      <Filter>FSM\EnemyState</Filter>
+    </ClInclude>
+    <ClInclude Include="IState.h">
+      <Filter>FSM\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="FSMHelper.h">
+      <Filter>FSM</Filter>
+    </ClInclude>
+    <ClInclude Include="IndicatorComponent.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="NPCSystem.h">
+      <Filter>System\Unit\NPC</Filter>
+    </ClInclude>
+    <ClInclude Include="NPCComponent.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="UnitSystem.h">
+      <Filter>System\Unit</Filter>
+    </ClInclude>
+    <ClInclude Include="MapData.h">
+      <Filter>Table</Filter>
+    </ClInclude>
+    <ClInclude Include="FadeInOut.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="GameStateEnum.h">
+      <Filter>Enum</Filter>
+    </ClInclude>
+    <ClInclude Include="StateEnum.h">
+      <Filter>Enum</Filter>
+    </ClInclude>
+    <ClInclude Include="FilterEnum.h">
+      <Filter>Enum</Filter>
+    </ClInclude>
+    <ClInclude Include="LayerEnum.h">
+      <Filter>Enum</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneNumEnum.h">
+      <Filter>Enum</Filter>
+    </ClInclude>
+    <ClInclude Include="CreditScene.h">
+      <Filter>Scene\BasicScene</Filter>
+    </ClInclude>
+    <ClInclude Include="LoadingScene.h">
+      <Filter>Scene\BasicScene</Filter>
+    </ClInclude>
+    <ClInclude Include="LogoScene.h">
+      <Filter>Scene\BasicScene</Filter>
+    </ClInclude>
+    <ClInclude Include="MainMenuScene.h">
+      <Filter>Scene\BasicScene</Filter>
+    </ClInclude>
+    <ClInclude Include="StageScene1_2.h">
+      <Filter>Scene\Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="StageScene1_3.h">
+      <Filter>Scene\Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="ExampleScene.h">
+      <Filter>Scene\BasicScene</Filter>
+    </ClInclude>
+    <ClInclude Include="TutotialTextTable.h">
+      <Filter>Table</Filter>
+    </ClInclude>
+    <ClInclude Include="TutorialEnum.h">
+      <Filter>Enum</Filter>
+    </ClInclude>
+    <ClInclude Include="EasingType.h">
+      <Filter>Enum</Filter>
+    </ClInclude>
+    <ClInclude Include="CameraPosition.h">
+      <Filter>Enum</Filter>
+    </ClInclude>
+    <ClInclude Include="EasingComponent.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneTable.h">
+      <Filter>Table</Filter>
+    </ClInclude>
+    <ClInclude Include="ShrinkRectComponent.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="ShrinkEffectComponent.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Project D\Resource</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\엔티티,컴포넌트,이벤트 생성시 주의사항.txt">
+      <Filter>Documents</Filter>
+    </Text>
+    <Text Include="텍스트.txt">
+      <Filter>PhysicsObjects\Filter</Filter>
+    </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassTypeEnum.h">
+      <Filter>Enum</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="DMC_Merc.ico">
+      <Filter>Project D\Resource</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Resource.rc">
+      <Filter>Project D\Resource</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+</Project>

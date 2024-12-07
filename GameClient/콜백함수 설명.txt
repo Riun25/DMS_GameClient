@@ -1,0 +1,49 @@
+1. 충돌 했는가를 확인 하는 방법
+
+void CustomCallback::onContact(const physx::PxContactPairHeader& _pairHeader, const physx::PxContactPair* _pairs, physx::PxU32 _nbPairs)
+{
+	DLOG(LOG_INFO, "onContact");
+	for (physx::PxU32 i = 0; i < _nbPairs; i++)
+	{
+		const physx::PxContactPair& cp = _pairs[i];
+
+		if (cp.events & physx::PxPairFlag::eNOTIFY_TOUCH_FOUND)
+		{
+			physx::PxRigidActor* actor0 = _pairHeader.actors[0]->is<physx::PxRigidActor>();
+			physx::PxRigidActor* actor1 = _pairHeader.actors[1]->is<physx::PxRigidActor>();
+
+			if (actor0 && actor1)
+			{
+				physx::PxShape* shape0[1];
+				physx::PxShape* shape1[1];
+
+				actor0->getShapes(shape0, 1);
+				actor1->getShapes(shape1, 1);
+
+				physx::PxFilterData filterData0 = shape0[0]->getSimulationFilterData();
+				physx::PxFilterData filterData1 = shape1[0]->getSimulationFilterData();
+
+				if ((filterData0.word0 & TYPE_GROUND) || (filterData1.word0 & TYPE_GROUND))
+				{
+					filterData0.word1 |= ATTR_ON_GROUND;
+					filterData1.word1 |= ATTR_ON_GROUND;
+
+					// 필터 데이터 수정 요청을 큐에 추가
+					m_pPhysicsManager->QueueFilterDataUpdate(shape0[0], filterData0);
+					m_pPhysicsManager->QueueFilterDataUpdate(shape1[0], filterData1);
+				}
+			}
+		}
+	}
+
+
+}
+
+위 함수에서 
+filterData0.word1 |= ATTR_ON_GROUND;
+filterData1.word1 |= ATTR_ON_GROUND;
+
+이 부분에 해당 객체에 영향을 줄 내용(on ground 설정 등)을 추가
+추가할 필터는 FilterEnum.h에서 CollisionAttribute에 추가하면 됨
+
+혹은 연결되어있는 피직스 매니저를 직접 사용하여 해당 actor에 직접 add force를 할 수도 있음

@@ -1,0 +1,22 @@
+#pragma once
+#include "Component.h"
+
+/// <summary>
+/// ¹Ú½º, ±¸Ã¼, Ä¸½¶µîÀ» ·»´õ¸µÇÏ´Â ÄÄÆ÷³ÍÆ®ÀÔ´Ï´Ù.
+/// ¾È¾¸
+/// </summary>
+/*
+struct GeometryRenderer 
+	: public Component
+{
+public:
+	std::shared_ptr<Component> Clone() const override
+	{
+		return std::make_shared<GeometryRenderer>(*this);
+	}
+
+public:
+	std::string m_file;
+
+};
+*/
