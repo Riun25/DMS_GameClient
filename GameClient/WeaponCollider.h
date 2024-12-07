@@ -17,5 +17,5 @@ public:
 	}
 
 public:
-	AABB m_weaponAABB;
+	AABB mWeaponAABB;
 };

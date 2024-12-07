@@ -13,7 +13,7 @@ struct AlphaBlendComponent
 {
 public:
 	AlphaBlendComponent(std::shared_ptr<Entity> _owner, float _alpha = 1.f)
-		: Component(_owner), m_alpha(_alpha)
+		: Component(_owner), mAlpha(_alpha)
 	{
 	}
 
@@ -23,5 +23,5 @@ public:
 	}
 
 public:
-	float m_alpha = 1.f;
+	float mAlpha = 1.f;
 };

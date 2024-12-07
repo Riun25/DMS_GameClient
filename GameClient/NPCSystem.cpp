@@ -160,14 +160,14 @@ void NPCSystem::TutorialUpdate(std::shared_ptr<Entity> _entity, int _textIdx)
 		switch (_textIdx)
 		{
 		case 0:
-			trsComp.m_localRotation.y = DirectX::XMConvertToRadians(60.f);
+			trsComp.mLocalRotation.y = DirectX::XMConvertToRadians(60.f);
 			animationComp.mpTargetAnimation = mpResourceManager->Get_Animation("Character@Wave Bare Hands.fbx");
 		break;
 		case 1:
 			animationComp.mpTargetAnimation = mpResourceManager->Get_Animation("Character@Cast Spell 01.fbx");
 			break;
 		case 3:
-			trsComp.m_localRotation.y = DirectX::XMConvertToRadians(-90.f);
+			trsComp.mLocalRotation.y = DirectX::XMConvertToRadians(-90.f);
 			break;
 		case 4:
 			animationComp.mpTargetAnimation = mpResourceManager->Get_Animation("Character@Shake Head.fbx");
@@ -179,11 +179,11 @@ void NPCSystem::TutorialUpdate(std::shared_ptr<Entity> _entity, int _textIdx)
 			animationComp.mpTargetAnimation = mpResourceManager->Get_Animation("Character@Nod Head.fbx");
 			break;
 		case 10:
-			trsComp.m_localRotation.y = DirectX::XMConvertToRadians(60.f);
+			trsComp.mLocalRotation.y = DirectX::XMConvertToRadians(60.f);
 			animationComp.mpTargetAnimation = mpResourceManager->Get_Animation("Character@ShurikenAttack.fbx");
 			break;
 		case 12:
-			trsComp.m_localRotation.y = DirectX::XMConvertToRadians(-90.f);
+			trsComp.mLocalRotation.y = DirectX::XMConvertToRadians(-90.f);
 			animationComp.mpTargetAnimation = mpResourceManager->Get_Animation("Character@Clapping.fbx");
 			break;
 		case 19:
@@ -193,14 +193,14 @@ void NPCSystem::TutorialUpdate(std::shared_ptr<Entity> _entity, int _textIdx)
 			animationComp.mpTargetAnimation = mpResourceManager->Get_Animation("Character@Damaged.fbx");
 			break;
 		case 28:
-			trsComp.m_localRotation.y = DirectX::XMConvertToRadians(60.f);
+			trsComp.mLocalRotation.y = DirectX::XMConvertToRadians(60.f);
 			animationComp.mpTargetAnimation = mpResourceManager->Get_Animation("Character@Cast Spell 02.FBX");
 			break;
 		case 34:
 			animationComp.mpTargetAnimation = mpResourceManager->Get_Animation("Character@Cast Spell 02.FBX");
 			break;
 		case 35:
-			trsComp.m_localRotation.y = DirectX::XMConvertToRadians(-90.f);
+			trsComp.mLocalRotation.y = DirectX::XMConvertToRadians(-90.f);
 			animationComp.mpTargetAnimation = mpResourceManager->Get_Animation("Character@Idle.fbx");
 			break;
 		default:

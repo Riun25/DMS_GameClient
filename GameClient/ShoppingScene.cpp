@@ -7,9 +7,9 @@ ShoppingScene::ShoppingScene(entt::registry& _registry, const std::string& _name
 	, ResourceManager* _pResourceManager, SoundManager* _pSoundManager)
 	:Scene(_registry, _name, _pEventManager, _pRenderManager, _pInpueManager, _worldManager)
 {
-	m_pUIManager = _UIManager;
-	m_pSoundManager = _pSoundManager;
-	m_pEntityManager = _pEntityManager;
+	mpUIManager = _UIManager;
+	mpSoundManager = _pSoundManager;
+	mpEntityManager = _pEntityManager;
 }
 
 bool ShoppingScene::Initialize()

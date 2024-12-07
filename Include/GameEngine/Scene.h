@@ -129,21 +129,21 @@ public:
 	IData* GetSceneData() const;
 
 protected:
-	UID m_uid;														// 씬의 고유 식별자
-	std::string m_sceneName;										// 씬의 이름
+	UID mUid;														// 씬의 고유 식별자
+	std::string mSceneName;										// 씬의 이름
 	//std::unordered_map<UID, std::shared_ptr<Entity>> m_pEntities;	// 씬에 존재하는 엔티티 맵핑
-	entt::registry& m_registry;										// 엔티티 레지스트리
+	entt::registry& mRegistry;										// 엔티티 레지스트리
 	// 	std::vector<std::shared_ptr<System>> m_pSystems;				// 씬에 존재하는 시스템 목록
 
-	RenderManager* m_pRenderManager;
-	PhysicsManager* m_pPhysicsManager;
-	InputManager* m_pInputManager;
-	WorldManager* m_pWorldManager;
-	UIManager* m_pUIManager;
-	SoundManager* m_pSoundManager;
-	EntityManager* m_pEntityManager;
-	ResourceManager* m_pResourceManager;
+	RenderManager* mpRenderManager;
+	PhysicsManager* mpPhysicsManager;
+	InputManager* mpInputManager;
+	WorldManager* mpWorldManager;
+	UIManager* mpUIManager;
+	SoundManager* mpSoundManager;
+	EntityManager* mpEntityManager;
+	ResourceManager* mpResourceManager;
 
-	IData* m_pSceneData;
+	IData* mpSceneData;
 };
 

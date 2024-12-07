@@ -15,18 +15,18 @@ public:
 
 	// 이벤트의 이름과 이벤트 데이터를 매개변수로 받는 생성자, data의 디폴트값은 null입니다.
 	Event(const std::string& _name, EventData _data = std::nullopt)
-		:m_name(_name), m_data(_data)
+		:mName(_name), mData(_data)
 	{
 	}
 
 	template <typename T>
 	std::optional<T> GetDataAs() const
 	{
-		if (m_data->has_value())
+		if (mData->has_value())
 		{
 			try
 			{
-				return std::any_cast<T>(m_data.value());
+				return std::any_cast<T>(mData.value());
 			}
 			catch (const std::bad_any_cast& e)
 			{
@@ -36,10 +36,10 @@ public:
 		return std::nullopt;
 	}	
 
-	std::string m_name;	// 이벤트 이름
+	std::string mName;	// 이벤트 이름
 
 private:
-	EventData m_data = std::nullopt;	// 이벤트 처리에 사용되는 데이터
+	EventData mData = std::nullopt;	// 이벤트 처리에 사용되는 데이터
 
 	friend class EventManager;
 	friend class EventListener;

@@ -42,13 +42,13 @@ public:
 
 		for (auto& key : keys)
 		{
-			m_keyInfos[key] = KeyInfo();
+			mKeyInfos[key] = KeyInfo();
 		}
 	}
 
 	~Keyboard()
 	{
-		m_keyInfos.clear();
+		mKeyInfos.clear();
 	}
 
 	// 키보드 상태 업데이트
@@ -58,7 +58,7 @@ public:
 
 		if (hWnd != nullptr)
 		{
-			for (auto& key : m_keyInfos)
+			for (auto& key : mKeyInfos)
 			{
 				if (GetAsyncKeyState(static_cast<int>(key.first)) & 0x8000)
 				{
@@ -76,7 +76,7 @@ public:
 		}
 		else
 		{
-			for (auto& key : m_keyInfos)
+			for (auto& key : mKeyInfos)
 			{
 				key.second.isPushed = false;
 				if (KEY_STATE::TAP == key.second.keyState
@@ -95,14 +95,14 @@ public:
 	// 키의 정보를 반환
 	virtual KeyInfo GetKeyInfo(KEY _key) const override
 	{
-		if (m_keyInfos.find(_key) != m_keyInfos.end())
+		if (mKeyInfos.find(_key) != mKeyInfos.end())
 		{
-			return m_keyInfos.find(_key)->second;
+			return mKeyInfos.find(_key)->second;
 		}
 	}
 
 private:
-	std::map<KEY, KeyInfo> m_keyInfos;
+	std::map<KEY, KeyInfo> mKeyInfos;
 
 };
 
@@ -122,29 +122,29 @@ public:
 
 		for (auto& key : keys)
 		{
-			m_keyInfos[key] = KeyInfo();
+			mKeyInfos[key] = KeyInfo();
 		}
 	}
 
 	~Mouse()
 	{
-		m_keyInfos.clear();
+		mKeyInfos.clear();
 	}
 
 	virtual void Update() override
 	{
 		HWND hWnd = GetFocus();
 
-		m_prevPosition = m_currentPosition;
+		mPrevPosition = mCurrentPosition;
 		POINT temp;
 		GetCursorPos(&temp);
 		ScreenToClient(hWnd, &temp);
-		m_currentPosition = Vector2(static_cast<float>(temp.x), static_cast<float>(temp.y));
+		mCurrentPosition = Vector2(static_cast<float>(temp.x), static_cast<float>(temp.y));
 
 		// 마우스 상태 업데이트
 		if (hWnd != nullptr)
 		{
-			for (auto& key : m_keyInfos)
+			for (auto& key : mKeyInfos)
 			{
 				if (GetAsyncKeyState(static_cast<int>(key.first)) & 0x8000)
 				{
@@ -162,7 +162,7 @@ public:
 		}
 		else
 		{
-			for (auto& key : m_keyInfos)
+			for (auto& key : mKeyInfos)
 			{
 				key.second.isPushed = false;
 				if (KEY_STATE::TAP == key.second.keyState
@@ -181,28 +181,28 @@ public:
 	// 키의 정보를 반환
 	virtual KeyInfo GetKeyInfo(KEY _key) const override
 	{
-		if (m_keyInfos.find(_key) != m_keyInfos.end())
+		if (mKeyInfos.find(_key) != mKeyInfos.end())
 		{
-			return m_keyInfos.find(_key)->second;
+			return mKeyInfos.find(_key)->second;
 		}
 	}
 
 	// 마우스의 위치 반환
 	Vector2 GetMousePos() const
 	{
-		return m_currentPosition;
+		return mCurrentPosition;
 	}
 
 	// 이전 프레임과 현재 프레임의 마우스의 위치 차이 반환
 	Vector2 GetDeltaMousePos() const
 	{
-		return m_currentPosition - m_prevPosition;
+		return mCurrentPosition - mPrevPosition;
 	}
 
 private:
-	std::map<KEY, KeyInfo> m_keyInfos;
-	Vector2 m_currentPosition;
-	Vector2 m_prevPosition;
+	std::map<KEY, KeyInfo> mKeyInfos;
+	Vector2 mCurrentPosition;
+	Vector2 mPrevPosition;
 
 };
 
@@ -223,7 +223,7 @@ public:
 
 		for (auto& key : keys)
 		{
-			m_keyInfos[key] = KeyInfo();
+			mKeyInfos[key] = KeyInfo();
 		}
 	}
 
@@ -234,7 +234,7 @@ public:
 
 		if (hWnd != nullptr)
 		{
-			for (auto& key : m_keyInfos)
+			for (auto& key : mKeyInfos)
 			{
 				if (GetAsyncKeyState(static_cast<int>(key.first)) & 0x8000)
 				{
@@ -252,7 +252,7 @@ public:
 		}
 		else
 		{
-			for (auto& key : m_keyInfos)
+			for (auto& key : mKeyInfos)
 			{
 				key.second.isPushed = false;
 				if (KEY_STATE::TAP == key.second.keyState
@@ -269,6 +269,6 @@ public:
 	}
 
 private:
-	std::map<KEY, KeyInfo> m_keyInfos;
+	std::map<KEY, KeyInfo> mKeyInfos;
 
 };

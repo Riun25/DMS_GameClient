@@ -3,15 +3,15 @@
 AStar::AStar()
 {
 	// sqrt(2) 중간 우선
-	directions[0] = Vector2(1, 1);
-	directions[1] = Vector2(1, -1);
-	directions[2] = Vector2(-1, 1);
-	directions[3] = Vector2(-1, -1);
+	mDirections[0] = Vector2(1, 1);
+	mDirections[1] = Vector2(1, -1);
+	mDirections[2] = Vector2(-1, 1);
+	mDirections[3] = Vector2(-1, -1);
 	// sqrt(1) 후순위
-	directions[4] = Vector2(1, 0);
-	directions[5] = Vector2(-1, 0);
-	directions[6] = Vector2(0, 1);
-	directions[7] = Vector2(0, -1);
+	mDirections[4] = Vector2(1, 0);
+	mDirections[5] = Vector2(-1, 0);
+	mDirections[6] = Vector2(0, 1);
+	mDirections[7] = Vector2(0, -1);
 
 	tempObstacles = nullptr;
 }
@@ -130,7 +130,7 @@ std::vector<Vector2>* AStar::BasicAstar(Vector2& _startPoint, Vector2& _goalPoin
 
 		//GetDirections();
 
-		for (const auto& dir : directions)
+		for (const auto& dir : mDirections)
 		{
 
 			Vector2 neighborPos = currentNode->position + dir;

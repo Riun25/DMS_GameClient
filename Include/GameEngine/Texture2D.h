@@ -16,8 +16,8 @@ public:
 	Texture2D(std::shared_ptr<Entity> _owner, const std::string& _file = "", const Vector2& _position = Vector2()
 		, const Vector2& _size = Vector2(1.f), const int& _layer = 0, const Vector4& _rgba = Vector4(1.0f, 1.0f, 1.0f, 1.0f)
 		, const bool& _isVisible = true, const bool& _hasDepth = false)
-		: Component(_owner), m_file(_file), m_position(_position), m_size(_size), m_layer(_layer), 
-		m_isVisible(_isVisible), m_rgba(_rgba), m_hasDepth(_hasDepth)
+		: Component(_owner), mFile(_file), mPosition(_position), mSize(_size), mLayer(_layer), 
+		mIsVisible(_isVisible), mRgba(_rgba), mHasDepth(_hasDepth)
 	{}
 
 	std::shared_ptr<Component> Clone() const override
@@ -26,11 +26,11 @@ public:
 	}
 
 public:
-	std::string m_file; // 파일명
-	Vector2 m_position; // 위치값은 좌측 상당 기준이다.
-	Vector2 m_size;		// 가로, 세로
-	int m_layer;		// 숫자가 클수록 뒤에 그려집니다.
-	Vector4 m_rgba;		// RGBA 값, 이미지는 RGB가 기본 1이어야 하고, A는 알파값이다.
-	bool m_isVisible;	// 렌더러에서만 사용할 변수로, true일 때만 그린다.
-	bool m_hasDepth;	// 3D 공간에서 z축으로 깊이감을 줘야 하면 사용한다.
+	std::string mFile; // 파일명
+	Vector2 mPosition; // 위치값은 좌측 상당 기준이다.
+	Vector2 mSize;		// 가로, 세로
+	int mLayer;		// 숫자가 클수록 뒤에 그려집니다.
+	Vector4 mRgba;		// RGBA 값, 이미지는 RGB가 기본 1이어야 하고, A는 알파값이다.
+	bool mIsVisible;	// 렌더러에서만 사용할 변수로, true일 때만 그린다.
+	bool mHasDepth;	// 3D 공간에서 z축으로 깊이감을 줘야 하면 사용한다.
 };

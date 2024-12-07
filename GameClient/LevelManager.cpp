@@ -60,10 +60,10 @@ void LevelManager::InitializeforNoneFbx(const UID& _sceneUID)
 void LevelManager::Initialize(const UID& _sceneUID)
 {
 	mCurrentSceneUID = _sceneUID;
-	currentLevelState = GameState::NORMAL;
-	currentSettingState = SettingState::NORMAL;
-	currentPopUpState = PopUpState::NORMAL;
-	currentUIAniState = UIAnimationState::NORMAL;
+	mCurrentLevelState = GameState::NORMAL;
+	mCurrentSettingState = SettingState::NORMAL;
+	mCurrentPopUpState = PopUpState::NORMAL;
+	mCurrentUIAniState = UIAnimationState::NORMAL;
 
 	mIsGameStart = false;
 	mIsOneDeploySet = false;
@@ -76,7 +76,7 @@ void LevelManager::Initialize(const UID& _sceneUID)
 	mIsSkip = false;
 	mIsRestart = false;
 	mClassName = "";
-	tempTime = 0.0f;
+	mPassedTime = 0.0f;
 	mStartPoint = mpAstar->GetMapStartPoint();
 	mEndPoint = mpAstar->GetMapEndPoint();
 	mTutorialFlag = false;
@@ -153,7 +153,7 @@ void LevelManager::DisablePlaceIndicator()
 	auto view = mRegistry.view<IndicatorComponent, OutlineComponent>();
 	for (auto& entity : view)
 	{
-		auto& name = mRegistry.get<Name>(entity).m_name;
+		auto& name = mRegistry.get<Name>(entity).mName;
 		if (name == "placeIndicator")
 		{
 			mpEntityManager->RemoveEntity(static_cast<UID>(entity));
@@ -166,11 +166,11 @@ void LevelManager::AddLight()
 	auto lightEntity = mpEntityManager->CreateEntity("LightGroup");
 	auto& lightComp = lightEntity->AddComponent<LightComponent>();
 
-	mpRenderManager->LightInitialize(&lightComp.m_commonConstData, 1);
-	mpRenderManager->SetDirLight(&lightComp.m_commonConstData, 0, 1.0f, Vector3(0.488983, -0.718127, 0.495166));
-	mpRenderManager->PrintLightInfo(&lightComp.m_commonConstData);
+	mpRenderManager->LightInitialize(&lightComp.mCommonConstData, 1);
+	mpRenderManager->SetDirLight(&lightComp.mCommonConstData, 0, 1.0f, Vector3(0.488983, -0.718127, 0.495166));
+	mpRenderManager->PrintLightInfo(&lightComp.mCommonConstData);
 
-	Light templight = lightComp.m_commonConstData.light[0];
+	Light templight = lightComp.mCommonConstData.light[0];
 	templight.position = Vector3(25.47, 85.77, 1.56);
 	templight.direction = Vector3(-0.4, -0.92, 0.01);
 	std::shared_ptr<Entity> tempEntity = mpEntityManager->CreateEntity("Camera");
@@ -225,11 +225,11 @@ void LevelManager::AddMapData(const int& _sceneNum)
 
 			if (mapData.hasCollider)
 			{
-				map->AddComponent<BoxCollider>().m_size
+				map->AddComponent<BoxCollider>().mSize
 					= mpRenderManager->Get_AABB(mapData.FBXname).mMax
 					- mpRenderManager->Get_AABB(mapData.FBXname).mMin;
-				map->GetComponent<BoxCollider>().m_size.y = 10.f;
-				map->AddComponent<Rigidbody>().m_isStatic = true;
+				map->GetComponent<BoxCollider>().mSize.y = 10.f;
+				map->AddComponent<Rigidbody>().mIsStatic = true;
 				mpPhysicsManager->AddPhysicsObject(map->GetUID(), TYPE_OBSTACLE);
 			}
 			if (mapData.alphaBlend)
@@ -275,7 +275,7 @@ void LevelManager::AddBasicUI()
 	mpUIManager->AddUI(uiEntity3, "UI_btn_VolumeUp.png", Vector2(1108.f, 464.f), Vector2(30.f, 30.f), static_cast<int>(Layer::SET_B), Vector4(0.8f, 0.8f, 0.8f, 1.0f), false);
 	mpUIManager->AddButtonAllColor(uiEntity3, Vector4(0.5f, 0.5f, 0.5f, 1.0f), Vector4(1.0f));
 	mpUIManager->AddTextwithInt(uiEntity3, u8"%d", "KIMM_Bold(60).ttf", Vector2(1050, 469), 5, static_cast<int>(Layer::SET_B), false, Vector4(1.0f));
-	uiEntity3->GetComponent<Text>().m_scale = 0.4f;
+	uiEntity3->GetComponent<Text>().mScale = 0.4f;
 
 	// 효과음 --
 	// 왼쪽 버튼
@@ -288,7 +288,7 @@ void LevelManager::AddBasicUI()
 	mpUIManager->AddUI(uiEntity5, "UI_btn_VolumeUp.png", Vector2(1108.f, 565.f), Vector2(30.f, 30.f), static_cast<int>(Layer::SET_B), Vector4(0.8f, 0.8f, 0.8f, 1.0f), false);
 	mpUIManager->AddButtonAllColor(uiEntity5, Vector4(0.5f, 0.5f, 0.5f, 1.0f), Vector4(1.0f));
 	mpUIManager->AddTextwithInt(uiEntity5, u8"%d", "KIMM_Bold(60).ttf", Vector2(1050, 570), 5, static_cast<int>(Layer::SET_B), false, Vector4(1.0f));
-	uiEntity5->GetComponent<Text>().m_scale = 0.4f;
+	uiEntity5->GetComponent<Text>().mScale = 0.4f;
 
 	// 설정 창 닫기 : 돌아가기
 	auto uiEntity6 = mpEntityManager->CreateEntity("UI_C_SettingX");
@@ -335,7 +335,7 @@ void LevelManager::AddBattleUI(SceneData* _pSceneData)
 	auto uiAlive = mpEntityManager->CreateEntity("UI_D_AliveNum"); //UI_place
 	mpUIManager->AddUI(uiAlive, "UI_pnl_MercPanel.png", Vector2(835.f, 13.f), Vector2(251.f, 92.f), static_cast<int>(Layer::COM_P), Vector4(1.0f), true);
 	mpUIManager->AddTextwithInt(uiAlive, u8"0%d", "KIMM_Bold(60).ttf", Vector2(852.f, 28.f), 20, static_cast<int>(Layer::COM_B), true, Vector4(1.0f));
-	uiAlive->GetComponent<Text>().m_scale = 1.0f;
+	uiAlive->GetComponent<Text>().mScale = 1.0f;
 	// 게임 시작 이펙트
 	auto uiEffect = mpEntityManager->CreateEntity("UI_Effect_Start");
 	mpUIManager->AddUI(uiEffect, "UI_img_StartEffect.png", Vector2(0, 0.f), Vector2(1920, 1733), static_cast<int>(Layer::EFFECT), Vector4(1.0f), false);
@@ -371,8 +371,8 @@ void LevelManager::AddBattleUI(SceneData* _pSceneData)
 	// 보유금
 	auto uiText3 = mpEntityManager->CreateEntity("UI_B_Money");//UI_money
 	mpUIManager->AddTextwithInt(uiText3, u8"%d", "KIMM_Bold(60).ttf", Vector2(270, 35)
-		, /*dynamic_cast<SceneData*>(m_pSceneData)->m_heldMoney*/0, static_cast<int>(Layer::COM_B), true, Vector4(1.0f));
-	uiText3->GetComponent<Text>().m_scale = 0.6f;
+		, /*dynamic_cast<SceneData*>(mpSceneData)->m_heldMoney*/0, static_cast<int>(Layer::COM_B), true, Vector4(1.0f));
+	uiText3->GetComponent<Text>().mScale = 0.6f;
 	// 배치 안내 문구
 	auto guideText = mpEntityManager->CreateEntity("UI_D_Guide");
 	mpUIManager->AddUI(guideText, "Frame.png", Vector2(0, 0.f), Vector2(1920, 1080), static_cast<int>(Layer::COM_P), Vector4(/*0.77f, 0.60f, 0.29f, */1.0f), false);
@@ -380,24 +380,24 @@ void LevelManager::AddBattleUI(SceneData* _pSceneData)
 
 	/// 머니건 ui
 	// 현재 머니건
-	// auto ui_moneyGun1 = m_pEntityManager->CreateEntity("ui_moneyGun1");
-	// m_pUIManager->AddUI(ui_moneyGun1, "green.png", Vector2(115, 940), Vector2(130, 130), 3, Vector4(0.8f, 0.8f, 0.8f, 1.0f), false);
+	// auto ui_moneyGun1 = mpEntityManager->CreateEntity("ui_moneyGun1");
+	// mpUIManager->AddUI(ui_moneyGun1, "green.png", Vector2(115, 940), Vector2(130, 130), 3, Vector4(0.8f, 0.8f, 0.8f, 1.0f), false);
 	// 이전 머니건
-	// auto ui_moneyGun2 = m_pEntityManager->CreateEntity("ui_moneyGun2");
-	// m_pUIManager->AddUI(ui_moneyGun2, "green.png", Vector2(30, 990), Vector2(80, 80), 3, Vector4(0.8f, 0.8f, 0.8f, 1.0f), false);
-	// m_pUIManager->AddButtonPressUI(ui_moneyGun2, "green.png");
+	// auto ui_moneyGun2 = mpEntityManager->CreateEntity("ui_moneyGun2");
+	// mpUIManager->AddUI(ui_moneyGun2, "green.png", Vector2(30, 990), Vector2(80, 80), 3, Vector4(0.8f, 0.8f, 0.8f, 1.0f), false);
+	// mpUIManager->AddButtonPressUI(ui_moneyGun2, "green.png");
 	// // 이전 머니건 버튼
-	// auto ui_moneyGun2_1 = m_pEntityManager->CreateEntity("ui_moneyGun2_1");
-	// m_pUIManager->AddUI(ui_moneyGun2_1, "green.png", Vector2(55, 960), Vector2(30, 30), 3, Vector4(0.8f, 0.8f, 0.8f, 1.0f), false);
-	// m_pUIManager->AddButtonPressUI(ui_moneyGun2_1, "green.png");
+	// auto ui_moneyGun2_1 = mpEntityManager->CreateEntity("ui_moneyGun2_1");
+	// mpUIManager->AddUI(ui_moneyGun2_1, "green.png", Vector2(55, 960), Vector2(30, 30), 3, Vector4(0.8f, 0.8f, 0.8f, 1.0f), false);
+	// mpUIManager->AddButtonPressUI(ui_moneyGun2_1, "green.png");
 	// // 다음 머니건
-	// auto ui_moneyGun3 = m_pEntityManager->CreateEntity("ui_moneyGun3");
-	// m_pUIManager->AddUI(ui_moneyGun3, "green.png", Vector2(250, 990), Vector2(80, 80), 3, Vector4(0.8f, 0.8f, 0.8f, 1.0f), false);
-	// m_pUIManager->AddButtonPressUI(ui_moneyGun3, "green.png");
+	// auto ui_moneyGun3 = mpEntityManager->CreateEntity("ui_moneyGun3");
+	// mpUIManager->AddUI(ui_moneyGun3, "green.png", Vector2(250, 990), Vector2(80, 80), 3, Vector4(0.8f, 0.8f, 0.8f, 1.0f), false);
+	// mpUIManager->AddButtonPressUI(ui_moneyGun3, "green.png");
 	// // 다음 머니건 버튼
-	// auto ui_moneyGun3_1 = m_pEntityManager->CreateEntity("ui_moneyGun3_1");
-	// m_pUIManager->AddUI(ui_moneyGun3_1, "green.png", Vector2(275, 960), Vector2(30, 30), 3, Vector4(0.8f, 0.8f, 0.8f, 1.0f), false);
-	// m_pUIManager->AddButtonPressUI(ui_moneyGun3_1, "green.png");
+	// auto ui_moneyGun3_1 = mpEntityManager->CreateEntity("ui_moneyGun3_1");
+	// mpUIManager->AddUI(ui_moneyGun3_1, "green.png", Vector2(275, 960), Vector2(30, 30), 3, Vector4(0.8f, 0.8f, 0.8f, 1.0f), false);
+	// mpUIManager->AddButtonPressUI(ui_moneyGun3_1, "green.png");
 
 		/// 결과창 ui
 	// 이미지
@@ -428,19 +428,19 @@ void LevelManager::AddBattleUI(SceneData* _pSceneData)
 	// auto ui_res4 = mpEntityManager->CreateEntity("UI_Res4");
 	// mpUIManager->AddUI(ui_res4, "UI_img_MercAlive.png", Vector2(1131, 365), Vector2(210, 60), static_cast<int>(Layer::COM_B), Vector4(1.0f), false);
 	// mpUIManager->AddTextwithInt2(ui_res4, u8"%d/%d", "KIMM_Bold(60).ttf", Vector2(1395, 371)
-	// 	, /*dynamic_cast<SceneData*>(m_pSceneData)->m_aliveAlly*/20, /*dynamic_cast<SceneData*>(m_pSceneData)->m_totalAlly*/20, static_cast<int>(Layer::COM_B), false, Vector4(1.0f));
-	// ui_res4->GetComponent<Text>().m_scale = 1.2;
+	// 	, /*dynamic_cast<SceneData*>(mpSceneData)->m_aliveAlly*/20, /*dynamic_cast<SceneData*>(mpSceneData)->m_totalAlly*/20, static_cast<int>(Layer::COM_B), false, Vector4(1.0f));
+	// ui_res4->GetComponent<Text>().mScale = 1.2;
 	// 남은 시간 -> 사용 안함
 	// auto ui_res5 = mpEntityManager->CreateEntity("UI_Res5");
 	// mpUIManager->AddUI(ui_res5, "UI_img_TimeLeft.png", Vector2(1131, 465), Vector2(210, 60), static_cast<int>(Layer::COM_B), Vector4(1.0f), false);
 	// mpUIManager->AddTextwithInt(ui_res5, u8"0", "KIMM_Bold(60).ttf", Vector2(1395, 471), 0, static_cast<int>(Layer::COM_B), false, Vector4(1.0f));
-	// ui_res5->GetComponent<Text>().m_scale = 1.2;
+	// ui_res5->GetComponent<Text>().mScale = 1.2;
 	// 사용 금액
 	auto ui_res7 = mpEntityManager->CreateEntity("UI_Res7");
 	//mpUIManager->AddUI(ui_res7, "UI_img_MoneyUsed.png", Vector2(1131, 646), Vector2(210, 60), static_cast<int>(Layer::COM_B), Vector4(1.0f), false);
 	mpUIManager->AddText(ui_res7, u8"0", "KIMM_Bold(60).ttf", Vector2(1536, 364)
 		, static_cast<int>(Layer::COM_B), false, Vector4(1.f));
-	ui_res7->GetComponent<Text>().m_scale = 0.6;
+	ui_res7->GetComponent<Text>().mScale = 0.6;
 	// 	ui_res7->AddComponent<EasingComponent>(mpEasingFunc);
 
 	// 보수 금액 -> 남은 금액으로 수정
@@ -448,13 +448,13 @@ void LevelManager::AddBattleUI(SceneData* _pSceneData)
 	//mpUIManager->AddUI(ui_res8, "UI_img_MoneyEarn.png", Vector2(1131, 746), Vector2(210, 60), static_cast<int>(Layer::COM_B), Vector4(1.0f), false);
 	mpUIManager->AddText(ui_res8, u8"0", "KIMM_Bold(60).ttf", Vector2(1536, 444)
 		, static_cast<int>(Layer::COM_B), false, Vector4(1.f));
-	ui_res8->GetComponent<Text>().m_scale = 0.6;
+	ui_res8->GetComponent<Text>().mScale = 0.6;
 
 	// 초기 금액
 	auto ui_res10 = mpEntityManager->CreateEntity("UI_Res10");
 	mpUIManager->AddText(ui_res10, u8"0", "KIMM_Bold(60).ttf", Vector2(1536, 284)
 		, static_cast<int>(Layer::COM_B), false, Vector4(1.f));
-	ui_res10->GetComponent<Text>().m_scale = 0.6;
+	ui_res10->GetComponent<Text>().mScale = 0.6;
 
 	// 버튼
 	// 다음으로
@@ -473,11 +473,11 @@ void LevelManager::AddStageNumAndObjects(const std::u8string& _stageNum)
 	// 스테이지 명칭
 	auto uiText = mpEntityManager->CreateEntity("UI_B_Stage");
 	mpUIManager->AddText(uiText, _stageNum, "KIMM_Bold(60).ttf", Vector2(1425, 34), static_cast<int>(Layer::COM_B), true, Vector4(1.0f));
-	uiText->GetComponent<Text>().m_scale = 0.7f;
+	uiText->GetComponent<Text>().mScale = 0.7f;
 	// 스테이지 목표 : 적군 숫자 표시 안내 문구
 	auto uiText2 = mpEntityManager->CreateEntity("UI_B_StageGuide");
 	mpUIManager->AddTextwithInt2(uiText2, u8"모든 적 처치 (%d/%d)", "KIMM_Bold(60).ttf", Vector2(1458, 78), 20, 20, static_cast<int>(Layer::COM_B), true, Vector4(1.0f));
-	uiText2->GetComponent<Text>().m_scale = 0.4f;
+	uiText2->GetComponent<Text>().mScale = 0.4f;
 }
 
 void LevelManager::AddClassUI(const int& _activeClassNum, bool _isToturial)
@@ -500,12 +500,12 @@ void LevelManager::AddClassUI(const int& _activeClassNum, bool _isToturial)
 					, u8"", Vector2(), 1.0f, "KIMM_Bold(60).ttf", Vector4(1.0f), static_cast<int>(Layer::COM_M), false);
 				mpUIManager->AddTextwithInt(uiEntity, u8"%d", "KIMM_Bold(60).ttf", Vector2(565.f + (i + 1) * 100.f, 790.f)
 					, statusTable[i].placeMoney, static_cast<int>(Layer::COM_M), false, Vector4(1.0f));
-				uiEntity->GetComponent<Text>().m_scale = 0.35f;
+				uiEntity->GetComponent<Text>().mScale = 0.35f;
 			}
 		}
 		else
 		{
-			uiEntity->GetComponent<Texture2D>().m_rgba = Vector4(1.0f, 0.5f, 0.5f, 1.0f);
+			uiEntity->GetComponent<Texture2D>().mRgba = Vector4(1.0f, 0.5f, 0.5f, 1.0f);
 			mpUIManager->AddButtonAllColor(uiEntity, Vector4(1.0f, 0.0f, 0.0f, 1.0f), Vector4(1.0f, 0.0f, 0.0f, 1.0f));
 			if (_isToturial == false)
 			{
@@ -513,7 +513,7 @@ void LevelManager::AddClassUI(const int& _activeClassNum, bool _isToturial)
 					, u8"", Vector2(), 1.0f, "KIMM_Bold(60).ttf", Vector4(1.0f), static_cast<int>(Layer::COM_M), false);
 				// 				mpUIManager->AddTextwithInt(uiEntity, u8"%d", "KIMM_Bold(60).ttf", Vector2(636.f + i * 172.f, 964.f + 47.f)
 				// 					, statusTable[i].placeMoney, static_cast<int>(Layer::COM_M), false, Vector4(1.0f));
-				// 				uiEntity->GetComponent<Text>().m_scale = 0.25f;
+				// 				uiEntity->GetComponent<Text>().mScale = 0.25f;
 			}
 		}
 	}
@@ -529,21 +529,21 @@ void LevelManager::AddVerifyPopUpUI()
 	auto uiPopUp = mpEntityManager->CreateEntity("UI_Verify_Main");
 	mpUIManager->AddUI(uiPopUp, "UI_pnl_PopupPanel.png", Vector2(720.f, 427.f), Vector2(480.f, 225.f), static_cast<int>(Layer::POP_P), Vector4(0.8f, 0.8f, 0.8f, 1.0f), false);
 	mpUIManager->AddTextwithInt2(uiPopUp, u8"정말로 게임을 종료하실 건가요?", "KIMM_Bold(60).ttf", Vector2(763.f, 470.f), 0, 0, static_cast<int>(Layer::POP_P), false, Vector4(1.0f));
-	uiPopUp->GetComponent<Text>().m_scale = 0.33f;
+	uiPopUp->GetComponent<Text>().mScale = 0.33f;
 
 	// Yes 버튼
 	auto uiPopUp2 = mpEntityManager->CreateEntity("UI_Verify_Yes");
 	mpUIManager->AddUI(uiPopUp2, "UI_btn_BtnYes.png", Vector2(795.f, 582.f), Vector2(130.f, 40.f), static_cast<int>(Layer::POP_B), Vector4(0.8f, 0.8f, 0.8f, 1.0f), false);
 	//mpUIManager->AddText(uiPopUp2, u8"예", "KIMM_Bold(60).ttf", Vector2(780, 480), static_cast<int>(Layer::POP_B), false, Vector4(1.0f));
 	mpUIManager->AddButtonAllColor(uiPopUp2, Vector4(0.5f, 0.5f, 0.5f, 1.0f), Vector4(1.0f));
-	//uiPopUp2->GetComponent<Text>().m_scale = 0.67f;
+	//uiPopUp2->GetComponent<Text>().mScale = 0.67f;
 
 	// No 버튼
 	auto uiPopUp3 = mpEntityManager->CreateEntity("UI_Verify_No");
 	mpUIManager->AddUI(uiPopUp3, "UI_btn_BtnNo.png", Vector2(995.f, 582.f), Vector2(130.f, 40.f), static_cast<int>(Layer::POP_B), Vector4(0.8f, 0.8f, 0.8f, 1.0f), false);
 	//mpUIManager->AddText(uiPopUp3, u8"아니요", "KIMM_Bold(60).ttf", Vector2(1020, 480), static_cast<int>(Layer::POP_B), false, Vector4(1.0f));
 	mpUIManager->AddButtonAllColor(uiPopUp3, Vector4(0.5f, 0.5f, 0.5f, 1.0f), Vector4(1.0f));
-	//uiPopUp3->GetComponent<Text>().m_scale = 0.67f;
+	//uiPopUp3->GetComponent<Text>().mScale = 0.67f;
 }
 
 void LevelManager::AddAnimationUI(bool _isBattleScene, int _priviusSceneNum)
@@ -572,15 +572,15 @@ void LevelManager::AddAnimationUI(bool _isBattleScene, int _priviusSceneNum)
 
 	if (_isBattleScene == true)
 	{
-		ui0->GetComponent<Texture2D>().m_isVisible = false;
-		ui1->GetComponent<Texture2D>().m_position.y = -726.f;
-		ui2->GetComponent<Texture2D>().m_position.y = -726.f;
+		ui0->GetComponent<Texture2D>().mIsVisible = false;
+		ui1->GetComponent<Texture2D>().mPosition.y = -726.f;
+		ui2->GetComponent<Texture2D>().mPosition.y = -726.f;
 	}
 
 	if (mIsRestart == true)
 	{
-		ui1->GetComponent<Texture2D>().m_position.x = 1920.f;
-		ui2->GetComponent<Texture2D>().m_position.x = -2500.f;
+		ui1->GetComponent<Texture2D>().mPosition.x = 1920.f;
+		ui2->GetComponent<Texture2D>().mPosition.x = -2500.f;
 	}
 }
 
@@ -594,7 +594,7 @@ void LevelManager::BasicUIUpdate()
 	auto uiButtonView = mRegistry.view<Button>();
 	for (auto& uiEntity : uiButtonView)
 	{
-		auto& name = mRegistry.get<Name>(uiEntity).m_name;
+		auto& name = mRegistry.get<Name>(uiEntity).mName;
 		auto& button = mRegistry.get<Button>(uiEntity);
 		//		팝업창 On?  ___________
 		//			|				   \
@@ -604,10 +604,10 @@ void LevelManager::BasicUIUpdate()
 		//						   /					 \
 		//					세팅창 제외 버튼 비활성화		모든 버튼 활성화
 
-		if (currentPopUpState == PopUpState::NORMAL)
+		if (mCurrentPopUpState == PopUpState::NORMAL)
 		{
 			// 세팅창 on?
-			if (currentSettingState == SettingState::NORMAL)
+			if (mCurrentSettingState == SettingState::NORMAL)
 			{
 				if (name.find("UI_C_Set") == std::string::npos)
 				{
@@ -642,35 +642,35 @@ void LevelManager::BasicUIUpdate()
 		// 기본 설정 버튼을 누르면 설정창이 열린다.
 		if (name == "UI_C_OutSetting")
 		{
-			if ((mpInputManager->GetKeyDown(KEY::ESCAPE) || ((mpUIManager->GetButtonState(button.m_pOwner) == ButtonState::PRESSED
-				&& (mpInputManager->GetKeyUp(KEY::LBUTTON))) && currentSettingState == SettingState::NORMAL)))
+			if ((mpInputManager->GetKeyDown(KEY::ESCAPE) || ((mpUIManager->GetButtonState(button.mpOwner) == ButtonState::PRESSED
+				&& (mpInputManager->GetKeyUp(KEY::LBUTTON))) && mCurrentSettingState == SettingState::NORMAL)))
 			{
 				// 				mpSoundManager->PlaySFX("Snd_sfx_ClickBtn");
-				currentSettingState = SettingState::OPEN;
+				mCurrentSettingState = SettingState::OPEN;
 				break;
 			}
 		}
 		// 돌아가기 버튼을 누르면 설정창이 닫힌다.
 		if (name == "UI_C_SettingX")
 		{
-			if (currentSettingState == SettingState::ADJUST &&
-				(mpUIManager->GetButtonState(button.m_pOwner) == ButtonState::PRESSED
+			if (mCurrentSettingState == SettingState::ADJUST &&
+				(mpUIManager->GetButtonState(button.mpOwner) == ButtonState::PRESSED
 					|| (mpInputManager->GetKeyDown(KEY::ESCAPE))))
 			{
 				// mpSoundManager->PlaySFX("Snd_sfx_ClickBtn");
 				button.mIsEnable = false;
-				currentSettingState = SettingState::CLOSED;
+				mCurrentSettingState = SettingState::CLOSED;
 				break;
 			}
 		}
 	}
 
-	if (currentSettingState == SettingState::OPEN)
+	if (mCurrentSettingState == SettingState::OPEN)
 	{
 		auto uiTextureView = mRegistry.view<Texture2D>();
 		for (auto& uiEntity : uiTextureView)
 		{
-			auto& name = mRegistry.get<Name>(uiEntity).m_name;
+			auto& name = mRegistry.get<Name>(uiEntity).mName;
 			auto& texture = mRegistry.get<Texture2D>(uiEntity);
 			auto text = mRegistry.try_get<Text>(uiEntity);
 			auto button = mRegistry.try_get<Button>(uiEntity);
@@ -693,7 +693,7 @@ void LevelManager::BasicUIUpdate()
 					// 돌아가기의 위치를 조정한다.
 					if (name == "UI_C_SettingX" && button)
 					{
-						texture.m_position.x = 895.f;
+						texture.mPosition.x = 895.f;
 						button->mUIPosition.x = 895.f;
 						button->mUIHoveringPosition.x = 895.f;
 						button->mUIPressedPosition.x = 895.f;
@@ -701,28 +701,28 @@ void LevelManager::BasicUIUpdate()
 				}
 				else if (name == "UI_C_SettingX" && button)
 				{
-					texture.m_position.x = 795.f;
+					texture.mPosition.x = 795.f;
 					button->mUIPosition.x = 795.f;
 					button->mUIHoveringPosition.x = 795.f;
 					button->mUIPressedPosition.x = 795.f;
 				}
 				// 그 외는 setting 창에 관련된 걸 전부 불러와서 시각화 한다.
-				texture.m_isVisible = true;
+				texture.mIsVisible = true;
 				if (text)
 				{
-					text->m_isVisible = true;
+					text->mIsVisible = true;
 				}
 			}
 		}
-		currentSettingState = SettingState::ADJUST;
+		mCurrentSettingState = SettingState::ADJUST;
 	}
 
-	if (currentSettingState == SettingState::CLOSED)
+	if (mCurrentSettingState == SettingState::CLOSED)
 	{
 		auto uiTextureView = mRegistry.view<Texture2D>();
 		for (auto& uiEntity : uiTextureView)
 		{
-			auto& name = mRegistry.get<Name>(uiEntity).m_name;
+			auto& name = mRegistry.get<Name>(uiEntity).mName;
 			auto& texture = mRegistry.get<Texture2D>(uiEntity);
 			auto text = mRegistry.try_get<Text>(uiEntity);
 			auto button = mRegistry.try_get<Button>(uiEntity);
@@ -743,41 +743,41 @@ void LevelManager::BasicUIUpdate()
 					button->mIsEnable = false;
 				}
 
-				texture.m_isVisible = false;
+				texture.mIsVisible = false;
 				if (text)
 				{
-					text->m_isVisible = false;
+					text->mIsVisible = false;
 				}
 			}
 		}
-		currentSettingState = SettingState::NORMAL;
+		mCurrentSettingState = SettingState::NORMAL;
 	}
 
-	if (currentSettingState == SettingState::ADJUST)
+	if (mCurrentSettingState == SettingState::ADJUST)
 	{
 		auto uiButtonView = mRegistry.view<Button>();
 		for (auto& uiEntity : uiButtonView)
 		{
-			auto& name = mRegistry.get<Name>(uiEntity).m_name;
+			auto& name = mRegistry.get<Name>(uiEntity).mName;
 			auto& texture = mRegistry.get<Texture2D>(uiEntity);
 			auto text = mRegistry.try_get<Text>(uiEntity);
 			auto& button = mRegistry.get<Button>(uiEntity);
 			if (name == "UI_C_SettingBG")
 			{
-				SetVolume(texture.m_file, texture.m_pOwner, text->m_num1, BGVolume);
+				SetVolume(texture.mFile, texture.mpOwner, text->mNum1, mBGVolume);
 			}
 
 			if (name == "UI_C_SettingES")
 			{
-				SetVolume(texture.m_file, texture.m_pOwner, text->m_num1, ESVolume);
+				SetVolume(texture.mFile, texture.mpOwner, text->mNum1, mESVolume);
 			}
 
-			mpSoundManager->SetBGMVolume(static_cast<float>(BGVolume) * (1.f / 5.f));
-			mpSoundManager->SetSFXVolume(static_cast<float>(ESVolume) * (1.f / 5.f));
+			mpSoundManager->SetBGMVolume(static_cast<float>(mBGVolume) * (1.f / 5.f));
+			mpSoundManager->SetSFXVolume(static_cast<float>(mESVolume) * (1.f / 5.f));
 
 			if (name == "UI_C_SettingGoMain")
 			{
-				if (mpUIManager->GetButtonState(texture.m_pOwner) == ButtonState::PRESSED)
+				if (mpUIManager->GetButtonState(texture.mpOwner) == ButtonState::PRESSED)
 				{
 					//mIsGoMain = true;
 // 					mpSoundManager->PlaySFX("Snd_sfx_ClickBtn");
@@ -787,7 +787,7 @@ void LevelManager::BasicUIUpdate()
 					}
 					button.mButtonState = ButtonState::NORMAL;
 					button.mIsEnable = false;
-					currentPopUpState = PopUpState::OPEN_MAINMENU;
+					mCurrentPopUpState = PopUpState::OPEN_MAINMENU;
 					break;
 				}
 			}
@@ -814,31 +814,31 @@ void LevelManager::PopUpUIUpdate(SceneData* _pSceneData)
 	// 보이는 것과 안 보이는 것에 대한 처리 -> 모든 리소스를 선행 처리 후 PopUpState는 일괄 처리로 한 번씩만 변경되게 한다.
 	ManagePopupDisplay(PopUpState::OPEN_MAINMENU, PopUpState::OPEN_UNITDEPLOY);
 
-	if (currentPopUpState == PopUpState::OPEN_MAINMENU)
+	if (mCurrentPopUpState == PopUpState::OPEN_MAINMENU)
 	{
 		auto imgView = mRegistry.view<Texture2D>();
 		for (auto& uiEntity : imgView)
 		{
-			auto& name = mRegistry.get<Name>(uiEntity).m_name;
+			auto& name = mRegistry.get<Name>(uiEntity).mName;
 			auto text = mRegistry.try_get<Text>(uiEntity);
 
 			if (name == "UI_Verify_Main")
 			{
 				// 원하는 텍스트로 교체해준다.
-				text->m_text = u8"메인 메뉴로 돌아갈까요?";
-				//text->m_position = Vector2(730.f, 380.f);
-				currentPopUpState = PopUpState::MAINMENU;
+				text->mText = u8"메인 메뉴로 돌아갈까요?";
+				//text->mPosition = Vector2(730.f, 380.f);
+				mCurrentPopUpState = PopUpState::MAINMENU;
 				break;
 			}
 		}
 
 	}
-	else if (currentPopUpState == PopUpState::OPEN_UNITDEPLOY)
+	else if (mCurrentPopUpState == PopUpState::OPEN_UNITDEPLOY)
 	{
 		auto imgView = mRegistry.view<Texture2D>();
 		for (auto& uiEntity : imgView)
 		{
-			auto& name = mRegistry.get<Name>(uiEntity).m_name;
+			auto& name = mRegistry.get<Name>(uiEntity).mName;
 			auto& texture = mRegistry.get<Texture2D>(uiEntity);
 			auto text = mRegistry.try_get<Text>(uiEntity);
 			auto button = mRegistry.try_get<Button>(uiEntity);
@@ -847,11 +847,11 @@ void LevelManager::PopUpUIUpdate(SceneData* _pSceneData)
 			{
 				if (_pSceneData->m_aliveAlly == 0)
 				{
-					texture.m_isVisible = false;
+					texture.mIsVisible = false;
 				}
 				else
 				{
-					texture.m_isVisible = true;
+					texture.mIsVisible = true;
 				}
 			}
 
@@ -859,61 +859,61 @@ void LevelManager::PopUpUIUpdate(SceneData* _pSceneData)
 			{
 				if (_pSceneData->m_aliveAlly == 0)
 				{
-					texture.m_file = "UI_btn_BtnCheck.png";
-					texture.m_position.x = 895.f;
+					texture.mFile = "UI_btn_BtnCheck.png";
+					texture.mPosition.x = 895.f;
 				}
 				else
 				{
-					texture.m_file = "UI_btn_BtnNo.png";
-					texture.m_position.x = 995.f;
+					texture.mFile = "UI_btn_BtnNo.png";
+					texture.mPosition.x = 995.f;
 				}
-				button->mUIPosition.x = texture.m_position.x;
-				button->mUIHoveringPosition.x = texture.m_position.x;
-				button->mUIPressedPosition.x = texture.m_position.x;
+				button->mUIPosition.x = texture.mPosition.x;
+				button->mUIHoveringPosition.x = texture.mPosition.x;
+				button->mUIPressedPosition.x = texture.mPosition.x;
 			}
 
 			if (name == "UI_Verify_Main")
 			{
-				text->m_num1 = /*mpUnitSystem->GetPlayerSystem()->mMaxSetUnitNum -*/ _pSceneData->m_aliveAlly;
-				text->m_num2 = _pSceneData->m_heldMoney;
+				text->mNum1 = /*mpUnitSystem->GetPlayerSystem()->mMaxSetUnitNum -*/ _pSceneData->m_aliveAlly;
+				text->mNum2 = _pSceneData->m_heldMoney;
 
 				// 원하는 텍스트로 교체해준다.
 				if (_pSceneData->m_aliveAlly == 0)
 				{
-					text->m_text = u8"\n용병이 없으면 싸울 수 없어요!";
+					text->mText = u8"\n용병이 없으면 싸울 수 없어요!";
 				}
 				else
 				{
-					text->m_text = u8"전투를 시작할까요?\n배치된 용병 : %d명\n사용 가능한 금액 : $ %d";
-					//text->m_position = Vector2(730.f, 330.f);
+					text->mText = u8"전투를 시작할까요?\n배치된 용병 : %d명\n사용 가능한 금액 : $ %d";
+					//text->mPosition = Vector2(730.f, 330.f);
 				}
 			}
 		}
-		currentPopUpState = PopUpState::UNITDEPLOY;
+		mCurrentPopUpState = PopUpState::UNITDEPLOY;
 		return;
 	}
-	else if (currentPopUpState == PopUpState::CLOSED)
+	else if (mCurrentPopUpState == PopUpState::CLOSED)
 	{
 		// NORMAL 상태로 바꾼다.
-		currentPopUpState = PopUpState::NORMAL;
+		mCurrentPopUpState = PopUpState::NORMAL;
 		//break;
 	}
-	else if (currentPopUpState == PopUpState::MAINMENU || currentPopUpState == PopUpState::UNITDEPLOY)
+	else if (mCurrentPopUpState == PopUpState::MAINMENU || mCurrentPopUpState == PopUpState::UNITDEPLOY)
 	{
 		auto imgView = mRegistry.view<Texture2D>();
 		for (auto& uiEntity : imgView)
 		{
-			auto& name = mRegistry.get<Name>(uiEntity).m_name;
+			auto& name = mRegistry.get<Name>(uiEntity).mName;
 			auto& texture = mRegistry.get<Texture2D>(uiEntity);
 			auto button = mRegistry.try_get<Button>(uiEntity);
 
 			// 아니오를 선택할 경우 팝업 창을 끈다.
 			if (name == "UI_Verify_No")
 			{
-				if (mpUIManager->GetButtonState(texture.m_pOwner) == ButtonState::PRESSED)
+				if (mpUIManager->GetButtonState(texture.mpOwner) == ButtonState::PRESSED)
 				{
 					// 					mpSoundManager->PlaySFX("Snd_sfx_ClickBtn");
-					currentPopUpState = PopUpState::CLOSED;
+					mCurrentPopUpState = PopUpState::CLOSED;
 					return;
 				}
 			}
@@ -921,10 +921,10 @@ void LevelManager::PopUpUIUpdate(SceneData* _pSceneData)
 			// Yes를 선택할 경우, 다른 걸 시작한다.
 			if (name == "UI_Verify_Yes")
 			{
-				if (mpUIManager->GetButtonState(texture.m_pOwner) == ButtonState::PRESSED)
+				if (mpUIManager->GetButtonState(texture.mpOwner) == ButtonState::PRESSED)
 				{
 					// 					mpSoundManager->PlaySFX("Snd_sfx_ClickBtn");
-					switch (currentPopUpState)
+					switch (mCurrentPopUpState)
 					{
 					case PopUpState::MAINMENU:
 					{
@@ -933,9 +933,9 @@ void LevelManager::PopUpUIUpdate(SceneData* _pSceneData)
 					break;
 					case PopUpState::UNITDEPLOY:
 					{
-						currentLevelState = GameState::PRE_PLAY;
+						mCurrentLevelState = GameState::PRE_PLAY;
 						button->mIsEnable = false;
-						texture.m_isVisible = false;
+						texture.mIsVisible = false;
 						mIsGameStart = true;
 						if (mIsClassButtonPressed == true)
 						{
@@ -953,7 +953,7 @@ void LevelManager::PopUpUIUpdate(SceneData* _pSceneData)
 					default:
 						break;
 					}
-					currentPopUpState = PopUpState::CLOSED;
+					mCurrentPopUpState = PopUpState::CLOSED;
 					return;
 				}
 			}
@@ -970,7 +970,7 @@ void LevelManager::PopUpUIMainUpdate()
 	auto uiTextureView2 = mRegistry.view<Texture2D>();
 	for (auto& uiEntity : uiTextureView2)
 	{
-		auto& name = mRegistry.get<Name>(uiEntity).m_name;
+		auto& name = mRegistry.get<Name>(uiEntity).mName;
 		auto& texture = mRegistry.get<Texture2D>(uiEntity);
 		auto text = mRegistry.try_get<Text>(uiEntity);
 		auto button = mRegistry.try_get<Button>(uiEntity);
@@ -978,30 +978,30 @@ void LevelManager::PopUpUIMainUpdate()
 
 		if (name == "UI_Verify_Main")
 		{
-			if (currentPopUpState == PopUpState::OPEN_EXITGAME)
+			if (mCurrentPopUpState == PopUpState::OPEN_EXITGAME)
 			{
-				text->m_text = u8"정말로 게임을 종료하실 건가요?";
-				//text->m_position = Vector2(730.f, 380.f);
-				currentPopUpState = PopUpState::EXITGAME;
+				text->mText = u8"정말로 게임을 종료하실 건가요?";
+				//text->mPosition = Vector2(730.f, 380.f);
+				mCurrentPopUpState = PopUpState::EXITGAME;
 				break;
 			}
 		}
 
-		if (currentPopUpState == PopUpState::CLOSED) // close를 일부러 가장 위에 둠
+		if (mCurrentPopUpState == PopUpState::CLOSED) // close를 일부러 가장 위에 둠
 		{
 			// NORMAL 상태로 바꾼다.
-			currentPopUpState = PopUpState::NORMAL;
+			mCurrentPopUpState = PopUpState::NORMAL;
 			break;
 		}
-		else if (currentPopUpState == PopUpState::EXITGAME)
+		else if (mCurrentPopUpState == PopUpState::EXITGAME)
 		{
 			// 아니오를 선택할 경우 팝업 창을 끈다.
 			if (name == "UI_Verify_No")
 			{
-				if (mpUIManager->GetButtonState(texture.m_pOwner) == ButtonState::PRESSED)
+				if (mpUIManager->GetButtonState(texture.mpOwner) == ButtonState::PRESSED)
 				{
 					// 					mpSoundManager->PlaySFX("Snd_sfx_ClickBtn");
-					currentPopUpState = PopUpState::CLOSED;
+					mCurrentPopUpState = PopUpState::CLOSED;
 					break;
 				}
 			}
@@ -1009,13 +1009,13 @@ void LevelManager::PopUpUIMainUpdate()
 			// Yes를 선택할 경우, 다른 걸 시작한다.
 			if (name == "UI_Verify_Yes")
 			{
-				if (mpUIManager->GetButtonState(texture.m_pOwner) == ButtonState::PRESSED)
+				if (mpUIManager->GetButtonState(texture.mpOwner) == ButtonState::PRESSED)
 				{
 					// 					mpSoundManager->PlaySFX("Snd_sfx_ClickBtn");
-					if (currentPopUpState == PopUpState::EXITGAME)
+					if (mCurrentPopUpState == PopUpState::EXITGAME)
 					{
 						mIsExit = true;
-						currentPopUpState = PopUpState::CLOSED;
+						mCurrentPopUpState = PopUpState::CLOSED;
 						break;
 					}
 				}
@@ -1030,65 +1030,65 @@ void LevelManager::PopUPUITutorial()
 	// 보이는 것과 안 보이는 것에 대한 처리 -> 모든 리소스를 선행 처리 후 PopUpState는 일괄 처리로 한 번씩만 변경되게 한다.
 	ManagePopupDisplay(PopUpState::OPEN_MAINMENU, PopUpState::OPEN_SKIP);
 
-	if (currentPopUpState == PopUpState::OPEN_MAINMENU)
+	if (mCurrentPopUpState == PopUpState::OPEN_MAINMENU)
 	{
 		auto imgView = mRegistry.view<Texture2D>();
 		for (auto& uiEntity : imgView)
 		{
-			auto& name = mRegistry.get<Name>(uiEntity).m_name;
+			auto& name = mRegistry.get<Name>(uiEntity).mName;
 			auto text = mRegistry.try_get<Text>(uiEntity);
 
 			if (name == "UI_Verify_Main")
 			{
 				// 원하는 텍스트로 교체해준다.
-				text->m_text = u8"메인 메뉴로 돌아갈까요?";
-				//text->m_position = Vector2(730.f, 380.f);
-				currentPopUpState = PopUpState::MAINMENU;
+				text->mText = u8"메인 메뉴로 돌아갈까요?";
+				//text->mPosition = Vector2(730.f, 380.f);
+				mCurrentPopUpState = PopUpState::MAINMENU;
 				break;
 			}
 		}
 
 	}
-	else if (currentPopUpState == PopUpState::OPEN_SKIP)
+	else if (mCurrentPopUpState == PopUpState::OPEN_SKIP)
 	{
 		auto imgView = mRegistry.view<Texture2D>();
 		for (auto& uiEntity : imgView)
 		{
-			auto& name = mRegistry.get<Name>(uiEntity).m_name;
+			auto& name = mRegistry.get<Name>(uiEntity).mName;
 			auto text = mRegistry.try_get<Text>(uiEntity);
 
 			if (name == "UI_Verify_Main")
 			{
 				// 원하는 텍스트로 교체해준다.
-				text->m_text = u8"튜토리얼을 건너뛸까요?";
-				//text->m_position = Vector2(730.f, 330.f);
-				currentPopUpState = PopUpState::SKIP;
+				text->mText = u8"튜토리얼을 건너뛸까요?";
+				//text->mPosition = Vector2(730.f, 330.f);
+				mCurrentPopUpState = PopUpState::SKIP;
 				break;
 			}
 		}
 	}
-	else if (currentPopUpState == PopUpState::CLOSED)
+	else if (mCurrentPopUpState == PopUpState::CLOSED)
 	{
 		// NORMAL 상태로 바꾼다.
-		currentPopUpState = PopUpState::NORMAL;
+		mCurrentPopUpState = PopUpState::NORMAL;
 		//break;
 	}
-	else if (currentPopUpState == PopUpState::MAINMENU || currentPopUpState == PopUpState::SKIP)
+	else if (mCurrentPopUpState == PopUpState::MAINMENU || mCurrentPopUpState == PopUpState::SKIP)
 	{
 		auto imgView = mRegistry.view<Texture2D>();
 		for (auto& uiEntity : imgView)
 		{
-			auto& name = mRegistry.get<Name>(uiEntity).m_name;
+			auto& name = mRegistry.get<Name>(uiEntity).mName;
 			auto& texture = mRegistry.get<Texture2D>(uiEntity);
 			auto button = mRegistry.try_get<Button>(uiEntity);
 
 			// 아니오를 선택할 경우 팝업 창을 끈다.
 			if (name == "UI_Verify_No")
 			{
-				if (mpUIManager->GetButtonState(texture.m_pOwner) == ButtonState::PRESSED)
+				if (mpUIManager->GetButtonState(texture.mpOwner) == ButtonState::PRESSED)
 				{
 					// 					mpSoundManager->PlaySFX("Snd_sfx_ClickBtn");
-					currentPopUpState = PopUpState::CLOSED;
+					mCurrentPopUpState = PopUpState::CLOSED;
 					break;
 				}
 			}
@@ -1096,10 +1096,10 @@ void LevelManager::PopUPUITutorial()
 			// Yes를 선택할 경우, 다른 걸 시작한다.
 			if (name == "UI_Verify_Yes")
 			{
-				if (mpUIManager->GetButtonState(texture.m_pOwner) == ButtonState::PRESSED)
+				if (mpUIManager->GetButtonState(texture.mpOwner) == ButtonState::PRESSED)
 				{
 					// 					mpSoundManager->PlaySFX("Snd_sfx_ClickBtn");
-					switch (currentPopUpState)
+					switch (mCurrentPopUpState)
 					{
 					case PopUpState::MAINMENU:
 						mIsGoMain = true;
@@ -1110,7 +1110,7 @@ void LevelManager::PopUPUITutorial()
 					default:
 						break;
 					}
-					currentPopUpState = PopUpState::CLOSED;
+					mCurrentPopUpState = PopUpState::CLOSED;
 					return;
 				}
 			}
@@ -1120,7 +1120,7 @@ void LevelManager::PopUPUITutorial()
 
 void LevelManager::UIAniUpdate(float _dTime)
 {
-	switch (currentUIAniState)
+	switch (mCurrentUIAniState)
 	{
 	case UIAnimationState::POSTGAMESTART:
 	{
@@ -1136,7 +1136,7 @@ void LevelManager::UIAniUpdate(float _dTime)
 		for (auto& entity : view)
 		{
 			auto button = mRegistry.try_get<Button>(entity);
-			auto& name = mRegistry.get<Name>(entity).m_name;
+			auto& name = mRegistry.get<Name>(entity).mName;
 			auto& texture = mRegistry.get<Texture2D>(entity);
 			auto pEntity = mpEntityManager->GetEntity(entity);
 
@@ -1144,13 +1144,13 @@ void LevelManager::UIAniUpdate(float _dTime)
 			{
 				if (mpUIManager->GetButtonState(pEntity) == ButtonState::NORMAL)
 				{
-					button->mUIPosition = texture.m_position;
+					button->mUIPosition = texture.mPosition;
 				}
 			}
 
-			if (name == "UI_Main_FrontBG" && texture.m_position.y == 1080)
+			if (name == "UI_Main_FrontBG" && texture.mPosition.y == 1080)
 			{
-				currentUIAniState = UIAnimationState::NEXTSCENE;
+				mCurrentUIAniState = UIAnimationState::NEXTSCENE;
 				mEasingVec.clear();
 				mUIAnimationTime = 0.0f;
 				return;
@@ -1168,9 +1168,9 @@ void LevelManager::UIAniUpdate(float _dTime)
 	{
 		if (mIsRestart == true)
 		{
-			currentUIAniState = UIAnimationState::NORMAL;// UI 애니메이션 상태 설정
+			mCurrentUIAniState = UIAnimationState::NORMAL;// UI 애니메이션 상태 설정
 			StartNoneUI(); // Fixed부터 업뎃되기 때문에 추가해준다.
-			currentLevelState = GameState::START_ANIMATION;
+			mCurrentLevelState = GameState::START_ANIMATION;
 			return;
 		}
 		else
@@ -1180,21 +1180,21 @@ void LevelManager::UIAniUpdate(float _dTime)
 			auto view = mRegistry.view<Texture2D>();
 			for (auto& entity : view)
 			{
-				auto& name = mRegistry.get<Name>(entity).m_name;
+				auto& name = mRegistry.get<Name>(entity).mName;
 				auto& texture = mRegistry.get<Texture2D>(entity);
 				if (name == "UI_A_CloudR")
 				{
-					mpEasingFunc->EasingFuncMap["easeInSine"](-509, 1920, mUIAnimationTime, &texture.m_position.x);
+					mpEasingFunc->EasingFuncMap["easeInSine"](-509, 1920, mUIAnimationTime, &texture.mPosition.x);
 				}
 
 				if (name == "UI_A_CloudL")
 				{
-					mpEasingFunc->EasingFuncMap["easeInSine"](0, -2500, mUIAnimationTime, &texture.m_position.x);
+					mpEasingFunc->EasingFuncMap["easeInSine"](0, -2500, mUIAnimationTime, &texture.mPosition.x);
 
-					if (texture.m_position.x == -2500)
+					if (texture.mPosition.x == -2500)
 					{
-						currentUIAniState = UIAnimationState::NORMAL;// UI 애니메이션 상태 설정
-						currentLevelState = GameState::START_ANIMATION;
+						mCurrentUIAniState = UIAnimationState::NORMAL;// UI 애니메이션 상태 설정
+						mCurrentLevelState = GameState::START_ANIMATION;
 						mUIAnimationTime = 0.0f;
 						return;
 					}
@@ -1211,20 +1211,20 @@ void LevelManager::UIAniUpdate(float _dTime)
 		auto view = mRegistry.view<Texture2D>();
 		for (auto& entity : view)
 		{
-			auto& name = mRegistry.get<Name>(entity).m_name;
+			auto& name = mRegistry.get<Name>(entity).mName;
 			auto& texture = mRegistry.get<Texture2D>(entity);
 			if (name == "UI_A_CloudR")
 			{
-				mpEasingFunc->EasingFuncMap["easeInSine"](1920, -509, mUIAnimationTime, &texture.m_position.x);
+				mpEasingFunc->EasingFuncMap["easeInSine"](1920, -509, mUIAnimationTime, &texture.mPosition.x);
 			}
 
 			if (name == "UI_A_CloudL")
 			{
-				mpEasingFunc->EasingFuncMap["easeInSine"](-2500, 0, mUIAnimationTime, &texture.m_position.x);
+				mpEasingFunc->EasingFuncMap["easeInSine"](-2500, 0, mUIAnimationTime, &texture.mPosition.x);
 
-				if (texture.m_position.x == 0)
+				if (texture.mPosition.x == 0)
 				{
-					currentUIAniState = UIAnimationState::NEXTSCENE;// UI 애니메이션 상태 설정
+					mCurrentUIAniState = UIAnimationState::NEXTSCENE;// UI 애니메이션 상태 설정
 					mUIAnimationTime = 0.0f;
 					return;
 				}
@@ -1239,20 +1239,20 @@ void LevelManager::UIAniUpdate(float _dTime)
 		auto view = mRegistry.view<Texture2D>();
 		for (auto& entity : view)
 		{
-			auto& name = mRegistry.get<Name>(entity).m_name;
+			auto& name = mRegistry.get<Name>(entity).mName;
 			auto& texture = mRegistry.get<Texture2D>(entity);
 			if (name == "UI_A_CloudR")
 			{
-				mpEasingFunc->EasingFuncMap["easeInSine"](-509, 1920, mUIAnimationTime, &texture.m_position.x);
+				mpEasingFunc->EasingFuncMap["easeInSine"](-509, 1920, mUIAnimationTime, &texture.mPosition.x);
 			}
 
 			if (name == "UI_A_CloudL")
 			{
-				mpEasingFunc->EasingFuncMap["easeInSine"](0, -2500, mUIAnimationTime, &texture.m_position.x);
+				mpEasingFunc->EasingFuncMap["easeInSine"](0, -2500, mUIAnimationTime, &texture.mPosition.x);
 
-				if (texture.m_position.x == -2500)
+				if (texture.mPosition.x == -2500)
 				{
-					currentUIAniState = UIAnimationState::NORMAL;// UI 애니메이션 상태 설정
+					mCurrentUIAniState = UIAnimationState::NORMAL;// UI 애니메이션 상태 설정
 					mUIAnimationTime = 0.0f;
 					return;
 				}
@@ -1283,23 +1283,23 @@ void LevelManager::PushAllUI()
 	auto view = mRegistry.view<Texture2D>();
 	for (auto& entity : view)
 	{
-		auto& name = mRegistry.get<Name>(entity).m_name;
+		auto& name = mRegistry.get<Name>(entity).mName;
 		auto& texture = mRegistry.get<Texture2D>(entity);
 
-		if (name.find("UI_A") == std::string::npos && name != "UI_FIX" && texture.m_isVisible == true)
+		if (name.find("UI_A") == std::string::npos && name != "UI_FIX" && texture.mIsVisible == true)
 		{
-			mEasingVec.emplace_back(texture.m_position.y, &texture.m_position.y);
+			mEasingVec.emplace_back(texture.mPosition.y, &texture.mPosition.y);
 		}
 	}
 
 	auto view2 = mRegistry.view<Text>();
 	for (auto& entity : view2)
 	{
-		auto& name = mRegistry.get<Name>(entity).m_name;
+		auto& name = mRegistry.get<Name>(entity).mName;
 		auto& text = mRegistry.get<Text>(entity);
-		if (name.find("UI_A") == std::string::npos && name != "UI_FIX" && text.m_isVisible == true)
+		if (name.find("UI_A") == std::string::npos && name != "UI_FIX" && text.mIsVisible == true)
 		{
-			mEasingVec.emplace_back(text.m_position.y, &text.m_position.y);
+			mEasingVec.emplace_back(text.mPosition.y, &text.mPosition.y);
 		}
 	}
 	mUIAnimationTime = 0.0f;
@@ -1312,7 +1312,7 @@ void LevelManager::StartNoneUI()
 	for (auto entity : textView)
 	{
 		auto& text = mRegistry.get<Text>(entity);
-		text.m_isVisible = false;
+		text.mIsVisible = false;
 	}
 
 	// 모든 텍스처 가리기
@@ -1320,32 +1320,32 @@ void LevelManager::StartNoneUI()
 	for (auto entity : resView)
 	{
 		auto& img = mRegistry.get<Texture2D>(entity);
-		auto& name = mRegistry.get<Name>(entity).m_name;
+		auto& name = mRegistry.get<Name>(entity).mName;
 		if (mIsRestart == true)
 		{
-			if (img.m_layer <= static_cast<int>(Layer::Fade)) //페이드만 보이고 이펙트도 안 보이게
+			if (img.mLayer <= static_cast<int>(Layer::Fade)) //페이드만 보이고 이펙트도 안 보이게
 			{
-				img.m_isVisible = true;
+				img.mIsVisible = true;
 			}
 			else
 			{
-				img.m_isVisible = false;
+				img.mIsVisible = false;
 			}
 		}
 		else
 		{
-			if (img.m_layer <= static_cast<int>(Layer::EFFECT)) // 이펙트와 페이드만 보이게
+			if (img.mLayer <= static_cast<int>(Layer::EFFECT)) // 이펙트와 페이드만 보이게
 			{
-				img.m_isVisible = true;
+				img.mIsVisible = true;
 
 				if (name == "UI_Effect_Start")
 				{
-					img.m_isVisible = false; // 게임 스타트 이펙트는 안 보이게
+					img.mIsVisible = false; // 게임 스타트 이펙트는 안 보이게
 				}
 			}
 			else
 			{
-				img.m_isVisible = false;
+				img.mIsVisible = false;
 			}
 		}
 
@@ -1357,7 +1357,7 @@ void LevelManager::StartNoneUI()
 	for (auto& entity : buttonView)
 	{
 		auto& button = mRegistry.get<Button>(entity);
-		auto& name = mRegistry.get<Name>(entity).m_name;
+		auto& name = mRegistry.get<Name>(entity).mName;
 		if (name == "UI_C_OutSetting")
 		{
 			button.mIsEnable = false;
@@ -1372,7 +1372,7 @@ void LevelManager::PrePlacementUpdate(SceneData* _pSceneData)
 	for (auto& entity : buttonView)
 	{
 		auto& button = mRegistry.get<Button>(entity);
-		auto& name = mRegistry.get<Name>(entity).m_name;
+		auto& name = mRegistry.get<Name>(entity).mName;
 		if (name == "UI_C_OutSetting")
 		{
 			button.mIsEnable = true;
@@ -1392,27 +1392,27 @@ void LevelManager::PrePlacementUpdate(SceneData* _pSceneData)
 	auto textView = mRegistry.view<Text>();
 	for (auto& uiEntity : textView)
 	{
-		auto& name = mRegistry.get<Name>(uiEntity).m_name;
+		auto& name = mRegistry.get<Name>(uiEntity).mName;
 		auto& text = mRegistry.get<Text>(uiEntity);
 
 		if (name.find("UI_D") != std::string::npos || name.find("UI_B") != std::string::npos || name == "UI_C_OutSetting")
 		{
-			text.m_isVisible = true;
+			text.mIsVisible = true;
 
 			if (name == "UI_D_Class")
 			{
-				text.m_isVisible = false;
+				text.mIsVisible = false;
 			}
 
 			if (name == "UI_B_StageGuide")
 			{
-				text.m_num1 = numEnemy;
-				text.m_num2 = numEnemy;
+				text.mNum1 = numEnemy;
+				text.mNum2 = numEnemy;
 			}
 
 			if (name == "UI_B_Money")
 			{
-				text.m_num1 = dynamic_cast<SceneData*>(_pSceneData)->m_heldMoney;
+				text.mNum1 = dynamic_cast<SceneData*>(_pSceneData)->m_heldMoney;
 			}
 		}
 
@@ -1422,12 +1422,12 @@ void LevelManager::PrePlacementUpdate(SceneData* _pSceneData)
 	auto textureView = mRegistry.view<Texture2D>();
 	for (auto uiEntity : textureView)
 	{
-		auto& name = mRegistry.get<Name>(uiEntity).m_name;
+		auto& name = mRegistry.get<Name>(uiEntity).mName;
 		auto& img = mRegistry.get<Texture2D>(uiEntity);
 
 		if (name.find("UI_D") != std::string::npos || name.find("UI_B") != std::string::npos || name == "UI_C_OutSetting")
 		{
-			img.m_isVisible = true;
+			img.mIsVisible = true;
 		}
 	}
 
@@ -1435,7 +1435,7 @@ void LevelManager::PrePlacementUpdate(SceneData* _pSceneData)
 	auto msgView = mRegistry.view<MessageBox2D>();
 	for (auto entity : msgView)
 	{
-		auto& name = mRegistry.get<Name>(entity).m_name;
+		auto& name = mRegistry.get<Name>(entity).mName;
 		auto& msgBox = mRegistry.get<MessageBox2D>(entity);
 		if (name.find("UI_B_Rank") != std::string::npos)
 		{
@@ -1443,7 +1443,7 @@ void LevelManager::PrePlacementUpdate(SceneData* _pSceneData)
 		}
 	}
 
-	currentLevelState = GameState::PLACEMENT;
+	mCurrentLevelState = GameState::PLACEMENT;
 }
 
 void LevelManager::PlacementUpdate(SceneData* _pSceneData, float _dTime)
@@ -1453,17 +1453,17 @@ void LevelManager::PlacementUpdate(SceneData* _pSceneData, float _dTime)
 	auto uiView = mRegistry.view<Button>();
 	for (auto& uiEntity : uiView)
 	{
-		auto& name = mRegistry.get<Name>(uiEntity).m_name;
+		auto& name = mRegistry.get<Name>(uiEntity).mName;
 		auto& button = mRegistry.get<Button>(uiEntity);
 		auto& texture = mRegistry.get<Texture2D>(uiEntity);
 
 		if (name == "UI_D_Start")
 		{
-			if (mpUIManager->GetButtonState(button.m_pOwner) == ButtonState::PRESSED)
+			if (mpUIManager->GetButtonState(button.mpOwner) == ButtonState::PRESSED)
 			{
 				if (mpInputManager->GetKeyUp(KEY::LBUTTON))
 				{
-					currentPopUpState = PopUpState::OPEN_UNITDEPLOY;
+					mCurrentPopUpState = PopUpState::OPEN_UNITDEPLOY;
 					// 					mpSoundManager->PlaySFX("Snd_sfx_ClickBtn");
 					return;
 				}
@@ -1480,20 +1480,20 @@ void LevelManager::PlacementUpdate(SceneData* _pSceneData, float _dTime)
 			{
 				//button.mIsEnable = true;
 
-				if (mpUIManager->GetButtonState(button.m_pOwner) == ButtonState::PRESSED)
+				if (mpUIManager->GetButtonState(button.mpOwner) == ButtonState::PRESSED)
 				{
 
 					if (mpInputManager->GetKeyUp(KEY::LBUTTON))
 					{
 						// 이미 생성한 UID가 같으면 스킵!
-						if (texture.m_file == "UI_btn_Merc01.png")
+						if (texture.mFile == "UI_btn_Merc01.png")
 						{
 							mClassName = "Mercenary";
 							mIsClassButtonPressed = true;
 							// 							mpSoundManager->PlaySFX("Snd_sfx_ClickBtn");
 							return;
 						}
-						else if (texture.m_file == "UI_btn_Merc02.png")
+						else if (texture.mFile == "UI_btn_Merc02.png")
 						{
 							mClassName = "Archer";
 							mIsClassButtonPressed = true;
@@ -1520,7 +1520,7 @@ void LevelManager::PlacementUpdate(SceneData* _pSceneData, float _dTime)
 						auto userPlaceUnit = mpEntityManager->CreateEntity("player");
 						mTempUnitUID = userPlaceUnit->GetUID();
 						mpUnitSystem->GetPlayerSystem()->AddDeplyUnit(userPlaceUnit, mClassName);
-						userPlaceUnit->GetComponent<Transform>().m_localPosition = Vector3(-15.0f, 2, 0.0f);
+						userPlaceUnit->GetComponent<Transform>().mLocalPosition = Vector3(-15.0f, 2, 0.0f);
 						mpRenderManager->InitailizeEntity(userPlaceUnit);
 						// 유저가 배치를 시작할 것임을 알린다.
 						userPlaceUnit->GetComponent<PlayerComponent>().mIsDeploy = true;
@@ -1528,7 +1528,7 @@ void LevelManager::PlacementUpdate(SceneData* _pSceneData, float _dTime)
 					else
 					{
 						mpUnitSystem->GetPlayerSystem()->ChangeUnit(mpEntityManager->GetEntity(mTempUnitUID), mClassName);
-						mpEntityManager->GetEntity(mTempUnitUID)->GetComponent<Transform>().m_localPosition = Vector3(-15.0f, 2, 0.0f);
+						mpEntityManager->GetEntity(mTempUnitUID)->GetComponent<Transform>().mLocalPosition = Vector3(-15.0f, 2, 0.0f);
 						mpRenderManager->InitailizeEntity(mpEntityManager->GetEntity(mTempUnitUID));
 					}
 				}
@@ -1536,46 +1536,46 @@ void LevelManager::PlacementUpdate(SceneData* _pSceneData, float _dTime)
 			else
 			{
 				mIsClassButtonPressed = false; // 버튼이 눌린 상태 삭제
-				texture.m_isVisible = true;
+				texture.mIsVisible = true;
 				button.mIsEnable = false;
 				if (text)
 				{
-					text->m_isVisible = false;
+					text->mIsVisible = false;
 				}
 			}
 
 			// 호버링 시 설명 문구가 뜨게 한다.
-			if (mpUIManager->GetButtonState(button.m_pOwner) == ButtonState::HOVERED)
+			if (mpUIManager->GetButtonState(button.mpOwner) == ButtonState::HOVERED)
 			{
-				if (texture.m_file == "UI_btn_Merc01.png")
+				if (texture.mFile == "UI_btn_Merc01.png")
 				{
 					msg2D.mIsImgVisible = true;
 					msg2D.mIsTextVisible = true;
-					text->m_isVisible = true;
+					text->mIsVisible = true;
 				}
-				else if (texture.m_file == "UI_btn_Merc02.png")
+				else if (texture.mFile == "UI_btn_Merc02.png")
 				{
 					msg2D.mIsImgVisible = true;
 					msg2D.mIsTextVisible = true;
-					text->m_isVisible = true;
+					text->mIsVisible = true;
 				}
-				else if (texture.m_file == "UI_btn_Merc03.png")
+				else if (texture.mFile == "UI_btn_Merc03.png")
 				{
 					msg2D.mIsImgVisible = true;
 				}
-				else if (texture.m_file == "UI_btn_Merc04.png")
+				else if (texture.mFile == "UI_btn_Merc04.png")
 				{
 					msg2D.mIsImgVisible = true;
 				}
-				else if (texture.m_file == "UI_btn_Merc05.png")
+				else if (texture.mFile == "UI_btn_Merc05.png")
 				{
 					msg2D.mIsImgVisible = true;
 				}
-				else if (texture.m_file == "UI_btn_Merc06.png")
+				else if (texture.mFile == "UI_btn_Merc06.png")
 				{
 					msg2D.mIsImgVisible = true;
 				}
-				else if (texture.m_file == "UI_btn_Merc07.png")
+				else if (texture.mFile == "UI_btn_Merc07.png")
 				{
 					msg2D.mIsImgVisible = true;
 				}
@@ -1586,14 +1586,14 @@ void LevelManager::PlacementUpdate(SceneData* _pSceneData, float _dTime)
 				msg2D.mIsTextVisible = false;
 				if (text)
 				{
-					text->m_isVisible = false;
+					text->mIsVisible = false;
 				}
 			}
 		} //[End] : UI 클래스 버튼 관련 코드 종료
 		// 배치 롤백 버튼
 		if (name == "UI_D_Reset" && _pSceneData->m_aliveAlly != 0)
 		{
-			if (mpUIManager->GetButtonState(button.m_pOwner) == ButtonState::PRESSED)
+			if (mpUIManager->GetButtonState(button.mpOwner) == ButtonState::PRESSED)
 			{
 				if (mpInputManager->GetKeyUp(KEY::LBUTTON))
 				{
@@ -1625,14 +1625,14 @@ void LevelManager::PlacementUpdate(SceneData* _pSceneData, float _dTime)
 	{
 		auto& player = mRegistry.get<PlayerComponent>(playerEntity);
 		auto& transform = mRegistry.get<Transform>(playerEntity);
-		auto& owner = player.m_pOwner;
+		auto& owner = player.mpOwner;
 
 		// 1. 배치 중일 때만 마우스에 따라 위치 이동
 		if (player.mIsDeploy == true)
 		{
 			if (cursorFollowPos.x >= mStartPoint.x && cursorFollowPos.x <= mEndPoint.x && cursorFollowPos.z >= mStartPoint.y && cursorFollowPos.z <= mEndPoint.y)
 			{
-				transform.m_localPosition = Vector3(static_cast<int>(cursorFollowPos.x), cursorFollowPos.y, static_cast<int>(cursorFollowPos.z));
+				transform.mLocalPosition = Vector3(static_cast<int>(cursorFollowPos.x), cursorFollowPos.y, static_cast<int>(cursorFollowPos.z));
 				if (mIsOneDeploySet == true)
 				{
 					mIsOneDeploySet == false;
@@ -1684,32 +1684,32 @@ void LevelManager::PlacementUpdate(SceneData* _pSceneData, float _dTime)
 	auto textView = mRegistry.view<Text>();
 	for (auto text : textView)
 	{
-		auto& name = mRegistry.get<Name>(text).m_name;
+		auto& name = mRegistry.get<Name>(text).mName;
 		auto& textComp = mRegistry.get<Text>(text);
 		if (name == "UI_B_Money")
 		{
-			textComp.m_num1 = _pSceneData->m_heldMoney;
+			textComp.mNum1 = _pSceneData->m_heldMoney;
 		}
 
 		// 배치한 아군의 수를 업데이트한다.
 		if (name == "UI_D_AliveNum")
 		{
-			if (9 < textComp.m_num1 && textComp.m_num1 < 20)
+			if (9 < textComp.mNum1 && textComp.mNum1 < 20)
 			{
-				textComp.m_text = u8"%d";
-				textComp.m_position.x = 867.f;
+				textComp.mText = u8"%d";
+				textComp.mPosition.x = 867.f;
 			}
-			else if (textComp.m_num1 == 20)
+			else if (textComp.mNum1 == 20)
 			{
-				textComp.m_text = u8"%d";
-				textComp.m_position.x = 852.f;
+				textComp.mText = u8"%d";
+				textComp.mPosition.x = 852.f;
 			}
 			else
 			{
-				textComp.m_text = u8"0%d";
-				textComp.m_position.x = 852.f;
+				textComp.mText = u8"0%d";
+				textComp.mPosition.x = 852.f;
 			}
-			textComp.m_num1 = _pSceneData->m_aliveAlly;
+			textComp.mNum1 = _pSceneData->m_aliveAlly;
 		}
 
 		if (name == "UI_B_Money")
@@ -1719,7 +1719,7 @@ void LevelManager::PlacementUpdate(SceneData* _pSceneData, float _dTime)
 				// 				_pSceneData->m_heldMoney -= 100;
 				isPayment = false;
 			}
-			textComp.m_num1 = _pSceneData->m_heldMoney;
+			textComp.mNum1 = _pSceneData->m_heldMoney;
 		}
 
 		/// 배치한 용병 수가 10명이 넘어가면, 1명당 100골드가 소모된다는 것을 알린다.
@@ -1728,43 +1728,43 @@ void LevelManager::PlacementUpdate(SceneData* _pSceneData, float _dTime)
 	auto indicatorView = mRegistry.view<IndicatorComponent>();
 	for (auto indiEntity : indicatorView)
 	{
-		if (mRegistry.get<Name>(indiEntity).m_name == "selectedSquare")
+		if (mRegistry.get<Name>(indiEntity).mName == "selectedSquare")
 		{
 			auto& texture3dComp = mRegistry.get<Texture3D>(indiEntity);
 			auto& indicatorComp = mRegistry.get<IndicatorComponent>(indiEntity);
 			auto outline = mRegistry.try_get<OutlineComponent>(indiEntity);
 			auto alpha = mRegistry.try_get<AlphaBlendComponent>(indiEntity);
 
-			if (alpha->m_alpha < 0.5)
+			if (alpha->mAlpha < 0.5)
 			{
-				alpha->m_alpha += 0.01;
+				alpha->mAlpha += 0.01;
 			}
 			else
 			{
-				alpha->m_alpha = 0;
+				alpha->mAlpha = 0;
 			}
 
 			if (cursorFollowPos.x >= -15 && cursorFollowPos.x <= 15 && cursorFollowPos.z >= -15 && cursorFollowPos.z <= 15)
 			{
 				if (IsCanClickAreaXZ(cursorFollowPos, Vector2(-15, 10), Vector2(-9, -10), _pSceneData->m_aliveAlly) == true)
 				{
-					if (texture3dComp.m_diffuse != indicatorComp.mOriginalColor)
+					if (texture3dComp.mDiffuse != indicatorComp.mOriginalColor)
 					{
-						texture3dComp.m_diffuse = indicatorComp.mOriginalColor;
-						outline->m_color = Vector3(0, 0, 1);
+						texture3dComp.mDiffuse = indicatorComp.mOriginalColor;
+						outline->mColor = Vector3(0, 0, 1);
 						mpRenderManager->UpdateEntityTexture(mpEntityManager->GetEntity(indiEntity));
 					}
 				}
 				else
 				{
-					if (texture3dComp.m_diffuse != indicatorComp.mChangedColor)
+					if (texture3dComp.mDiffuse != indicatorComp.mChangedColor)
 					{
-						texture3dComp.m_diffuse = indicatorComp.mChangedColor;
-						outline->m_color = Vector3(1, 0, 0);
+						texture3dComp.mDiffuse = indicatorComp.mChangedColor;
+						outline->mColor = Vector3(1, 0, 0);
 						mpRenderManager->UpdateEntityTexture(mpEntityManager->GetEntity(indiEntity));
 					}
 				}
-				texture3dComp.m_pOwner->GetComponent<Transform>().m_localPosition = Vector3(static_cast<int>(cursorFollowPos.x), 0.1f, static_cast<int>(cursorFollowPos.z));
+				texture3dComp.mpOwner->GetComponent<Transform>().mLocalPosition = Vector3(static_cast<int>(cursorFollowPos.x), 0.1f, static_cast<int>(cursorFollowPos.z));
 			}
 		}
 	}
@@ -1779,7 +1779,7 @@ void LevelManager::PreplayUpdate(SceneData* _pSceneData)
 	auto texView = mRegistry.view<Texture2D>();
 	for (auto& entity : texView)
 	{
-		auto& name = mRegistry.get<Name>(entity).m_name;
+		auto& name = mRegistry.get<Name>(entity).mName;
 		// 소지금
 		auto& texture = mRegistry.get<Texture2D>(entity);
 		//auto button = mRegistry.try_get<Button>(entity);
@@ -1787,31 +1787,31 @@ void LevelManager::PreplayUpdate(SceneData* _pSceneData)
 		//UI 활성화
 		if (name == "UI_P_Timer")
 		{
-			texture.m_isVisible = true;
+			texture.mIsVisible = true;
 		}
 
 		if (name.find("UI_D") != std::string::npos)
 		{
-			texture.m_isVisible = false;
+			texture.mIsVisible = false;
 		}
 
-	} // End for문 : m_pEntityManager->GetEntityMap()
+	} // End for문 : mpEntityManager->GetEntityMap()
 
 	auto textView = mRegistry.view<Text>();
 	for (auto& entity : textView)
 	{
-		auto& name = mRegistry.get<Name>(entity).m_name;
+		auto& name = mRegistry.get<Name>(entity).mName;
 		auto& text = mRegistry.get<Text>(entity);
 
 		//UI 활성화
 		if (name == "UI_P_Timer")
 		{
-			text.m_isVisible = true;
+			text.mIsVisible = true;
 		}
 
 		if (name.find("UI_D") != std::string::npos)
 		{
-			text.m_isVisible = false;
+			text.mIsVisible = false;
 		}
 	}
 
@@ -1859,7 +1859,7 @@ void LevelManager::PlayUpdate(SceneData* _pSceneData, float _dTime)
 	auto indicatorView = mRegistry.view<IndicatorComponent>();
 	for (auto& entity : indicatorView)
 	{
-		if (mRegistry.get<Name>(entity).m_name == "selectedSquare")
+		if (mRegistry.get<Name>(entity).mName == "selectedSquare")
 		{
 			auto& tile = mRegistry.get<Texture3D>(entity);
 			auto outline = mRegistry.try_get<OutlineComponent>(entity);
@@ -1870,13 +1870,13 @@ void LevelManager::PlayUpdate(SceneData* _pSceneData, float _dTime)
 			else cursorPos.x -= 0.5;
 			if (cursorPos.z < 0) cursorPos.z -= 0.5;
 
-			if (alpha->m_alpha < 0.5)
+			if (alpha->mAlpha < 0.5)
 			{
-				alpha->m_alpha += 0.01;
+				alpha->mAlpha += 0.01;
 			}
 			else
 			{
-				alpha->m_alpha = 0;
+				alpha->mAlpha = 0;
 			}
 
 			if (cursorPos.x >= -15 && cursorPos.x <= 15 && cursorPos.z >= -15 && cursorPos.z <= 15)
@@ -1886,17 +1886,17 @@ void LevelManager::PlayUpdate(SceneData* _pSceneData, float _dTime)
 				mpAstar->AdjustToTileCenter(cursorPos, astarPos);
 				if ((*mpAstar->GetAstarMap())[static_cast<int>(astarPos.y + abs(mStartPoint.y))][static_cast<int>(astarPos.x + abs(mStartPoint.x))] == 0) // 장애물이 없는 곳만 클릭 가능
 				{
-					tile.m_diffuse = "blue.png";
-					outline->m_color = Vector3(0, 0, 1);
+					tile.mDiffuse = "blue.png";
+					outline->mColor = Vector3(0, 0, 1);
 					mpRenderManager->UpdateEntityTexture(mpEntityManager->GetEntity(entity));
 				}
 				else
 				{
-					tile.m_diffuse = "red.png";
-					outline->m_color = Vector3(1, 0, 0);
+					tile.mDiffuse = "red.png";
+					outline->mColor = Vector3(1, 0, 0);
 					mpRenderManager->UpdateEntityTexture(mpEntityManager->GetEntity(entity));
 				}
-				tile.m_pOwner->GetComponent<Transform>().m_localPosition = cursorPos;
+				tile.mpOwner->GetComponent<Transform>().mLocalPosition = cursorPos;
 			}
 		}
 	}
@@ -1967,7 +1967,7 @@ void LevelManager::PlayUpdate(SceneData* _pSceneData, float _dTime)
 	auto textView = mRegistry.view<Text>();
 	for (auto& entity : textView)
 	{
-		auto& name = mRegistry.get<Name>(entity).m_name;
+		auto& name = mRegistry.get<Name>(entity).mName;
 		auto& text = mRegistry.get<Text>(entity);
 		// 타이머
 		if (name == "UI_P_Timer")
@@ -1983,7 +1983,7 @@ void LevelManager::PlayUpdate(SceneData* _pSceneData, float _dTime)
 
 			// std::u8string으로 변환
 			std::string str = oss.str();
-			text.m_text = std::u8string(str.begin(), str.end());
+			text.mText = std::u8string(str.begin(), str.end());
 
 			// 10초 남았을때, 경고효과음 재생
 			if (!mPlayWarningSound && std::fabs(_pSceneData->m_time - 10.0f) < 0.001f)
@@ -1997,7 +1997,7 @@ void LevelManager::PlayUpdate(SceneData* _pSceneData, float _dTime)
 			{
 				_pSceneData->m_time = _pSceneData->m_totalTime;
 				DLOG(LOG_INFO, "Game Over");
-				//m_pWorldManager->GetCurrentWorld()->SetScene("game over");
+				//mpWorldManager->GetCurrentWorld()->SetScene("game over");
 				SetGameState(GameState::NONE_UI);
 				return;
 			}
@@ -2006,15 +2006,15 @@ void LevelManager::PlayUpdate(SceneData* _pSceneData, float _dTime)
 		// 플레이어의 소지금을 업데이트 한다.
 		if (name == "UI_B_Money")
 		{
-			text.m_num1 = _pSceneData->m_heldMoney;
+			text.mNum1 = _pSceneData->m_heldMoney;
 		}
 
 		if (name == "UI_B_StageGuide")
 		{
-			text.m_num1 = numEnemy;
+			text.mNum1 = numEnemy;
 		}
 
-	} // End for문 : m_pEntityManager->GetEntityMap()
+	} // End for문 : mpEntityManager->GetEntityMap()
 	if (numAlly == 0 || numEnemy == 0)
 	{
 		_pSceneData->m_aliveAlly = numAlly;
@@ -2046,7 +2046,7 @@ void LevelManager::NoneUI()
 	for (auto& entity : rigidView)
 	{
 		auto& rigid = mRegistry.get<Rigidbody>(entity);
-		rigid.m_isKinematic = true;
+		rigid.mIsKinematic = true;
 	}
 
 	auto resTextView = mRegistry.view<Text>();
@@ -2054,14 +2054,14 @@ void LevelManager::NoneUI()
 	{
 		auto& text = mRegistry.get<Text>(entity);
 
-		text.m_isVisible = false;
+		text.mIsVisible = false;
 	}
 
 	auto resView = mRegistry.view<Texture2D>();
 	for (auto entity : resView)
 	{
 		auto& img = mRegistry.get<Texture2D>(entity);
-		img.m_isVisible = false;
+		img.mIsVisible = false;
 	}
 
 	// 모든 메세지창 가리기
@@ -2087,7 +2087,7 @@ void LevelManager::NoneUI()
 	/// 동전 전부 삭제
 	DeleteMoney();
 
-	currentLevelState = GameState::POST_PLAY_ANIMATION;
+	mCurrentLevelState = GameState::POST_PLAY_ANIMATION;
 }
 
 void LevelManager::PostAnimationFixedUpdate(float _dTime)
@@ -2095,21 +2095,21 @@ void LevelManager::PostAnimationFixedUpdate(float _dTime)
 	JumpingAndRotUnit();
 	auto camera = GetWorldCamera();
 
-	tempTime += _dTime * 0.5f;
-	if (tempTime <= 1)
+	mPassedTime += _dTime * 0.5f;
+	if (mPassedTime <= 1)
 	{
-		CameraWalk(camera->mViewPos, mCameraPosInfo.mainPositionPerspective, mCameraPosInfo.pos6, tempTime);
-		CameraRotate(camera->mViewDir, mCameraPosInfo.mainRotationPerspective, mCameraPosInfo.rot6, tempTime);
+		CameraWalk(camera->mViewPos, mCameraPosInfo.mainPositionPerspective, mCameraPosInfo.pos6, mPassedTime);
+		CameraRotate(camera->mViewDir, mCameraPosInfo.mainRotationPerspective, mCameraPosInfo.rot6, mPassedTime);
 	}
-	else if (1 < tempTime && tempTime <= 2)
+	else if (1 < mPassedTime && mPassedTime <= 2)
 	{
-		CameraWalk(camera->mViewPos, mCameraPosInfo.pos6, mCameraPosInfo.pos7, (tempTime - 1.0f));
-		CameraRotate(camera->mViewDir, mCameraPosInfo.rot6, mCameraPosInfo.rot7, (tempTime - 1.0f));
+		CameraWalk(camera->mViewPos, mCameraPosInfo.pos6, mCameraPosInfo.pos7, (mPassedTime - 1.0f));
+		CameraRotate(camera->mViewDir, mCameraPosInfo.rot6, mCameraPosInfo.rot7, (mPassedTime - 1.0f));
 	}
-	else if (2.f < tempTime || mpInputManager->GetKeyUp(KEY::LBUTTON))
+	else if (2.f < mPassedTime || mpInputManager->GetKeyUp(KEY::LBUTTON))
 	{
-		currentLevelState = GameState::POST_PLAY;
-		tempTime = 0.0f;
+		mCurrentLevelState = GameState::POST_PLAY;
+		mPassedTime = 0.0f;
 	}
 
 	SmogUpdate(_dTime);
@@ -2123,12 +2123,12 @@ void LevelManager::PostplayUpdate(SceneData* _pSceneData)
 	auto resTextView = mRegistry.view<Text>();
 	for (auto entity : resTextView)
 	{
-		auto& name = mRegistry.get<Name>(entity).m_name;
+		auto& name = mRegistry.get<Name>(entity).mName;
 		auto& text = mRegistry.get<Text>(entity);
 
 		if (name.find("UI_Res") != std::string::npos)
 		{
-			text.m_isVisible = true;
+			text.mIsVisible = true;
 		}
 
 		// 결과창 출력에 사용할 이징함수 추가
@@ -2138,12 +2138,12 @@ void LevelManager::PostplayUpdate(SceneData* _pSceneData)
 	auto resView = mRegistry.view<Texture2D>();
 	for (auto entity : resView)
 	{
-		auto& name = mRegistry.get<Name>(entity).m_name;
+		auto& name = mRegistry.get<Name>(entity).mName;
 		auto& texture = mRegistry.get<Texture2D>(entity);
 
 		if (name.find("UI_Res") != std::string::npos)
 		{
-			texture.m_isVisible = true;
+			texture.mIsVisible = true;
 		}
 
 		// 보상, 결과 랭크 계산
@@ -2152,7 +2152,7 @@ void LevelManager::PostplayUpdate(SceneData* _pSceneData)
 		{
 			if (_pSceneData->m_aliveAlly == 0)
 			{
-				texture.m_file = "UI_img_RankF.png";
+				texture.mFile = "UI_img_RankF.png";
 				_pSceneData->m_remainAmount = _pSceneData->m_heldMoney;
 			}
 			else
@@ -2160,17 +2160,17 @@ void LevelManager::PostplayUpdate(SceneData* _pSceneData)
 				// A랭크
 				if (_pSceneData->m_heldMoney >= _pSceneData->m_rankA)
 				{
-					texture.m_file = "UI_img_RankA.png";
+					texture.mFile = "UI_img_RankA.png";
 					_pSceneData->m_remainAmount = _pSceneData->m_heldMoney;
 				}
 				else if (_pSceneData->m_heldMoney >= _pSceneData->m_rankB)
 				{
-					texture.m_file = "UI_img_RankB.png";
+					texture.mFile = "UI_img_RankB.png";
 					_pSceneData->m_remainAmount = _pSceneData->m_heldMoney;
 				}
 				else
 				{
-					texture.m_file = "UI_img_RankC.png";
+					texture.mFile = "UI_img_RankC.png";
 					_pSceneData->m_remainAmount = _pSceneData->m_heldMoney;
 				}
 			}
@@ -2181,35 +2181,35 @@ void LevelManager::PostplayUpdate(SceneData* _pSceneData)
 
 	for (auto entity : resView)
 	{
-		auto& name = mRegistry.get<Name>(entity).m_name;
+		auto& name = mRegistry.get<Name>(entity).mName;
 		auto& texture = mRegistry.get<Texture2D>(entity);
 		auto button = mRegistry.try_get<Button>(entity);
 
 		if (name == "UI_Res9")
 		{
-			texture.m_position.x = 1180.f;
-			button->mUIPosition.x = texture.m_position.x;
-			button->mUIHoveringPosition.x = texture.m_position.x;
-			button->mUIPressedPosition.x = texture.m_position.x;
+			texture.mPosition.x = 1180.f;
+			button->mUIPosition.x = texture.mPosition.x;
+			button->mUIHoveringPosition.x = texture.mPosition.x;
+			button->mUIPressedPosition.x = texture.mPosition.x;
 			/// 여기 버튼 위치도 바꿔야 하는지 확인
 			if (!mIsClear) // 못 깼으면? -> 재시작으로 교체
 			{
-				texture.m_file = "UI_btn_StageToStage.png";
-				//texture.m_isVisible = false;
+				texture.mFile = "UI_btn_StageToStage.png";
+				//texture.mIsVisible = false;
 				//button.mIsEnable = false;
 			}
 			else // 깼으면? -> 다음으로 교체
 			{
 				mIsRestart = false; // 재시작이 아님을 알림
 
-				texture.m_file = "UI_btn_StageToNext.png";
+				texture.mFile = "UI_btn_StageToNext.png";
 				if (mIsFinalStage == true)
 				{
-					texture.m_position.x = 1335.f;
-					button->mUIPosition.x = texture.m_position.x;
-					button->mUIHoveringPosition.x = texture.m_position.x;
-					button->mUIPressedPosition.x = texture.m_position.x;
-					tempTime = 0.0f;
+					texture.mPosition.x = 1335.f;
+					button->mUIPosition.x = texture.mPosition.x;
+					button->mUIHoveringPosition.x = texture.mPosition.x;
+					button->mUIPressedPosition.x = texture.mPosition.x;
+					mPassedTime = 0.0f;
 					FadePreSetting(true);
 				}
 			}
@@ -2219,12 +2219,12 @@ void LevelManager::PostplayUpdate(SceneData* _pSceneData)
 		{
 			if (mIsFinalStage == true && mIsClear == true)// 만약 현재 스테이지가 마지막 스테이지고 클리어라면 메인으로는 없다
 			{
-				texture.m_isVisible = false;
+				texture.mIsVisible = false;
 				button->mIsEnable = false;
 			}
 			else
 			{
-				texture.m_isVisible = true;
+				texture.mIsVisible = true;
 				button->mIsEnable = true;
 			}
 		}
@@ -2257,12 +2257,12 @@ void LevelManager::ResultUpdate(SceneData* _pSceneData, float _dTime)
 			auto partView = mRegistry.view<ParticleComponent>();
 			for (auto& entity : partView)
 			{
-				auto& name = mRegistry.get<Name>(entity).m_name;
+				auto& name = mRegistry.get<Name>(entity).mName;
 				auto& particle = mRegistry.get<ParticleComponent>(entity);
-				particle.m_pParticleData->position = Vector3(-40, RandomUtil::RandomInt(3, 10), RandomUtil::RandomInt(-20, 20));
+				particle.mpParticleData->position = Vector3(-40, RandomUtil::RandomInt(3, 10), RandomUtil::RandomInt(-20, 20));
 				if (name == "FireCracker")
 				{
-					mpRenderManager->AddParticle(200, *particle.m_pParticleData);
+					mpRenderManager->AddParticle(200, *particle.mpParticleData);
 				}
 			}
 		}
@@ -2273,7 +2273,7 @@ void LevelManager::ResultUpdate(SceneData* _pSceneData, float _dTime)
 	auto textView = mRegistry.view<Text>();
 	for (auto entity : textView)
 	{
-		auto& name = mRegistry.get<Name>(entity).m_name;
+		auto& name = mRegistry.get<Name>(entity).mName;
 
 		if (name.find("UI_Res") != std::string::npos)
 		{
@@ -2299,7 +2299,7 @@ void LevelManager::ResultUpdate(SceneData* _pSceneData, float _dTime)
 						formattedStr += str[i];
 
 						// std::string을 std::u8string으로 변환
-						text->m_text = std::u8string(formattedStr.begin(), formattedStr.end());
+						text->mText = std::u8string(formattedStr.begin(), formattedStr.end());
 					}
 				}
 
@@ -2334,7 +2334,7 @@ void LevelManager::ResultUpdate(SceneData* _pSceneData, float _dTime)
 					}
 
 					// std::string을 std::u8string으로 변환
-					text->m_text = std::u8string(formattedStr.begin(), formattedStr.end());
+					text->mText = std::u8string(formattedStr.begin(), formattedStr.end());
 				}
 				// 남은 금액
 				else if (name == "UI_Res8")
@@ -2367,7 +2367,7 @@ void LevelManager::ResultUpdate(SceneData* _pSceneData, float _dTime)
 					}
 
 					// std::string을 std::u8string으로 변환
-					text->m_text = std::u8string(formattedStr.begin(), formattedStr.end());
+					text->mText = std::u8string(formattedStr.begin(), formattedStr.end());
 				}
 			}
 
@@ -2375,10 +2375,10 @@ void LevelManager::ResultUpdate(SceneData* _pSceneData, float _dTime)
 		auto resView = mRegistry.view<Button>();
 		for (auto entity : resView)
 		{
-			auto& name = mRegistry.get<Name>(entity).m_name;
+			auto& name = mRegistry.get<Name>(entity).mName;
 			auto& button = mRegistry.get<Button>(entity);
 
-			if (button.GetOwnerName() == "UI_Res9" && mpUIManager->GetButtonState(button.m_pOwner) == ButtonState::PRESSED)
+			if (button.GetOwnerName() == "UI_Res9" && mpUIManager->GetButtonState(button.mpOwner) == ButtonState::PRESSED)
 			{
 				if (mIsClear == true) // 다음일 때
 				{
@@ -2389,21 +2389,21 @@ void LevelManager::ResultUpdate(SceneData* _pSceneData, float _dTime)
 					else
 					{
 						mIsNext = true;
-						currentUIAniState = UIAnimationState::VISIBLE;
+						mCurrentUIAniState = UIAnimationState::VISIBLE;
 					}
 				}
 				else // 재시작일 때
 				{
-					currentLevelState = GameState::RESTART;
+					mCurrentLevelState = GameState::RESTART;
 				}
 				break;
 			}
 
 			if (button.GetOwnerName() == "UI_Res11")
 			{
-				if (mpUIManager->GetButtonState(button.m_pOwner) == ButtonState::PRESSED)
+				if (mpUIManager->GetButtonState(button.mpOwner) == ButtonState::PRESSED)
 				{
-					currentPopUpState = PopUpState::OPEN_MAINMENU;
+					mCurrentPopUpState = PopUpState::OPEN_MAINMENU;
 					if (!mpSoundManager->IsPlaying("Snd_sfx_ClickBtn"))
 					{
 						mpSoundManager->PlaySFX("Snd_sfx_ClickBtn");
@@ -2424,29 +2424,29 @@ void LevelManager::ResultUpdate(SceneData* _pSceneData, float _dTime)
 	auto textureView = mRegistry.view<Texture2D>();
 	for (auto entity : textureView)
 	{
-		auto& name = mRegistry.get<Name>(entity).m_name;
+		auto& name = mRegistry.get<Name>(entity).mName;
 		auto& img = mRegistry.get<Texture2D>(entity);
 
 		// 랭크 패널
 		if (name == "UI_Res6")
 		{
 			auto img = mRegistry.try_get<Texture2D>(entity);
-			UpdateRandomColor(img->m_rgba, _dTime, 3.0f);
+			UpdateRandomColor(img->mRgba, _dTime, 3.0f);
 		}
 	}
 
 
 	if (mIsEndingFade == true)
 	{
-		tempTime += _dTime * 0.1f; /// 엔딩 크레딧 페이드 속도 조정하고 싶으면 이거 조정
+		mPassedTime += _dTime * 0.1f; /// 엔딩 크레딧 페이드 속도 조정하고 싶으면 이거 조정
 		auto view = mRegistry.view<FadeInOut>();
 		for (auto& entity : view)
 		{
-			auto& name = mRegistry.get<Name>(entity).m_name;
+			auto& name = mRegistry.get<Name>(entity).mName;
 			auto& img = mRegistry.get<FadeInOut>(entity);
 			if (name == "FaidInOut")
 			{
-				if (img.IsFadingOutFin(tempTime, 1.0f) == true)
+				if (img.IsFadingOutFin(mPassedTime, 1.0f) == true)
 				{
 					mIsGameEnding = true;
 				}
@@ -2465,14 +2465,14 @@ void LevelManager::UpdateParticle(float _dTime)
 		auto particle = mRegistry.try_get<ParticleComponent>(entity);
 		auto& player = mRegistry.get<PlayerComponent>(entity);
 		auto& trsComp = mRegistry.get<Transform>(entity);
-		auto& name = mRegistry.get<Name>(entity).m_name;
-		particle->m_pParticleData->position = trsComp.m_localPosition;
-		particle->m_pParticleData->direction = player.tempDirection;
-		particle->m_pParticleData->direction.Normalize();
+		auto& name = mRegistry.get<Name>(entity).mName;
+		particle->mpParticleData->position = trsComp.mLocalPosition;
+		particle->mpParticleData->direction = player.tempDirection;
+		particle->mpParticleData->direction.Normalize();
 
 		if (player.mOwnState == State::LOOT)
 		{
-			mpRenderManager->AddParticle(100, *particle->m_pParticleData);
+			mpRenderManager->AddParticle(100, *particle->mpParticleData);
 		}
 	}
 
@@ -2481,15 +2481,15 @@ void LevelManager::UpdateParticle(float _dTime)
 		auto particle = mRegistry.try_get<ParticleComponent>(entity);
 		auto& player = mRegistry.get<EnemyComponent>(entity);
 		auto& trsComp = mRegistry.get<Transform>(entity);
-		auto& name = mRegistry.get<Name>(entity).m_name;
-		particle->m_pParticleData->direction = player.tempDirection;
-		particle->m_pParticleData->direction.Normalize();
+		auto& name = mRegistry.get<Name>(entity).mName;
+		particle->mpParticleData->direction = player.tempDirection;
+		particle->mpParticleData->direction.Normalize();
 
-		particle->m_pParticleData->position = trsComp.m_localPosition;
+		particle->mpParticleData->position = trsComp.mLocalPosition;
 
 		if (player.mOwnState == State::LOOT)
 		{
-			mpRenderManager->AddParticle(100, *particle->m_pParticleData);
+			mpRenderManager->AddParticle(100, *particle->mpParticleData);
 		}
 	}
 }
@@ -2498,42 +2498,42 @@ void LevelManager::StartAnimationFixedUpdate(float _dTime)
 {
 	//static float time = 0;
 	auto camera = GetWorldCamera();
-	tempTime += _dTime * 0.5f;
+	mPassedTime += _dTime * 0.5f;
 	//[기획]2초 동안 좌표(0, 17, -17.5)로 이동하며 회전값(0, -0.8, 0.6)이 되도록 고개 숙이듯 회전
-	if (tempTime <= 0.5)
+	if (mPassedTime <= 0.5)
 	{
 		//CameraWalk(camera->mViewPos, mCameraPosInfo.startPos, mCameraPosInfo.pos1, tempTime * 2);
-		CameraEasing("easeInSine", camera->mViewPos, mCameraPosInfo.startPos, mCameraPosInfo.pos2, tempTime);
+		CameraEasing("easeInSine", camera->mViewPos, mCameraPosInfo.startPos, mCameraPosInfo.pos2, mPassedTime);
 		//CameraRotate(camera->mViewDir, mCameraPosInfo.startRot, mCameraPosInfo.rot2, tempTime);
 	}
 	// 플밍이 추가한 구간
-	else if (0.5 < tempTime && tempTime <= 1)
+	else if (0.5 < mPassedTime && mPassedTime <= 1)
 	{
-		CameraEasing("easeInSine", camera->mViewPos, mCameraPosInfo.startPos, mCameraPosInfo.pos2, tempTime);
-		CameraEasing("easeInSine", camera->mViewDir, mCameraPosInfo.startRot, mCameraPosInfo.rot2, (tempTime - 0.5f) * 2);
+		CameraEasing("easeInSine", camera->mViewPos, mCameraPosInfo.startPos, mCameraPosInfo.pos2, mPassedTime);
+		CameraEasing("easeInSine", camera->mViewDir, mCameraPosInfo.startRot, mCameraPosInfo.rot2, (mPassedTime - 0.5f) * 2);
 	}
 	// [기획] 페이드인이었으나 정신 사나울 듯 하여 2초 동안 이동으로 임시로 함
-	else if (1 < tempTime && tempTime <= 2)
+	else if (1 < mPassedTime && mPassedTime <= 2)
 	{
-		CameraWalk(camera->mViewPos, mCameraPosInfo.pos2, mCameraPosInfo.pos3, (tempTime - 1.0f));
-		CameraEasing("easeOutSine", camera->mViewDir, mCameraPosInfo.rot2, mCameraPosInfo.rot3, (tempTime - 1.0f));
+		CameraWalk(camera->mViewPos, mCameraPosInfo.pos2, mCameraPosInfo.pos3, (mPassedTime - 1.0f));
+		CameraEasing("easeOutSine", camera->mViewDir, mCameraPosInfo.rot2, mCameraPosInfo.rot3, (mPassedTime - 1.0f));
 	}
 	// [기획] 좌표 (-3, 10, 0)으로 이동하며, 동시에 회전값이 (0.8, -0.6, 0)이 되도록 회전 // 알아서 1초로 정함
-	else if (2.3f < tempTime && tempTime <= 2.8f)
+	else if (2.3f < mPassedTime && mPassedTime <= 2.8f)
 	{
-		CameraWalk(camera->mViewPos, mCameraPosInfo.pos3, mCameraPosInfo.pos4, (tempTime - 2.3f) * 2);
-		CameraRotate(camera->mViewDir, mCameraPosInfo.rot3, mCameraPosInfo.rot4, (tempTime - 2.3f) * 2);
+		CameraWalk(camera->mViewPos, mCameraPosInfo.pos3, mCameraPosInfo.pos4, (mPassedTime - 2.3f) * 2);
+		CameraRotate(camera->mViewDir, mCameraPosInfo.rot3, mCameraPosInfo.rot4, (mPassedTime - 2.3f) * 2);
 	}
 	// 페이드 아웃
-	else if (2.8f < tempTime && tempTime <= 2.9f)
+	else if (2.8f < mPassedTime && mPassedTime <= 2.9f)
 	{
 		FadePreSetting(true);
 	}
-	else if (2.9f < tempTime && tempTime <= 3.5f)
+	else if (2.9f < mPassedTime && mPassedTime <= 3.5f)
 	{
 		FadeOutScreen(_dTime);
 	}
-	else if (3.5f < tempTime && tempTime <= 3.6f)
+	else if (3.5f < mPassedTime && mPassedTime <= 3.6f)
 	{
 		FadePreSetting(false);
 		mpRenderManager->CameraSetOrthographic(0.03);
@@ -2541,39 +2541,39 @@ void LevelManager::StartAnimationFixedUpdate(float _dTime)
 		auto view = mRegistry.view<Texture2D>();
 		for (auto& entity : view)
 		{
-			auto& name = mRegistry.get<Name>(entity).m_name;
+			auto& name = mRegistry.get<Name>(entity).mName;
 			auto& texture = mRegistry.get<Texture2D>(entity);
 			if (name == "UI_Effect_Start")
 			{
-				texture.m_isVisible = true;
+				texture.mIsVisible = true;
 			}
 		}
 	}
-	else if (3.6f < tempTime && tempTime <= 4.2f)
+	else if (3.6f < mPassedTime && mPassedTime <= 4.2f)
 	{
 		FadeInScreen(_dTime);
 		camera->SetEyePos(Vector3(-16.46, 18.06, -16.62));
 		camera->SetDirection(Vector3(0.57735, -0.57735, 0.57735));
 	}
-	else if (4.2f < tempTime && tempTime <= 4.7f)
+	else if (4.2f < mPassedTime && mPassedTime <= 4.7f)
 	{
 		auto view = mRegistry.view<Texture2D>();
 		for (auto& entity : view)
 		{
-			auto& name = mRegistry.get<Name>(entity).m_name;
+			auto& name = mRegistry.get<Name>(entity).mName;
 			auto& texture = mRegistry.get<Texture2D>(entity);
 			if (name == "UI_Effect_Start")
 			{
-				mpEasingFunc->EasingFuncMap["easeInSine"](0, -653.f, (tempTime - 4.2f) * 4, &texture.m_position.y);
+				mpEasingFunc->EasingFuncMap["easeInSine"](0, -653.f, (mPassedTime - 4.2f) * 4, &texture.mPosition.y);
 			}
 		}
 	}
-	else if (4.5f < tempTime)
+	else if (4.5f < mPassedTime)
 	{
 		auto view = mRegistry.view<FadeInOut>();
 		for (auto& entity : view)
 		{
-			auto& name = mRegistry.get<Name>(entity).m_name;
+			auto& name = mRegistry.get<Name>(entity).mName;
 			auto& img = mRegistry.get<FadeInOut>(entity);
 			if (name == "UI_Effect_Start")
 			{
@@ -2582,8 +2582,8 @@ void LevelManager::StartAnimationFixedUpdate(float _dTime)
 				{
 					img.mAlpha = 0.0f;
 					img.state = FadeInOutState::FADE_IN;
-					currentLevelState = GameState::PRE_PLACEMENT;
-					tempTime = 0.0f;
+					mCurrentLevelState = GameState::PRE_PLACEMENT;
+					mPassedTime = 0.0f;
 				}
 			}
 		}
@@ -2616,10 +2616,10 @@ void LevelManager::ResetPlayer(SceneData* _pSceneData)
 	for (auto& weaponEntity : weaponView)
 	{
 		auto& transform = mRegistry.get<Transform>(weaponEntity);
-		if (transform.m_pParent)
+		if (transform.mpParent)
 		{
-			auto& parentTrs = transform.m_pParent;
-			if (parentTrs->m_pOwner->HasComponent<WeaponComponent>() && parentTrs->m_pOwner->HasComponent<PlayerComponent>())
+			auto& parentTrs = transform.mpParent;
+			if (parentTrs->mpOwner->HasComponent<WeaponComponent>() && parentTrs->mpOwner->HasComponent<PlayerComponent>())
 			{
 				mpEntityManager->RemoveEntity(static_cast<UID>(weaponEntity));
 			}
@@ -2656,13 +2656,13 @@ void LevelManager::ResetPlayer(SceneData* _pSceneData)
 
 void LevelManager::UpdateRandomColor(Vector4& _rgba, float _dTime, float _speed)
 {
-	tempTime += _dTime;
+	mPassedTime += _dTime;
 	// 색상 변경 속도 조절
 
 	// 시간에 따라 R, G, B 값을 변환
-	_rgba.x = (sin(tempTime * _speed) + 1.0f) * 0.5f;   // 0~255 범위로 변환
-	_rgba.y = (sin(tempTime * _speed + 2.0f) + 1.0f) * 0.5f;
-	_rgba.z = (sin(tempTime * _speed + 4.0f) + 1.0f) * 0.5f;
+	_rgba.x = (sin(mPassedTime * _speed) + 1.0f) * 0.5f;   // 0~255 범위로 변환
+	_rgba.y = (sin(mPassedTime * _speed + 2.0f) + 1.0f) * 0.5f;
+	_rgba.z = (sin(mPassedTime * _speed + 4.0f) + 1.0f) * 0.5f;
 }
 
 void LevelManager::SetVolume(const std::string& _fileName, const shared_ptr<Entity>& _entity, int& _intNum, int& _whatVolume)
@@ -2699,12 +2699,12 @@ void LevelManager::ManagePopupDisplay(PopUpState _state, PopUpState _state2/* = 
 	auto uiTextureView = mRegistry.view<Texture2D>();
 	for (auto& uiEntity : uiTextureView)
 	{
-		auto& name = mRegistry.get<Name>(uiEntity).m_name;
+		auto& name = mRegistry.get<Name>(uiEntity).mName;
 		auto button = mRegistry.try_get<Button>(uiEntity);
 		auto text = mRegistry.try_get<Text>(uiEntity);
 		auto& texture = mRegistry.get<Texture2D>(uiEntity);
 
-		if (currentPopUpState == _state || currentPopUpState == _state2)
+		if (mCurrentPopUpState == _state || mCurrentPopUpState == _state2)
 		{
 			// 팝업창이 뜰 경우 모두 보이게 한다.
 			if (name.find("UI_Ver") != std::string::npos)
@@ -2715,14 +2715,14 @@ void LevelManager::ManagePopupDisplay(PopUpState _state, PopUpState _state2/* = 
 					button->mButtonState = ButtonState::NORMAL;
 				}
 
-				texture.m_isVisible = true;
+				texture.mIsVisible = true;
 				if (name == "UI_Verify_Main")
 				{
-					text->m_isVisible = true;
+					text->mIsVisible = true;
 				}
 			}
 		}
-		else if (currentPopUpState == PopUpState::CLOSED)
+		else if (mCurrentPopUpState == PopUpState::CLOSED)
 		{
 			if (name.find("UI_Ver") != std::string::npos)
 			{
@@ -2731,10 +2731,10 @@ void LevelManager::ManagePopupDisplay(PopUpState _state, PopUpState _state2/* = 
 					// 버튼은 한 번만 클릭된다.
 					button->mButtonState = ButtonState::NORMAL;
 				}
-				texture.m_isVisible = false;
+				texture.mIsVisible = false;
 				if (name == "UI_Verify_Main")
 				{
-					text->m_isVisible = false;
+					text->mIsVisible = false;
 				}
 			}
 		}
@@ -2761,7 +2761,7 @@ Vector3 LevelManager::GetTargetPosition(Vector2 _mousePos, int _screenWidth, int
 	{		// 카메라의 마우스 위치 업데이트
 		if (entity->GetName() == "Camera")
 		{
-			mpCamera = entity->GetComponent<CameraComponent>().m_pCamera;
+			mpCamera = entity->GetComponent<CameraComponent>().mpCamera;
 		}
 	}
 
@@ -2826,7 +2826,7 @@ void LevelManager::JumpingAndRotUnit()
 		if (hpEntity.mHealthPercentage > 0)
 		{
 			auto& trs = mRegistry.get<Transform>(entity);
-			trs.m_localRotation.y += DirectX::XMConvertToRadians(RandomUtil::RandomFloat(0.0f, 2.0f));
+			trs.mLocalRotation.y += DirectX::XMConvertToRadians(RandomUtil::RandomFloat(0.0f, 2.0f));
 			animation.mpTargetAnimation = mpResourceManager->Get_Animation("Character@Cast Spell 02.FBX");
 			animation.mPlaySpeed = RandomUtil::RandomFloat(0.5f, 2.0f);
 		}
@@ -2851,7 +2851,7 @@ void LevelManager::UpdateRankBar(SceneData* _pSceneData)
 	auto msgView = mRegistry.view<MessageBox2D>();
 	for (auto& entity : msgView)
 	{
-		auto& name = mRegistry.get<Name>(entity).m_name;
+		auto& name = mRegistry.get<Name>(entity).mName;
 		auto& msgComp = mRegistry.get<MessageBox2D>(entity);
 		if (name == "UI_B_Rank_Gauge")
 		{
@@ -2909,32 +2909,32 @@ void LevelManager::KillAllEnemies()
 
 GameState LevelManager::GetGameState()
 {
-	return currentLevelState;
+	return mCurrentLevelState;
 }
 
 void LevelManager::SetGameState(GameState _state)
 {
-	currentLevelState = _state;
+	mCurrentLevelState = _state;
 }
 
 PopUpState LevelManager::GetPopUpState()
 {
-	return currentPopUpState;
+	return mCurrentPopUpState;
 }
 
 void LevelManager::SetPopUpState(PopUpState _state)
 {
-	currentPopUpState = _state;
+	mCurrentPopUpState = _state;
 }
 
 UIAnimationState LevelManager::GetUIAnimationState()
 {
-	return currentUIAniState;
+	return mCurrentUIAniState;
 }
 
 void LevelManager::SetUIAnimationState(UIAnimationState _state)
 {
-	currentUIAniState = _state;
+	mCurrentUIAniState = _state;
 }
 
 void LevelManager::CameraWalk(Vector3& _target, const Vector3& _start, const Vector3& _end, float _time)
@@ -2964,9 +2964,9 @@ Camera* LevelManager::GetWorldCamera()
 	for (auto& entity : view)
 	{
 		auto& cameraComp = mRegistry.get<CameraComponent>(entity);
-		if (cameraComp.m_cameraEnum == 0)
+		if (cameraComp.mCameraEnum == 0)
 		{
-			return cameraComp.m_pCamera;
+			return cameraComp.mpCamera;
 		}
 	}
 
@@ -2978,7 +2978,7 @@ void LevelManager::FadePreSetting(bool _mIsFadeOut)
 	auto view = mRegistry.view<FadeInOut>();
 	for (auto& entity : view)
 	{
-		auto& name = mRegistry.get<Name>(entity).m_name;
+		auto& name = mRegistry.get<Name>(entity).mName;
 		auto& img = mRegistry.get<FadeInOut>(entity);
 		if (name == "FaidInOut")
 		{
@@ -3009,7 +3009,7 @@ void LevelManager::FadeInScreen(float _time)
 	auto view = mRegistry.view<FadeInOut>();
 	for (auto& entity : view)
 	{
-		auto& name = mRegistry.get<Name>(entity).m_name;
+		auto& name = mRegistry.get<Name>(entity).mName;
 		auto& img = mRegistry.get<FadeInOut>(entity);
 		if (name == "FaidInOut")
 		{
@@ -3023,7 +3023,7 @@ void LevelManager::FadeOutScreen(float _time)
 	auto view = mRegistry.view<FadeInOut>();
 	for (auto& entity : view)
 	{
-		auto& name = mRegistry.get<Name>(entity).m_name;
+		auto& name = mRegistry.get<Name>(entity).mName;
 		auto& img = mRegistry.get<FadeInOut>(entity);
 		if (name == "FaidInOut")
 		{
@@ -3046,12 +3046,12 @@ void LevelManager::AddCamera(const Vector3& _pos, const Vector3& _viewDir)
 	auto camera = mpEntityManager->CreateEntity("Camera");
 	camera->AddComponent<CameraComponent>(mpRenderManager->GetScreenWidth(), mpRenderManager->GetScreenHeight()
 		, 10.f, _pos, _viewDir, Vector3(0.f, 1.f, 0.f), Vector3(70.f, 0.1f, 10000.f), static_cast<unsigned int>(cameraEnum::WorldCamera));
-	camera->GetComponent<CameraComponent>().m_pCamera->mIsFirstPersonMode = false;
+	camera->GetComponent<CameraComponent>().mpCamera->mIsFirstPersonMode = false;
 
-	auto& cameraObj = camera->GetComponent<CameraComponent>().m_pCamera;
+	auto& cameraObj = camera->GetComponent<CameraComponent>().mpCamera;
 
-	auto& nearZ = camera->GetComponent<CameraComponent>().m_pCamera->mNearZ;
-	auto& farZ = camera->GetComponent<CameraComponent>().m_pCamera->mFarZ;
+	auto& nearZ = camera->GetComponent<CameraComponent>().mpCamera->mNearZ;
+	auto& farZ = camera->GetComponent<CameraComponent>().mpCamera->mFarZ;
 }
 
 std::vector<EnemyData> LevelManager::GetSceneEnemyDataVec()
@@ -3066,7 +3066,7 @@ void LevelManager::DeleteMoney()
 	for (auto& entity : moneyView)
 	{
 		auto& money = mRegistry.get<MoneyComponent>(entity);
-		mpEntityManager->RemoveEntity(money.m_pOwner->GetUID());
+		mpEntityManager->RemoveEntity(money.mpOwner->GetUID());
 	}
 
 	mpUnitSystem->GetProjectileSystem()->GetMoneyPosVec()->clear();
@@ -3079,8 +3079,8 @@ void LevelManager::EnemyUpdate(float _dTime)
 	{
 		auto& enemyComp = mRegistry.get<EnemyComponent>(entity);
 
-		//mpUnitSystem->GetPlayerSystem()->EnemyUnitUpdate(m_pEntityManager->GetEntity(entity), _dTime); // 적군 유닛을 업데이트 합니다.
-		mpUnitSystem->GetPlayerSystem()->EnemyUnitUpdate(enemyComp.m_pOwner, _dTime); // 적군 유닛을 업데이트 합니다.
+		//mpUnitSystem->GetPlayerSystem()->EnemyUnitUpdate(mpEntityManager->GetEntity(entity), _dTime); // 적군 유닛을 업데이트 합니다.
+		mpUnitSystem->GetPlayerSystem()->EnemyUnitUpdate(enemyComp.mpOwner, _dTime); // 적군 유닛을 업데이트 합니다.
 
 		physx::PxFilterData filterData = mpPhysicsManager->GetFilterData(entity);
 		filterData.word1 |= 8;
@@ -3111,12 +3111,12 @@ void LevelManager::DeleteEnemyAll()
 	for (auto& weaponEntity : weaponView)
 	{
 		auto& transform = mRegistry.get<Transform>(weaponEntity);
-		if (transform.m_pParent)
+		if (transform.mpParent)
 		{
-			auto& name = mRegistry.get<Name>(weaponEntity).m_name;
-			auto& parentTrs = transform.m_pParent;
-			auto& name2 = mRegistry.get<Name>(static_cast<entt::entity>(parentTrs->m_pOwner->GetUID())).m_name;
-			if (parentTrs->m_pOwner->HasComponent<WeaponComponent>() && parentTrs->m_pOwner->HasComponent<EnemyComponent>())
+			auto& name = mRegistry.get<Name>(weaponEntity).mName;
+			auto& parentTrs = transform.mpParent;
+			auto& name2 = mRegistry.get<Name>(static_cast<entt::entity>(parentTrs->mpOwner->GetUID())).mName;
+			if (parentTrs->mpOwner->HasComponent<WeaponComponent>() && parentTrs->mpOwner->HasComponent<EnemyComponent>())
 			{
 				mpEntityManager->RemoveEntity(static_cast<UID>(weaponEntity));
 			}
@@ -3139,18 +3139,18 @@ void LevelManager::TutorialClassDeploy()
 		auto uiView = mRegistry.view<Button>();
 		for (auto& uiEntity : uiView)
 		{
-			auto& name = mRegistry.get<Name>(uiEntity).m_name;
+			auto& name = mRegistry.get<Name>(uiEntity).mName;
 			auto& button = mRegistry.get<Button>(uiEntity);
 			auto& img = mRegistry.get<Texture2D>(uiEntity);
 
 			if (name == "UI_D_Class")
 			{
-				if (mpUIManager->GetButtonState(button.m_pOwner) == ButtonState::PRESSED)
+				if (mpUIManager->GetButtonState(button.mpOwner) == ButtonState::PRESSED)
 				{
 					// 					mpSoundManager->PlaySFX("Snd_sfx_ClickBtn");
 					if (mpInputManager->GetKeyUp(KEY::LBUTTON))
 					{
-						if (img.m_file == "UI_btn_Merc01.png")
+						if (img.mFile == "UI_btn_Merc01.png")
 						{
 							mClassName = "Mercenary";
 							mIsClassButtonPressed = true;
@@ -3166,7 +3166,7 @@ void LevelManager::TutorialClassDeploy()
 						auto userPlaceUnit = mpEntityManager->CreateEntity("player");
 						mTempUnitUID = userPlaceUnit->GetUID();
 						mpUnitSystem->GetPlayerSystem()->AddDeplyUnit(userPlaceUnit, mClassName);
-						userPlaceUnit->GetComponent<Transform>().m_localPosition = Vector3(-15.0f, 2, 0.0f);
+						userPlaceUnit->GetComponent<Transform>().mLocalPosition = Vector3(-15.0f, 2, 0.0f);
 						mpRenderManager->InitailizeEntity(userPlaceUnit);
 						// 유저가 배치를 시작할 것임을 알린다.
 						userPlaceUnit->GetComponent<PlayerComponent>().mIsDeploy = true;
@@ -3187,14 +3187,14 @@ void LevelManager::TutorialClassDeployed(Vector3& _cursorPos, bool _isPayment, S
 	{
 		auto& player = mRegistry.get<PlayerComponent>(playerEntity);
 		auto& transform = mRegistry.get<Transform>(playerEntity);
-		auto& owner = player.m_pOwner;
+		auto& owner = player.mpOwner;
 
 		// 1. 배치 중일 때만 마우스에 따라 위치 이동
 		if (player.mIsDeploy == true)
 		{
 			if (_cursorPos.x >= mStartPoint.x && _cursorPos.x <= mEndPoint.x && _cursorPos.z >= mStartPoint.y && _cursorPos.z <= mEndPoint.y)
 			{
-				transform.m_localPosition = Vector3(static_cast<int>(_cursorPos.x), _cursorPos.y, static_cast<int>(_cursorPos.z));
+				transform.mLocalPosition = Vector3(static_cast<int>(_cursorPos.x), _cursorPos.y, static_cast<int>(_cursorPos.z));
 				if (mIsOneDeploySet == true)
 				{
 					mIsOneDeploySet = false;
@@ -3229,13 +3229,13 @@ void LevelManager::TutorialClassDeployed(Vector3& _cursorPos, bool _isPayment, S
 							auto uiView = mRegistry.view<Button>();
 							for (auto& uiEntity : uiView)
 							{
-								auto& name = mRegistry.get<Name>(uiEntity).m_name;
+								auto& name = mRegistry.get<Name>(uiEntity).mName;
 								auto& button = mRegistry.get<Button>(uiEntity);
 								auto& texture = mRegistry.get<Texture2D>(uiEntity);
 
 								if (name == "UI_D_Class")
 								{
-									if (texture.m_file == "UI_btn_Merc01.png")
+									if (texture.mFile == "UI_btn_Merc01.png")
 									{
 										button.mIsEnable = false;
 									}
@@ -3262,7 +3262,7 @@ void LevelManager::AllDeploy(Vector3& _cursorPos, bool _isPayment, SceneData* _p
 	auto uiView = mRegistry.view<Button>();
 	for (auto& uiEntity : uiView)
 	{
-		auto& name = mRegistry.get<Name>(uiEntity).m_name;
+		auto& name = mRegistry.get<Name>(uiEntity).mName;
 		auto& button = mRegistry.get<Button>(uiEntity);
 		auto& texture = mRegistry.get<Texture2D>(uiEntity);
 
@@ -3275,18 +3275,18 @@ void LevelManager::AllDeploy(Vector3& _cursorPos, bool _isPayment, SceneData* _p
 			{
 				//button.mIsEnable = true;
 
-				if (mpUIManager->GetButtonState(button.m_pOwner) == ButtonState::PRESSED)
+				if (mpUIManager->GetButtonState(button.mpOwner) == ButtonState::PRESSED)
 				{
 					// 					mpSoundManager->PlaySFX("Snd_sfx_ClickBtn");
 					if (mpInputManager->GetKeyUp(KEY::LBUTTON))
 					{
 						// 이미 생성한 UID가 같으면 스킵!
-						if (texture.m_file == "UI_btn_Merc01.png")
+						if (texture.mFile == "UI_btn_Merc01.png")
 						{
 							mClassName = "Mercenary";
 							mIsClassButtonPressed = true;
 						}
-						else if (texture.m_file == "UI_btn_Merc02.png")
+						else if (texture.mFile == "UI_btn_Merc02.png")
 						{
 							mClassName = "Archer";
 							mIsClassButtonPressed = true;
@@ -3303,7 +3303,7 @@ void LevelManager::AllDeploy(Vector3& _cursorPos, bool _isPayment, SceneData* _p
 						auto userPlaceUnit = mpEntityManager->CreateEntity("player");
 						mTempUnitUID = userPlaceUnit->GetUID();
 						mpUnitSystem->GetPlayerSystem()->AddDeplyUnit(userPlaceUnit, mClassName);
-						userPlaceUnit->GetComponent<Transform>().m_localPosition = Vector3(-15.0f, 2, 0.0f);
+						userPlaceUnit->GetComponent<Transform>().mLocalPosition = Vector3(-15.0f, 2, 0.0f);
 						mpRenderManager->InitailizeEntity(userPlaceUnit);
 						// 유저가 배치를 시작할 것임을 알린다.
 						userPlaceUnit->GetComponent<PlayerComponent>().mIsDeploy = true;
@@ -3311,7 +3311,7 @@ void LevelManager::AllDeploy(Vector3& _cursorPos, bool _isPayment, SceneData* _p
 					else
 					{
 						mpUnitSystem->GetPlayerSystem()->ChangeUnit(mpEntityManager->GetEntity(mTempUnitUID), mClassName);
-						mpEntityManager->GetEntity(mTempUnitUID)->GetComponent<Transform>().m_localPosition = Vector3(-15.0f, 2, 0.0f);
+						mpEntityManager->GetEntity(mTempUnitUID)->GetComponent<Transform>().mLocalPosition = Vector3(-15.0f, 2, 0.0f);
 						mpRenderManager->InitailizeEntity(mpEntityManager->GetEntity(mTempUnitUID));
 					}
 				}
@@ -3319,7 +3319,7 @@ void LevelManager::AllDeploy(Vector3& _cursorPos, bool _isPayment, SceneData* _p
 			else
 			{
 				mIsClassButtonPressed = false; // 버튼이 눌린 상태 삭제
-				texture.m_isVisible = true;
+				texture.mIsVisible = true;
 				button.mIsEnable = false;
 				mTutorialFlag = true; // 20마리를 배치했으면 플래그를 활성화하고, 이게 활성화되면 리셋 버튼은 더 못 누르게 막음
 			}
@@ -3327,14 +3327,14 @@ void LevelManager::AllDeploy(Vector3& _cursorPos, bool _isPayment, SceneData* _p
 			if (msg2D)
 			{
 				// 호버링 시 설명 문구가 뜨게 한다.
-				if (mpUIManager->GetButtonState(button.m_pOwner) == ButtonState::HOVERED)
+				if (mpUIManager->GetButtonState(button.mpOwner) == ButtonState::HOVERED)
 				{
-					if (texture.m_file == "UI_btn_Merc01.png")
+					if (texture.mFile == "UI_btn_Merc01.png")
 					{
 						msg2D->mIsImgVisible = true;
 						msg2D->mIsTextVisible = true;
 					}
-					else if (texture.m_file == "UI_btn_Merc02.png")
+					else if (texture.mFile == "UI_btn_Merc02.png")
 					{
 						msg2D->mIsImgVisible = true;
 						msg2D->mIsTextVisible = true;
@@ -3351,7 +3351,7 @@ void LevelManager::AllDeploy(Vector3& _cursorPos, bool _isPayment, SceneData* _p
 		// 배치 롤백 버튼
 		if (name == "UI_D_Reset" && mTutorialFlag == false)
 		{
-			if (mpUIManager->GetButtonState(button.m_pOwner) == ButtonState::PRESSED)
+			if (mpUIManager->GetButtonState(button.mpOwner) == ButtonState::PRESSED)
 			{
 				if (mpInputManager->GetKeyUp(KEY::LBUTTON))
 				{
@@ -3378,14 +3378,14 @@ void LevelManager::AllDeploy(Vector3& _cursorPos, bool _isPayment, SceneData* _p
 	{
 		auto& player = mRegistry.get<PlayerComponent>(playerEntity);
 		auto& transform = mRegistry.get<Transform>(playerEntity);
-		auto& owner = player.m_pOwner;
+		auto& owner = player.mpOwner;
 
 		// 1. 배치 중일 때만 마우스에 따라 위치 이동
 		if (player.mIsDeploy == true)
 		{
 			if (_cursorPos.x >= mStartPoint.x && _cursorPos.x <= mEndPoint.x && _cursorPos.z >= mStartPoint.y && _cursorPos.z <= mEndPoint.y)
 			{
-				transform.m_localPosition = Vector3(static_cast<int>(_cursorPos.x), _cursorPos.y, static_cast<int>(_cursorPos.z));
+				transform.mLocalPosition = Vector3(static_cast<int>(_cursorPos.x), _cursorPos.y, static_cast<int>(_cursorPos.z));
 				if (GetmIsOneDeploySet() == true)
 				{
 					mIsOneDeploySet = false;
@@ -3427,7 +3427,7 @@ void LevelManager::AllDeploy(Vector3& _cursorPos, bool _isPayment, SceneData* _p
 	auto textView = mRegistry.view<Text>();
 	for (auto text : textView)
 	{
-		auto& name = mRegistry.get<Name>(text).m_name;
+		auto& name = mRegistry.get<Name>(text).mName;
 		auto& textComp = mRegistry.get<Text>(text);
 
 		if (name == "UI_B_Money")
@@ -3437,7 +3437,7 @@ void LevelManager::AllDeploy(Vector3& _cursorPos, bool _isPayment, SceneData* _p
 				_pSceneData->m_heldMoney -= 100;
 				_isPayment == false;
 			}
-			textComp.m_num1 = _pSceneData->m_heldMoney;
+			textComp.mNum1 = _pSceneData->m_heldMoney;
 		}
 	}
 }
@@ -3567,12 +3567,12 @@ void LevelManager::SmogUpdate(float _dTime)
 		auto partView = mRegistry.view<ParticleComponent>();
 		for (auto& entity : partView)
 		{
-			auto& name = mRegistry.get<Name>(entity).m_name;
+			auto& name = mRegistry.get<Name>(entity).mName;
 			auto& particle = mRegistry.get<ParticleComponent>(entity);
-			//particle.m_pParticleData->position = Vector3(-40, RandomUtil::RandomInt(3, 10), RandomUtil::RandomInt(-20, 20));
+			//particle.mpParticleData->position = Vector3(-40, RandomUtil::RandomInt(3, 10), RandomUtil::RandomInt(-20, 20));
 			if (name == "Smog")
 			{
-				mpRenderManager->AddParticle(3, *particle.m_pParticleData);
+				mpRenderManager->AddParticle(3, *particle.mpParticleData);
 			}
 		}
 	}

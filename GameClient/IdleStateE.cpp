@@ -17,7 +17,7 @@ void IdleStateE::Enter(std::shared_ptr<Entity> _entity)
 void IdleStateE::Update(float _dTime, std::shared_ptr<Entity> _entity)
 {
 	// 엔티티의 위치를 고정
-	mpPhysicsManager->UpdatePosition(_entity, _entity->GetComponent<Transform>().m_localPosition);
+	mpPhysicsManager->UpdatePosition(_entity, _entity->GetComponent<Transform>().mLocalPosition);
 }
 
 void IdleStateE::Exit(std::shared_ptr<Entity> _entity)

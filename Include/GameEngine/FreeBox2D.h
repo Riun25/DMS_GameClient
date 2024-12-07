@@ -13,8 +13,8 @@ struct FreeBox2D
 public:
 	FreeBox2D(std::shared_ptr<Entity> _owner, Vector2 _position = Vector2(), int _layer = 0, const bool& _isVisible = true,
 		Vector4 _rgba = Vector4(0.0f, 0.0f, 0.0f, 1.0f))
-		: Component(_owner), m_position(_position), m_layer(_layer),
-		m_isVisible(_isVisible), m_rgba(_rgba), m_hasDepth(false)
+		: Component(_owner), mPosition(_position), mLayer(_layer),
+		mIsVisible(_isVisible), mRgba(_rgba), mHasDepth(false)
 	{}
 
 	std::shared_ptr<Component> Clone() const override
@@ -24,9 +24,9 @@ public:
 
 public:
 
-	Vector2 m_position;
-	int m_layer; // 숫자가 클수록 뒤에 그려집니다.
-	bool m_isVisible; // 렌더러에서만 사용할 변수로, true일 때만 그린다.
-	Vector4 m_rgba;
-	bool m_hasDepth;	// 3D 공간에서 z축으로 깊이감을 줘야 하면 사용한다.
+	Vector2 mPosition;
+	int mLayer; // 숫자가 클수록 뒤에 그려집니다.
+	bool mIsVisible; // 렌더러에서만 사용할 변수로, true일 때만 그린다.
+	Vector4 mRgba;
+	bool mHasDepth;	// 3D 공간에서 z축으로 깊이감을 줘야 하면 사용한다.
 };

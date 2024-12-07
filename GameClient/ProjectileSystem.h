@@ -27,7 +27,7 @@ public:
 
 	/// <summary>
 	/// 클래스에서 엔티티들의 컴포넌트를 사용할 경우 
-	/// "entt::registry& m_registry" 멤버로 추가하고, 생성자 추가
+	/// "entt::registry& mRegistry" 멤버로 추가하고, 생성자 추가
 	/// </summary>
 	/// <param name="_registry"></param>
 	ProjectileSystem(entt::registry& _registry, EventManager* _pEventManager
@@ -86,13 +86,13 @@ public:
 	bool mIsThrow = false; // NPC인 용병왕에게 애니메이션을 시도하라는 플래그
 
 private:
-	entt::registry& m_registry;
-	EntityManager* m_pEntityManager;
-	PhysicsManager* m_pPhysicsManager;
-	RenderManager* m_pRenderManager;
-	SoundManager* m_pSoundManager;
-	InputManager* m_pInputManager;
-	WorldManager* m_pWorldManager;
+	entt::registry& mRegistry;
+	EntityManager* mpEntityManager;
+	PhysicsManager* mpPhysicsManager;
+	RenderManager* mpRenderManager;
+	SoundManager* mpSoundManager;
+	InputManager* mpInputManager;
+	WorldManager* mpWorldManager;
 
 	// 적군 아군 모두가 확인하는 돈의 위치 저장 벡터
 	std::vector<std::pair<std::shared_ptr<Entity>, Vector3>> mMoneyPosVec;
@@ -100,7 +100,7 @@ private:
 	Vector2 mStartPoint;
 	int mMapwidth;
 	AStar* mpAstar;
-	SceneData* m_pSceneData;
+	SceneData* mpSceneData;
 	std::shared_ptr<UserData> m_pWorldData;
 	float spawnTime = 0.f;
 	float mTutoSpawnTime = 0.f;

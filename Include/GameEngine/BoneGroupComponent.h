@@ -10,7 +10,7 @@ struct BoneGroupComponent
 {
 public:
 	BoneGroupComponent(std::shared_ptr<Entity> _owner)
-		: Component(_owner), m_boneData()
+		: Component(_owner), mBoneData()
 	{}
 	std::shared_ptr<Component> Clone() const override
 	{
@@ -20,5 +20,5 @@ public:
 
 public:
 // 	std::string m_file;
-	VSBoneConstantBufferData m_boneData;
+	VSBoneConstantBufferData mBoneData;
 };

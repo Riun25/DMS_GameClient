@@ -30,13 +30,13 @@ public:
 private:
 	TimeManager* m_pTimeManager;
 
-	float m_FPS = 0;			// 초당 렌더링하는 프레임 수
-	float m_FrameTime = 0;		// 한 프레임을 렌더링하는 데 걸리는 시간
-	float m_CPUInfo = 0;		// CPU 사용량
+	float mFPS = 0;			// 초당 렌더링하는 프레임 수
+	float mFrameTime = 0;		// 한 프레임을 렌더링하는 데 걸리는 시간
+	float mCPUInfo = 0;		// CPU 사용량
 	// 	float m_RenderTime;		// 렌더링 작업에 소요되는 시간
 	// 	float m_physicsTime;	// 물리 연산에 소요되는 시간
 
-	ULARGE_INTEGER lastCPU, lastSysCPU, lastUserCPU;
-	int numProcessors;
-	HANDLE self;
+	ULARGE_INTEGER mLastCPU, mLastSysCPU, mLastUserCPU;
+	int mNumProcessors;
+	HANDLE mSelf;
 };

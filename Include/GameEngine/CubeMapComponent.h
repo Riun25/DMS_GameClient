@@ -10,9 +10,9 @@ struct CubeMapComponent
 {
 public:
 	CubeMapComponent(std::shared_ptr<Entity> _owner, const std::string& _diffuse = "", const std::string& _specular = "")
-		: Component(_owner), m_diffuse(_diffuse), m_specular(_specular)
+		: Component(_owner), mDiffuse(_diffuse), mSpecular(_specular)
 	{
-		m_pModel = std::make_shared<ModelBuffer>();
+		mpModel = std::make_shared<ModelBuffer>();
 	}
 
 	std::shared_ptr<Component> Clone() const override
@@ -21,9 +21,9 @@ public:
 	}
 
 public:
-	std::shared_ptr<ModelBuffer> m_pModel;
-	std::string m_diffuse;
-	std::string m_specular;
+	std::shared_ptr<ModelBuffer> mpModel;
+	std::string mDiffuse;
+	std::string mSpecular;
 
-	VSConstantBufferData m_VSCBD;
+	VSConstantBufferData mVSCBD;
 };

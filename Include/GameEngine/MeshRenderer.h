@@ -21,12 +21,12 @@ public:
 	/// <param name="_hasAnimation">애니메이션 여부</param>
 	MeshRenderer(std::shared_ptr<Entity> _owner, const std::string& _file = "", const std::string& _meshName = ""
 		, bool _hasBone = false, bool _hasAnimation = false, bool _flag = false)
-		: Component(_owner), m_file(_file), m_meshName(_meshName)
-		, m_hasBone(_hasBone), m_flag(_flag)
-		, m_pModel(nullptr), mIs_VSconstant(false), mIs_VSBoneConstant(false), mIs_VSTargetBoneconstant(false), mIs_PSconstant(false), mIs_CubeMap(false)
+		: Component(_owner), mFile(_file), mMeshName(_meshName)
+		, mHasBone(_hasBone), mFlag(_flag)
+		, mpModel(nullptr), mIs_VSconstant(false), mIs_VSBoneConstant(false), mIs_VSTargetBoneconstant(false), mIs_PSconstant(false), mIs_CubeMap(false)
 		, mVSConstantBufferData()
 	{
-		m_pModel = std::make_shared<ModelBuffer>();
+		mpModel = std::make_shared<ModelBuffer>();
 	}
 
 	std::shared_ptr<Component> Clone() const override
@@ -43,11 +43,11 @@ public:
 	}
 
 public:
-	std::string m_file;
-	std::string m_meshName;
-	std::shared_ptr<ModelBuffer> m_pModel;
-	bool m_hasBone;
-	bool m_flag;	// 임시 부울 변수, 게임 플레이 중에 오브젝트 생성오류 해결하기 위해 임시로 넣음
+	std::string mFile;
+	std::string mMeshName;
+	std::shared_ptr<ModelBuffer> mpModel;
+	bool mHasBone;
+	bool mFlag;	// 임시 부울 변수, 게임 플레이 중에 오브젝트 생성오류 해결하기 위해 임시로 넣음
 
 	bool mIs_VSconstant = true;						 // VSConstantBuffer가 있는가?
 	bool mIs_VSBoneConstant;					 // VSBoneConstanatBuffer가 있는가?

@@ -215,12 +215,12 @@ private:
 	
 
 	// 현재 게임 상태를 저장 -> 추후 더 세분화 될 수 있음 -> 배치 완료와 게임 시작 전 상태 같은 것들.
-	GameState currentLevelState;
-	SettingState currentSettingState = SettingState::NORMAL;
-	PopUpState currentPopUpState = PopUpState::NORMAL;
-	UIAnimationState currentUIAniState = UIAnimationState::NORMAL;
+	GameState mCurrentLevelState;
+	SettingState mCurrentSettingState = SettingState::NORMAL;
+	PopUpState mCurrentPopUpState = PopUpState::NORMAL;
+	UIAnimationState mCurrentUIAniState = UIAnimationState::NORMAL;
 
-	std::list<std::shared_ptr<Entity>> coordinateList;
+	std::list<std::shared_ptr<Entity>> mCoordinateList;
 
 	bool mIsGameStart = false; // 게임 시작을 알리는 플래그 : 배치를 위해 대기된 유닛을 지우기 위한 플래그
 	bool mIsOneDeploySet = false; // 하나의 유닛이 배치가 완료되었는지를 확인하는 플래그
@@ -234,9 +234,9 @@ private:
 
 	// 음량과 관련하여 셋팅하는 함수
 	void SetVolume(const std::string& _fileName, const shared_ptr<Entity>& _entity, int& _intNum, int& _whatVolume);
-	int BGVolume = 3;
-	int ESVolume = 3;
-	float tempTime = 0.f;
+	int mBGVolume = 3;
+	int mESVolume = 3;
+	float mPassedTime = 0.f;
 	bool mPlayWarningSound = false;
 	float mUIAnimationTime = 0.0f;
 

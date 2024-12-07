@@ -39,10 +39,6 @@ public:
 	/// <param name="_classTypeEnum">ClassType 이넘</param> <returns>std::string</returns>
 	std::string ConvertClasstypeToString(ClassType _classTypeEnum);
 
-	/// <summary> ClassTypeMap을 클래스 매니저에서 가져오는 함수 </summary>
-	/// <returns>std::vector&lt;std::pair&lt;std::string, ClassType&gt;&gt;*</returns>
-	std::vector<std::pair<std::string, ClassType>>* GetClassTypeVec();
-
 	/// <summary> 여기서부터는 게임 상수를 선언한다.(기획 값) </summary>
 	float mMoneyBuffCoef = 1.5f;	// 돈버프 때 향상되는 수치
 	float mBuffUnitSizeCoef = 1.4f; // 유닛 사이즈가 돈 버프 때 향상되는 수치

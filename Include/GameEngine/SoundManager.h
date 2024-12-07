@@ -63,6 +63,6 @@ private:
 	// 	void SetMasterVolume(const Event& _event);
 
 private:
-	SoundSystem* m_pSoundSystem;
+	SoundSystem* mpSoundSystem;
 };
 

@@ -70,7 +70,7 @@ void EquipmentManager::AddInitUnitEquipment(std::shared_ptr<Entity> _entity, con
 				}
 			}
 			TestWearEquipment(_entity, mpEquipmentMeshVec[i], mEquipPart[i % 14].second, true); // 없는 공간은 null이라 기재한다.
-			if (_entity->GetComponent<EquipmentComponent>().m_pEquipments.size() > 13)
+			if (_entity->GetComponent<EquipmentComponent>().mpEquipments.size() > 13)
 			{
 				break;
 			}
@@ -86,7 +86,7 @@ void EquipmentManager::AddNPCEquipment(std::shared_ptr<Entity> _entity, const st
 		if (mpEquipmentMeshVec[i].className == _classType && mpEquipmentMeshVec[i].buffLv == 0)
 		{
 			TestWearEquipment(_entity, mpEquipmentMeshVec[i], mEquipPart[i % 14].second, true); // 없는 공간은 null이라 기재한다.
-			if (_entity->GetComponent<EquipmentComponent>().m_pEquipments.size() > 13)
+			if (_entity->GetComponent<EquipmentComponent>().mpEquipments.size() > 13)
 			{
 				break;
 			}
@@ -101,7 +101,7 @@ void EquipmentManager::AddUnitEquip(std::shared_ptr<Entity> _entity, const std::
 		if (mpEquipmentMeshVec[i].className == _classType && mpEquipmentMeshVec[i].buffLv == 0)
 		{
 			TestWearEquipment(_entity, mpEquipmentMeshVec[i], mEquipPart[i % 14].second, false); // 없는 공간은 null이라 기재한다.
-			if (_entity->GetComponent<EquipmentComponent>().m_pEquipments.size() > 13)
+			if (_entity->GetComponent<EquipmentComponent>().mpEquipments.size() > 13)
 			{
 				break;
 			}
@@ -137,15 +137,15 @@ void EquipmentManager::UpdateEquipment(std::shared_ptr<Entity> _entity, const st
 
 	for (size_t i = 0; i < afterEquipInfoVec.size(); i++)
 	{
-		// 	std::string a = beforeEquipVec[i]->GetComponent<MeshRenderer>().m_file;
+		// 	std::string a = beforeEquipVec[i]->GetComponent<MeshRenderer>().mFile;
 		// 	// [교체] 장비 메쉬가 다른 경우
-		// 	auto& beforeEquipFbx = beforeEquipVec[i]->GetComponent<MeshRenderer>().m_file;
-		auto& beforeEquipFbx = equipComp.m_pEquipments[i]->m_modelFileName;
+		// 	auto& beforeEquipFbx = beforeEquipVec[i]->GetComponent<MeshRenderer>().mFile;
+		auto& beforeEquipFbx = equipComp.mpEquipments[i]->mModelFileName;
 		if (beforeEquipFbx != afterEquipInfoVec[i].equipmentFBXname)
 		{
-			equipComp.m_pEquipments[i]->m_modelFileName = afterEquipInfoVec[i].equipmentFBXname;
-			equipComp.m_pEquipments[i]->m_meshName = afterEquipInfoVec[i].equipmentMeshname;
-			equipComp.m_pEquipments[i]->m_diffuseTexture = afterEquipInfoVec[i].textureName;
+			equipComp.mpEquipments[i]->mModelFileName = afterEquipInfoVec[i].equipmentFBXname;
+			equipComp.mpEquipments[i]->mMeshName = afterEquipInfoVec[i].equipmentMeshname;
+			equipComp.mpEquipments[i]->mDiffuseTexture = afterEquipInfoVec[i].textureName;
 			mpRenderManager->InitailizeEntity(_entity);
 		}
 		// 		else // [스킵]장비 메쉬가 같은 경우 
@@ -160,14 +160,14 @@ void EquipmentManager::TestWearEquipment(std::shared_ptr<Entity> _entity, const 
 {
 	// auto equipment = mpEntityManager->CreateEntity("equipment");
 	// equipment->AddComponent<Transform>();
-	// equipment->GetComponent<Transform>().m_pParent = &(_entity->GetComponent<Transform>());
+	// equipment->GetComponent<Transform>().mpParent = &(_entity->GetComponent<Transform>());
 	// equipment->AddComponent<MeshRenderer>(_info.equipmentFBXname, _info.equipmentMeshname, false, false);
 	// equipment->AddComponent<Texture3D>(_info.textureName);
 	// equipment->AddComponent<TargetBoneComponent>();
 	// auto& targetBoneComponent = equipment->GetComponent<TargetBoneComponent>();
-	// auto& meshName = _entity->GetComponent<MeshRenderer>().m_meshName;
+	// auto& meshName = _entity->GetComponent<MeshRenderer>().mMeshName;
 	// targetBoneComponent.mTargetBoneIndex = mpResourceManager->Get_TargetModelBoneIndex(meshName, _targetBoneName);
-	// targetBoneComponent.mTarGetBoneConstantBufferData = &(_entity->GetComponent<BoneGroupComponent>().m_boneData);
+	// targetBoneComponent.mTarGetBoneConstantBufferData = &(_entity->GetComponent<BoneGroupComponent>().mBoneData);
 	// targetBoneComponent.mTargetBoneData.targrtBoneMatrix = targetBoneComponent.mTarGetBoneConstantBufferData->bone[targetBoneComponent.mTargetBoneIndex];
 	// auto& equipVec = _entity->GetComponent<AnimationComponent>().myEntityVec;
 	// equipVec.push_back(equipment);
@@ -180,7 +180,7 @@ void EquipmentManager::TestWearEquipment(std::shared_ptr<Entity> _entity, const 
 
 	auto& equip = _entity->GetComponent<EquipmentComponent>();
 	equip.AddEquipment(_info.equipmentFBXname, _info.equipmentMeshname
-		, _entity->GetComponent<MeshRenderer>().m_meshName, _targetBoneName
+		, _entity->GetComponent<MeshRenderer>().mMeshName, _targetBoneName
 		, _info.textureName);
 }
 
@@ -188,22 +188,22 @@ void EquipmentManager::WearWeapon(std::shared_ptr<Entity> _entity, const WeaponM
 {
 	auto meleeWeapon = mpEntityManager->CreateEntity("meleeWeapon");
 	auto& transform = meleeWeapon->AddComponent<Transform>();
-	meleeWeapon->GetComponent<Transform>().m_pParent = &(_entity->GetComponent<Transform>());
+	meleeWeapon->GetComponent<Transform>().mpParent = &(_entity->GetComponent<Transform>());
 	// 	meleeWeapon->AddComponent<MeshRenderer>(_info.weaponFBXname, _info.weaponMeshname);
 	// 	meleeWeapon->GetComponent<MeshRenderer>().mIsWeapon = true;
 	meleeWeapon->AddComponent<Texture3D>(_info.textureName);
-	auto& meshName = _entity->GetComponent<MeshRenderer>().m_meshName;
+	auto& meshName = _entity->GetComponent<MeshRenderer>().mMeshName;
 	_entity->AddComponent<WeaponComponent>(/*meshName, "RigRPalm", 1.f*/);
 	auto& weapon = _entity->GetComponent<WeaponComponent>();
-	weapon.m_boneIndex = mpResourceManager->Get_TargetModelBoneIndex(meshName, "RigRPalm");
-	weapon.m_weaponAABB = mpResourceManager->Get_AABB(_info.weaponFBXname);
-	weapon.m_pAttachedEntity = meleeWeapon.get();
-	weapon.m_fileName = _info.weaponFBXname;
-	weapon.m_meshName = _info.weaponMeshname;
+	weapon.mBoneIndex = mpResourceManager->Get_TargetModelBoneIndex(meshName, "RigRPalm");
+	weapon.mWeaponAABB = mpResourceManager->Get_AABB(_info.weaponFBXname);
+	weapon.mpAttachedEntity = meleeWeapon.get();
+	weapon.mFileName = _info.weaponFBXname;
+	weapon.mMeshName = _info.weaponMeshname;
 
 	auto& collider = meleeWeapon->AddComponent<BoxCollider>(true);
-	collider.m_size = weapon.m_weaponAABB.mMax - weapon.m_weaponAABB.mMin;
-	//meleeWeapon->GetComponent<BoxCollider>().m_size *= 0.5f;
+	collider.mSize = weapon.mWeaponAABB.mMax - weapon.mWeaponAABB.mMin;
+	//meleeWeapon->GetComponent<BoxCollider>().mSize *= 0.5f;
 	meleeWeapon->AddComponent<Rigidbody>(1.f, 0.f, 0.f, false, true, 0.f, 0.f, 0.f, false);
 	// 	meleeWeapon->AddComponent<TargetBoneComponent>();
 	//auto& equipVec = _entity->GetComponent<AnimationComponent>().myEntityVec;

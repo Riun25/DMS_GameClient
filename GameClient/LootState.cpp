@@ -29,7 +29,7 @@ void LootState::Update(float _dTime, std::shared_ptr<Entity> _entity)
 	}
 
 	/// 1. 엔티티의 위치를 고정
-	mpPhysicsManager->UpdatePosition(_entity, _entity->GetComponent<Transform>().m_localPosition);
+	mpPhysicsManager->UpdatePosition(_entity, _entity->GetComponent<Transform>().mLocalPosition);
 
 	/// 2. 플레이어의 소지금에 돈을 추가하고, MoneyComponent 엔티티를 삭제한 후 타겟을 nullptr로 변경
 	auto& animationComp = _entity->GetComponent<AnimationComponent>();
@@ -41,13 +41,13 @@ void LootState::Update(float _dTime, std::shared_ptr<Entity> _entity)
 	{
 		if (playerComp.mpTarget->HasComponent<MoneyComponent>())
 		{
-			if (!playerComp.mpTarget->GetComponent<ProjectileComponent>().m_isTriggered
-				/*|| _entity != playerComp.mpTarget->GetComponent<MoneyComponent>().m_pTarget*/)
+			if (!playerComp.mpTarget->GetComponent<ProjectileComponent>().mIsTriggered
+				/*|| _entity != playerComp.mpTarget->GetComponent<MoneyComponent>().mpTarget*/)
 			{
 				return;
 			}
 			// 플레이어의 소지금에 돈을 추가한다.
-			playerComp.mMoney += playerComp.mpTarget->GetComponent<MoneyComponent>().m_amount;
+			playerComp.mMoney += playerComp.mpTarget->GetComponent<MoneyComponent>().mAmount;
 			std::shared_ptr<Entity>& pTarget = playerComp.mpTarget;
 
 			/// moneyVec에서 해당 엔티티를 지운다.

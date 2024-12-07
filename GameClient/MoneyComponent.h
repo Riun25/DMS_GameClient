@@ -9,7 +9,7 @@ struct MoneyComponent
 {
 public:
 	MoneyComponent(std::shared_ptr<Entity> _owner, int _amount = 0, bool _onGround = false)
-		:Component(_owner), m_amount(_amount), m_onGround(_onGround), m_IsInVec(false)
+		:Component(_owner), mAmount(_amount), mIsOnGround(_onGround), mIsInVec(false)
 	{
 	}
 
@@ -19,10 +19,10 @@ public:
 	}
 
 public:
-	int m_amount;	// 금액
-	bool m_onGround;
-	uint16_t m_num;
-	static uint16_t m_currentNum;
-	bool m_IsInVec;
-	std::shared_ptr<Entity> m_pTarget;
+	int mAmount;	// 금액
+	bool mIsOnGround;
+	uint16_t mNum;
+	static uint16_t mCurrentNum;
+	bool mIsInVec;
+	std::shared_ptr<Entity> mpTarget;
 };

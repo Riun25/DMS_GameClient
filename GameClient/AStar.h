@@ -74,7 +74,7 @@ private:
 	std::vector<Vector2>* mObstacles = nullptr;
 	std::vector<std::vector<int>>* mMap = nullptr;
 
-	Vector2 directions[8];
+	Vector2 mDirections[8];
 
 	float Distance(const Vector2& _pos1, const Vector2& _pos2);
 

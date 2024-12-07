@@ -42,27 +42,27 @@ public:
 		, const Vector3& _dScale = Vector3(0.5), const Vector3& _posRandomFactor = Vector3(), const Vector3& _rotRandomFactor = Vector3()
 		, const Vector3& _dirRandomFactor = Vector3(), const Vector3& _dColor = Vector3(), float _gravity = 0
 		, const Vector3& _colorRandomFactor = Vector3())
-		: Component(_owner), m_pParticleData(std::make_shared<CSParticleData>())
+		: Component(_owner), mpParticleData(std::make_shared<CSParticleData>())
 	{
-		m_pParticleData->position = _position;
-		m_pParticleData->playTime = _playTime;
-		m_pParticleData->color = _color;
-		m_pParticleData->lifeTime = _lifeTime;
-		m_pParticleData->direction = _direction;
-		m_pParticleData->velocity = _velocity;
-		m_pParticleData->Rotation = _rotation;
-		m_pParticleData->opacity = _opacity;
-		m_pParticleData->Scale = _scale;
-		m_pParticleData->deltaOpacity = _dOpacity;
-		m_pParticleData->deltaRotation = _dRotation;
-		m_pParticleData->SclRandomFactor = _scaleRandomFactor;
-		m_pParticleData->deltaScale = _dScale;
-		m_pParticleData->PosRandomFactor = _posRandomFactor;
-		m_pParticleData->RotRandomFactor = _rotRandomFactor;
-		m_pParticleData->dirRandomFactor = _dirRandomFactor;
-		m_pParticleData->deltaColor = _dColor;
-		m_pParticleData->gravity = _gravity;
-		m_pParticleData->colorRandomFactor = _colorRandomFactor;
+		mpParticleData->position = _position;
+		mpParticleData->playTime = _playTime;
+		mpParticleData->color = _color;
+		mpParticleData->lifeTime = _lifeTime;
+		mpParticleData->direction = _direction;
+		mpParticleData->velocity = _velocity;
+		mpParticleData->Rotation = _rotation;
+		mpParticleData->opacity = _opacity;
+		mpParticleData->Scale = _scale;
+		mpParticleData->deltaOpacity = _dOpacity;
+		mpParticleData->deltaRotation = _dRotation;
+		mpParticleData->SclRandomFactor = _scaleRandomFactor;
+		mpParticleData->deltaScale = _dScale;
+		mpParticleData->PosRandomFactor = _posRandomFactor;
+		mpParticleData->RotRandomFactor = _rotRandomFactor;
+		mpParticleData->dirRandomFactor = _dirRandomFactor;
+		mpParticleData->deltaColor = _dColor;
+		mpParticleData->gravity = _gravity;
+		mpParticleData->colorRandomFactor = _colorRandomFactor;
 	}
 
 	std::shared_ptr<Component> Clone() const override
@@ -71,5 +71,5 @@ public:
 	}
 
 public:
-	std::shared_ptr<CSParticleData> m_pParticleData;
+	std::shared_ptr<CSParticleData> mpParticleData;
 };

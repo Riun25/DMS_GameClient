@@ -52,12 +52,12 @@ private:
 	template <InputDevice T>
 	void AddDevice(std::shared_ptr<T> _pDevice)
 	{
-		m_pDevices.push_back(_pDevice);
+		mpDevices.push_back(_pDevice);
 	}
 
 private:
-	std::vector<std::shared_ptr<IInputDevice>> m_pDevices;	// 관리하고있는 디바이스들의 배열
-	std::vector<HCURSOR> m_cursors;
-	HCURSOR m_currentCursor;
+	std::vector<std::shared_ptr<IInputDevice>> mpDevices;	// 관리하고있는 디바이스들의 배열
+	std::vector<HCURSOR> mCursors;
+	HCURSOR mCurrentCursor;
 };
 

@@ -38,8 +38,8 @@ private:
 	void ProcessImmediateEvents();
 
 private:
-	std::unordered_map<std::string, std::unordered_map<HandlerID, EventHandler>> m_immediateHandlers;	// 즉각적인 이벤트 핸들러 맵
-	std::unordered_map<std::string, std::unordered_map<HandlerID, EventHandler>> m_delayedHandlers;		// 지연된 이벤트 핸들러 맵
+	std::unordered_map<std::string, std::unordered_map<HandlerID, EventHandler>> mImmediateHandlers;	// 즉각적인 이벤트 핸들러 맵
+	std::unordered_map<std::string, std::unordered_map<HandlerID, EventHandler>> mDelayedHandlers;		// 지연된 이벤트 핸들러 맵
 	HandlerID m_lastHandlerId = 0;	// 마지막 핸들러 ID
 
 	struct DelayedEvent
@@ -48,14 +48,14 @@ private:
 
 		bool operator<(const DelayedEvent& _other) const;
 
-		std::shared_ptr<Event> m_event;
-		int m_executeFrame;
+		std::shared_ptr<Event> mEvent;
+		int mExecuteFrame;
 	};
 
-	std::priority_queue<DelayedEvent> m_delayedEventQueue;		// 지연된 이벤트 우선순위 큐
-	std::queue<std::shared_ptr<Event>> m_immediateEventQueue;	// 즉각적인 이벤트 큐
+	std::priority_queue<DelayedEvent> mDelayedEventQueue;		// 지연된 이벤트 우선순위 큐
+	std::queue<std::shared_ptr<Event>> mImmediateEventQueue;	// 즉각적인 이벤트 큐
 
-// 	std::mutex m_eventMutex;
+// 	std::mutex mEventMutex;
 
-	int m_currentFrame = 0; // 현재 프레임 번호
+	int mCurrentFrame = 0; // 현재 프레임 번호
 };

@@ -42,7 +42,7 @@ void AttackState::Enter(std::shared_ptr<Entity> _entity)
 		return;
 	}
 	auto& tempTarget = playerComp.mpTarget;
-	mpFSMHelper->LookAtTarget(trsComp.m_localPosition, tempTarget->GetComponent<Transform>().m_localPosition, playerComp.tempDirection, trsComp.m_localRotation.y);
+	mpFSMHelper->LookAtTarget(trsComp.mLocalPosition, tempTarget->GetComponent<Transform>().mLocalPosition, playerComp.tempDirection, trsComp.mLocalRotation.y);
 
 	/// 디버깅용
 	//std::cout << "Enter Attack State" << std::endl;
@@ -87,8 +87,8 @@ void AttackState::FixedUpdate(float _fixedTime, std::shared_ptr<Entity> _entity)
 	auto& previousTarget = playerComp.mPreviousTarget;								// 이전 타겟 : 현재 지정된 타겟과 동일한지 확인용(move와 달리 attack에서 이 값은 무조건 nullptr이 될 수 없다.)
 	auto& previousTargetPos = playerComp.mPreviousTargetPos;						// 이전 타깃의 위치
 	auto& tempTarget = playerComp.mpTarget;											// 현재 타겟
-	auto& targetPos = tempTarget->GetComponent<Transform>().m_localPosition;		// 타겟 위치
-	auto& position = trsComp.m_localPosition;										// 유닛의 위치
+	auto& targetPos = tempTarget->GetComponent<Transform>().mLocalPosition;		// 타겟 위치
+	auto& position = trsComp.mLocalPosition;										// 유닛의 위치
 	auto& direction = playerComp.tempDirection;										// 유닛의 방향
 
 	// 타깃이 변경되면 방향 변경
@@ -96,7 +96,7 @@ void AttackState::FixedUpdate(float _fixedTime, std::shared_ptr<Entity> _entity)
 	{
 		previousTarget = tempTarget;
 		// 캐릭터가 바라보고 있는 방향을 업데이트
-		mpFSMHelper->LookAtTarget(position, targetPos, direction, trsComp.m_localRotation.y);
+		mpFSMHelper->LookAtTarget(position, targetPos, direction, trsComp.mLocalRotation.y);
 	}
 
 	// 타깃이 조금이라도 움직이면 방향 업뎃
@@ -104,8 +104,7 @@ void AttackState::FixedUpdate(float _fixedTime, std::shared_ptr<Entity> _entity)
 	{
 		previousTargetPos = targetPos;
 		// 캐릭터가 바라보고 있는 방향을 업데이트
-		mpFSMHelper->LookAtTarget(position, targetPos, direction, trsComp.m_localRotation.y);
-		//return;
+		mpFSMHelper->LookAtTarget(position, targetPos, direction, trsComp.mLocalRotation.y);
 	}
 
 	/// 2. 원거리일 경우 각 클래스에 맞는 함수를 호출한다.
@@ -164,11 +163,11 @@ void AttackState::RangedAttack(std::shared_ptr<Entity> _entity)
 		if (playerComp.mpTarget)
 		{
 			auto& targetTransform = playerComp.mpTarget->GetComponent<Transform>();
-			Vector3& targetPos = targetTransform.m_localPosition;
+			Vector3& targetPos = targetTransform.mLocalPosition;
 
 			// 화살 생성 이벤트 트리거
 			auto projectile = mpEntityManager->CreateEntity("arrow");
-			projectile->AddComponent<Transform>(transform.m_localPosition + Vector3(0, 0.7, 0), transform.m_localRotation, Vector3(0.01f));
+			projectile->AddComponent<Transform>(transform.mLocalPosition + Vector3(0, 0.7, 0), transform.mLocalRotation, Vector3(0.01f));
 			//mpEventManager->TriggerEvent(Event("Create Arrow", projectile->GetUID()));
 			projectile->AddComponent<BoxCollider>(true, Vector3(), Vector3(0.03f, 0.03f, 0.3f));
 			auto& projectileRigid = projectile->AddComponent<Rigidbody>(50.f, 0.f, 0.f, false, false, 0, 1, 1);
@@ -177,21 +176,21 @@ void AttackState::RangedAttack(std::shared_ptr<Entity> _entity)
 			auto& projectileComp = projectile->AddComponent<ProjectileComponent>(0.02, 10, Vector3(0, 0, 0), 50);
 			mpPhysicsManager->AddPhysicsObject(projectile->GetUID(), TYPE_PROJECTILE, ATTR_ALLY);
 			mpRenderManager->InitailizeEntity(projectile);
-			projectileComp.m_isThrown = true;
-			Vector3 start = projectile->GetComponent<Transform>().m_localPosition;
-			auto time = projectileComp.m_lifeTime;
-			auto mass = projectileRigid.m_mass;
-			projectileComp.m_targetPosition = targetTransform.m_localPosition;
-			projectileComp.m_damage = playerComp.mAttackPower;
+			projectileComp.mIsThrown = true;
+			Vector3 start = projectile->GetComponent<Transform>().mLocalPosition;
+			auto time = projectileComp.mLifeTime;
+			auto mass = projectileRigid.mMass;
+			projectileComp.mTargetPosition = targetTransform.mLocalPosition;
+			projectileComp.mDamage = playerComp.mAttackPower;
 			/// 
 			Vector3 force;
-			force.x = targetTransform.m_localPosition.x - start.x;
-			force.z = targetTransform.m_localPosition.z - start.z;
+			force.x = targetTransform.mLocalPosition.x - start.x;
+			force.z = targetTransform.mLocalPosition.z - start.z;
 			force.Normalize();
-			force *= projectileComp.m_speed;
+			force *= projectileComp.mSpeed;
 
 			mpPhysicsManager->SetVelocity(projectile, force);
-			//m_pSoundManager->Play3DSound("bow", pos.x, pos.y, pos.z);
+			//mpSoundManager->Play3DSound("bow", pos.x, pos.y, pos.z);
 
 			// 화살이 발사되었음을 기록 (한 번만 발사되도록)
 			playerComp.mIsShot = true;

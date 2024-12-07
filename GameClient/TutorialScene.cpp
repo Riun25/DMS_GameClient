@@ -30,12 +30,12 @@ bool TutorialScene::Initialize()
 {
 	/// 리소스 추가
 	AddResource();
-	// 	m_pRenderManager->SetCubeMap("Atrium_diffuseIBL.dds", "Atrium_specularIBL.dds");
+	// 	mpRenderManager->SetCubeMap("Atrium_diffuseIBL.dds", "Atrium_specularIBL.dds");
 
 		// 씬데이터 생성
-	m_pSceneData = new SceneData();
-	SceneData* pSceneData = dynamic_cast<SceneData*>(m_pSceneData);
-	auto sceneTable = m_pResourceManager->ParseCSV<SceneTable>("StageVariables.csv");
+	mpSceneData = new SceneData();
+	SceneData* pSceneData = dynamic_cast<SceneData*>(mpSceneData);
+	auto sceneTable = mpResourceManager->ParseCSV<SceneTable>("StageVariables.csv");
 	for (auto& table : sceneTable)
 	{
 		if (m_mapNum == table.sceneNum)
@@ -52,18 +52,18 @@ bool TutorialScene::Initialize()
 	mpAstar = new AStar();
 	std::vector<std::vector<int>>* astarMap = new std::vector<std::vector<int>>();
 
-	*astarMap = m_pResourceManager->ParseMapCSV(m_stageName + std::string(".csv"));
+	*astarMap = mpResourceManager->ParseMapCSV(m_stageName + std::string(".csv"));
 
 	mpAstar->Initialize(Vector2(-15.0f), Vector2(15.0f), astarMap);
 
 	/// 매니저 및 시스템 초기화
 	// 유닛 시스템 설정(투사체, 플레이어, NPC 시스템 및 장비 매니저 초기화)
-	mpUnitSystem = new UnitSystem(m_registry, m_pEntityManager, m_pPhysicsManager, m_pInputManager, m_pWorldManager
-		, m_pRenderManager, m_pResourceManager, m_pEventManager, m_pUIManager, m_pSoundManager, mpAstar);
+	mpUnitSystem = new UnitSystem(mRegistry, mpEntityManager, mpPhysicsManager, mpInputManager, mpWorldManager
+		, mpRenderManager, mpResourceManager, mpEventManager, mpUIManager, mpSoundManager, mpAstar);
 	mpUnitSystem->Initialize();
 
-	mpLevelManager = new LevelManager(m_registry, m_pRenderManager, m_pPhysicsManager, m_pInputManager, m_pUIManager, m_pEntityManager
-		, m_pResourceManager, m_pSoundManager, mpUnitSystem, mpAstar);
+	mpLevelManager = new LevelManager(mRegistry, mpRenderManager, mpPhysicsManager, mpInputManager, mpUIManager, mpEntityManager
+		, mpResourceManager, mpSoundManager, mpUnitSystem, mpAstar);
 	mpLevelManager->Initialize(GetUID());
 	/// 기본적인 환경 설정
 	// 카메라 엔티티 생성, 세팅
@@ -91,7 +91,7 @@ bool TutorialScene::Initialize()
 	// 유닛세팅 --------------------------------------------------------
 	// 적군 유닛 세팅
 	mpUnitSystem->GetPlayerSystem()->AddSceneEnemyUnits(m_mapNum);
-	// 	auto enemy = m_pEntityManager->CreateEntity("enemy");
+	// 	auto enemy = mpEntityManager->CreateEntity("enemy");
 	// 	mpUnitSystem->GetPlayerSystem()->AddUnit(enemy, "RVC_0", Vector3(10.f, 0.f, -10.f));
 		//mpUnitSystem->GetPlayerSystem()->AddUnit(enemy, "RVC_R1", Vector3(10.f, 0.f, -10.f));
 		// NPC 세팅
@@ -107,7 +107,7 @@ bool TutorialScene::Initialize()
 	}
 
 	// 리스타트 확인
-	if (m_pWorldManager->GetCurrentWorld()->GetCurrentScene()->GetUID() == m_pWorldManager->GetCurrentWorld()->GetPreviousScene())
+	if (mpWorldManager->GetCurrentWorld()->GetCurrentScene()->GetUID() == mpWorldManager->GetCurrentWorld()->GetPreviousScene())
 	{
 		mpLevelManager->mIsRestart = true;
 	}
@@ -118,12 +118,12 @@ bool TutorialScene::Initialize()
 	mpLevelManager->AddStageNumAndObjects(m_u8StageName);
 	mpLevelManager->AddClassUI(2, false); // UI 클래스 버튼
 	mpLevelManager->AddVerifyPopUpUI();
-	mpLevelManager->AddAnimationUI(true, static_cast<int>(m_pWorldManager->GetCurrentWorld()->GetPreviousScene()));
+	mpLevelManager->AddAnimationUI(true, static_cast<int>(mpWorldManager->GetCurrentWorld()->GetPreviousScene()));
 	mpLevelManager->SetUIAnimationState(UIAnimationState::PREBATTLE); // UI 애니메이션 상태 설정
 
 	/// Sound
-	m_pSoundManager->StopBGM();
-	m_pSoundManager->PlayBGM("Snd_bgm_BeforeBattle");
+	mpSoundManager->StopBGM();
+	mpSoundManager->PlayBGM("Snd_bgm_BeforeBattle");
 	return Scene::Initialize();
 }
 
@@ -137,14 +137,14 @@ void TutorialScene::FixedUpdate(float _dTime)
 		{
 		case UIAnimationState::VISIBLE:
 		{
-			auto view = m_registry.view<Texture2D>();
+			auto view = mRegistry.view<Texture2D>();
 			for (auto& entity : view)
 			{
-				auto& name = m_registry.get<Name>(entity).m_name;
-				auto& texture = m_registry.get<Texture2D>(entity);
+				auto& name = mRegistry.get<Name>(entity).mName;
+				auto& texture = mRegistry.get<Texture2D>(entity);
 				if (name.find("UI_A_Cloud") != std::string::npos)
 				{
-					texture.m_isVisible = true;
+					texture.mIsVisible = true;
 				}
 			}
 			mpLevelManager->SetUIAnimationState(UIAnimationState::POSTBATTLE);
@@ -170,14 +170,14 @@ void TutorialScene::FixedUpdate(float _dTime)
 
 void TutorialScene::Update(float _dTime)
 {
-	SceneData* pSceneData = dynamic_cast<SceneData*>(m_pSceneData);
+	SceneData* pSceneData = dynamic_cast<SceneData*>(mpSceneData);
 
 	mpLevelManager->BasicUIUpdate();
 	mpLevelManager->PopUpUIUpdate(pSceneData);
 
 	if (mpLevelManager->mIsGoMain == true)
 	{
-		m_pWorldManager->GetCurrentWorld()->SetScene(static_cast<uint32_t>(SceneName::MAIN));
+		mpWorldManager->GetCurrentWorld()->SetScene(static_cast<uint32_t>(SceneName::MAIN));
 		return;
 	}
 
@@ -215,9 +215,9 @@ void TutorialScene::Update(float _dTime)
 	{
 		mpLevelManager->NoneUI();
 		mpUnitSystem->GetProjectileSystem()->Finalize();
-		int a = m_pWorldManager->GetCurrentWorld()->GetCurrentScene()->GetUID();
+		int a = mpWorldManager->GetCurrentWorld()->GetCurrentScene()->GetUID();
 		int b = static_cast<uint32_t>(SceneName::LAST);
-		if (static_cast<uint32_t>(m_pWorldManager->GetCurrentWorld()->GetCurrentScene()->GetUID()) == static_cast<uint32_t>(SceneName::LAST) - 1)
+		if (static_cast<uint32_t>(mpWorldManager->GetCurrentWorld()->GetCurrentScene()->GetUID()) == static_cast<uint32_t>(SceneName::LAST) - 1)
 		{
 			mpLevelManager->mIsFinalStage = true;
 		}
@@ -240,19 +240,19 @@ void TutorialScene::Update(float _dTime)
 
 		if (mpLevelManager->mIsGoMain == true)
 		{
-			m_pWorldManager->GetCurrentWorld()->SetScene(static_cast<uint32_t>(SceneName::MAIN));
+			mpWorldManager->GetCurrentWorld()->SetScene(static_cast<uint32_t>(SceneName::MAIN));
 			return;
 		}
 
 		if (mpLevelManager->GetUIAnimationState() == UIAnimationState::NEXTSCENE)
 		{
-			m_pWorldManager->GetCurrentWorld()->SetScene(static_cast<uint32_t>(SceneName::LOADING));
+			mpWorldManager->GetCurrentWorld()->SetScene(static_cast<uint32_t>(SceneName::LOADING));
 			return;
 		}
 
 		if (mpLevelManager->mIsGameEnding == true)
 		{
-			m_pWorldManager->GetCurrentWorld()->SetScene(static_cast<uint32_t>(SceneName::CREDIT));
+			mpWorldManager->GetCurrentWorld()->SetScene(static_cast<uint32_t>(SceneName::CREDIT));
 			return;
 		}
 	}
@@ -260,7 +260,7 @@ void TutorialScene::Update(float _dTime)
 	case GameState::RESTART:
 	{
 		mpLevelManager->SetUIAnimationState(UIAnimationState::UNVISIBLE);
-		m_pWorldManager->GetCurrentWorld()->SetScene(m_pWorldManager->GetCurrentWorld()->GetCurrentScene()->GetUID());
+		mpWorldManager->GetCurrentWorld()->SetScene(mpWorldManager->GetCurrentWorld()->GetCurrentScene()->GetUID());
 	}
 	break;
 	default:
@@ -271,52 +271,52 @@ void TutorialScene::Update(float _dTime)
 
 void TutorialScene::LateUpdate(float _dTime)
 {
-	auto cameraView = m_registry.view<CameraComponent>();
+	auto cameraView = mRegistry.view<CameraComponent>();
 	for (auto entity : cameraView)
 	{
-		auto& camera = m_registry.get<CameraComponent>(entity);
+		auto& camera = mRegistry.get<CameraComponent>(entity);
 		// 카메라의 마우스 위치 업데이트
-		if (camera.m_cameraEnum == 0)
+		if (camera.mCameraEnum == 0)
 		{
-			// 			camera.m_pCamera->OnMouseMove(static_cast<int>(m_pInputManager->GetMousePos().x), static_cast<int>(m_pInputManager->GetMousePos().y));
-			// 			if (m_pInputManager->GetKey(KEY::F))
+			// 			camera.mpCamera->OnMouseMove(static_cast<int>(mpInputManager->GetMousePos().x), static_cast<int>(mpInputManager->GetMousePos().y));
+			// 			if (mpInputManager->GetKey(KEY::F))
 			// 			{
-			// 				if (camera.m_pCamera->mIsFirstPersonMode)
+			// 				if (camera.mpCamera->mIsFirstPersonMode)
 			// 				{
-			// 					camera.m_pCamera->mIsFirstPersonMode = false;
+			// 					camera.mpCamera->mIsFirstPersonMode = false;
 			// 				}
 			// 				else
 			// 				{
-			// 					camera.m_pCamera->mIsFirstPersonMode = true;
-			// 					camera.m_pCamera->PrintCamInfo();
+			// 					camera.mpCamera->mIsFirstPersonMode = true;
+			// 					camera.mpCamera->PrintCamInfo();
 			// 				}
 			// 			}
 		}
 	}
 
-	if (m_pInputManager->GetKeyUp(KEY::M))
+	if (mpInputManager->GetKeyUp(KEY::M))
 	{
 		auto camera = mpLevelManager->GetWorldCamera();
 		camera->SetEyePos(Vector3(0, 17, -17.5));
 		camera->SetDirection(Vector3(0, -0.8, 0.6));
 
-		m_pRenderManager->CameraSetPerspective();
+		mpRenderManager->CameraSetPerspective();
 	}
-	if (m_pInputManager->GetKeyUp(KEY::N))
+	if (mpInputManager->GetKeyUp(KEY::N))
 	{
 		auto camera = mpLevelManager->GetWorldCamera();
 		camera->SetEyePos(Vector3(-15.42, 18.06, -17.72));
 		camera->SetDirection(Vector3(0.57735, -0.57735, 0.57735));
 
-		m_pRenderManager->CameraSetOrthographic(0.03);
+		mpRenderManager->CameraSetOrthographic(0.03);
 	}
 
 	/// 임시로 적용시켜놓은 버프 상수값 변경 버튼
-	if (m_pInputManager->GetKeyUp(KEY::RIGHT))
+	if (mpInputManager->GetKeyUp(KEY::RIGHT))
 	{
 		mpUnitSystem->GetPlayerSystem()->mpStatusManager->mMoneyBuffCoef += 0.05f;
 	}
-	if (m_pInputManager->GetKeyUp(KEY::LEFT))
+	if (mpInputManager->GetKeyUp(KEY::LEFT))
 	{
 		mpUnitSystem->GetPlayerSystem()->mpStatusManager->mMoneyBuffCoef -= 0.05f;
 	}
@@ -340,38 +340,38 @@ void TutorialScene::Finalize()
 	{
 		delete mpAstar;
 	}
-	if (m_pSceneData)
+	if (mpSceneData)
 	{
-		delete m_pSceneData;
+		delete mpSceneData;
 	}
 }
 
 void TutorialScene::AddResource()
 {
-	//m_pResourceManager->GetFileManager()->PrintAll(false);
+	//mpResourceManager->GetFileManager()->PrintAll(false);
 	/// 리소스 추가
 	// 모델 추가
-	//m_pRenderManager->AddModel("../TestAsset/", "box.fbx");
+	//mpRenderManager->AddModel("../TestAsset/", "box.fbx");
 
 	/////UI
-	//m_pUIManager->AddTexture2D("../Resources/Texture/", "blue.png");
+	//mpUIManager->AddTexture2D("../Resources/Texture/", "blue.png");
 
 	//// 애니메이션 추가
-	//m_pResourceManager->AddFilesInDirAni("Animation");
+	//mpResourceManager->AddFilesInDirAni("Animation");
 
 	//// 3D 텍스처 추가
-	//m_pResourceManager->AddFilesInDir3D("Texture3D");
+	//mpResourceManager->AddFilesInDir3D("Texture3D");
 
 	//// 큐브맵 텍스처 추가
-	//m_pResourceManager->AddFilesInDirDDS("CubeMap");
+	//mpResourceManager->AddFilesInDirDDS("CubeMap");
 
 	//// Fbx 추가 -> 추후 클래스 별로 쪼갤 것
-	//m_pResourceManager->AddFilesInDirModel("Mercenary");
-	//m_pResourceManager->AddFilesInDirModel("Environment");
-	//m_pResourceManager->AddFilesInDirModel("Archer");
-	//m_pResourceManager->AddFilesInDirModel("Enemy");
-	//m_pResourceManager->AddFilesInDirModel("money");
-	//m_pResourceManager->AddFilesInDirModel("Chief");
+	//mpResourceManager->AddFilesInDirModel("Mercenary");
+	//mpResourceManager->AddFilesInDirModel("Environment");
+	//mpResourceManager->AddFilesInDirModel("Archer");
+	//mpResourceManager->AddFilesInDirModel("Enemy");
+	//mpResourceManager->AddFilesInDirModel("money");
+	//mpResourceManager->AddFilesInDirModel("Chief");
 }
 
 void TutorialScene::SetMapInfo(uint8_t _num, string _stageName)

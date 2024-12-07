@@ -193,22 +193,22 @@ private:
 
 private:
 	// 렌더링 모드 설정
-	bool m_renderModel = true;
-	bool m_renderGeometry = true;
-	bool m_renderShadow = true;
+	bool mRenderModel = true;
+	bool mRenderGeometry = true;
+	bool mRenderShadow = true;
 
-	entt::registry& m_registry;
-	WorldManager* m_pWorldManager;
-	TimeManager* m_pTimeManager;
+	entt::registry& mRegistry;
+	WorldManager* mpWorldManager;
+	TimeManager* mpTimeManager;
 
-	Camera* m_pWorldCamera;									//#sung 아예 월드카메라와 라이트 카메라의 포인터를 변수로 가지게 하였다.
-	Camera* m_pLightCamera[MAX_LIGHTS];
+	Camera* mpWorldCamera;									//#sung 아예 월드카메라와 라이트 카메라의 포인터를 변수로 가지게 하였다.
+	Camera* mpLightCamera[MAX_LIGHTS];
 	AnimationManager* mpAnimationManager;
 
-	std::unique_ptr<entt::observer> m_pLightObserver;
-	std::unique_ptr<entt::observer> m_pMeshObserver;
-	std::unique_ptr<entt::observer> m_pTexture3DObserver;
-	std::unique_ptr<entt::observer> m_pTexture2DObserver;
+	std::unique_ptr<entt::observer> mpLightObserver;
+	std::unique_ptr<entt::observer> mpMeshObserver;
+	std::unique_ptr<entt::observer> mpTexture3DObserver;
+	std::unique_ptr<entt::observer> mpTexture2DObserver;
 
 	float m_opacityFactor[4] = { 1.f,1.f,1.f,1.f };
 

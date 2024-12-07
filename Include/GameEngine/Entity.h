@@ -55,7 +55,7 @@ public:
 			return GetComponent<T>();
 		}
 		auto self = shared_from_this();
-		return m_registry.emplace<T>(m_entity, self, std::forward<Args>(args)...);
+		return mRegistry.emplace<T>(mEntity, self, std::forward<Args>(args)...);
 	}
 
 	/// <summary>
@@ -66,7 +66,7 @@ public:
 	template <IsComponent T>
 	bool HasComponent() const
 	{
-		return m_registry.all_of<T>(m_entity);
+		return mRegistry.all_of<T>(mEntity);
 	}
 
 	/// <summary>
@@ -79,7 +79,7 @@ public:
 	{
 		if (HasComponent<T>())
 		{
-			return m_registry.get<T>(m_entity);
+			return mRegistry.get<T>(mEntity);
 		}
 		throw std::runtime_error("Component not found");
 	}
@@ -104,7 +104,7 @@ public:
 	template <IsComponent T>
 	void RemoveComponent()
 	{
-		m_registry.remove<T>(m_entity);
+		mRegistry.remove<T>(mEntity);
 	}
 
 	/// <summary>
@@ -136,9 +136,9 @@ private:
 public:
 	// 	UID m_uid;						// 객체 고유식별자, 엔티티 생성시에 자동으로 부여됩니다.
 	// 	std::string m_name;				// 객체 이름
-	std::weak_ptr<Scene> m_owner;	// 이 오브젝트를 보유하고있는 씬
-	entt::registry& m_registry;		// 엔티티와 컴포넌트를 관리하는 엔티티 레지스트리
-	entt::entity m_entity;			// 엔티티 핸들
+	std::weak_ptr<Scene> mpOwner;	// 이 오브젝트를 보유하고있는 씬
+	entt::registry& mRegistry;		// 엔티티와 컴포넌트를 관리하는 엔티티 레지스트리
+	entt::entity mEntity;			// 엔티티 핸들
 
 };
 

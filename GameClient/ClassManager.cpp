@@ -71,9 +71,9 @@ void ClassManager::UpdateUnitMesh(std::shared_ptr<Entity> _entity, const std::st
 			{
 				_entity->GetComponent<EnemyComponent>().mClassType = ConvertStringToClasstype(_classType);
 			}
-			_entity->GetComponent<MeshRenderer>().m_file = unitMeshInfo.fbxName;
-			_entity->GetComponent<MeshRenderer>().m_meshName = unitMeshInfo.meshName;
-			_entity->GetComponent<Texture3D>().m_diffuse = unitMeshInfo.textureName;
+			_entity->GetComponent<MeshRenderer>().mFile = unitMeshInfo.fbxName;
+			_entity->GetComponent<MeshRenderer>().mMeshName = unitMeshInfo.meshName;
+			_entity->GetComponent<Texture3D>().mDiffuse = unitMeshInfo.textureName;
 			return;
 		}
 	}

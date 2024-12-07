@@ -28,7 +28,7 @@ ExampleScene::ExampleScene(entt::registry& _registry, const std::string& _name
 	mpLevelManager = nullptr;
 	mpAstar = nullptr;
 
-	mTutorialTextVec = m_pResourceManager->ParseCSV<TutotialTextTable>("TutorialText2.csv");
+	mTutorialTextVec = mpResourceManager->ParseCSV<TutotialTextTable>("TutorialText2.csv");
 	mTextIdx = 0;
 	mTutorialState = TutorialState::FINAL;
 	mTime = 0.0f;
@@ -38,28 +38,28 @@ bool ExampleScene::Initialize()
 {
 	/// 리소스 추가
 	AddResource();
-	m_pRenderManager->SetCubeMap("Atrium_diffuseIBL.dds", "Atrium_specularIBL.dds");
+	mpRenderManager->SetCubeMap("Atrium_diffuseIBL.dds", "Atrium_specularIBL.dds");
 
 	// 씬데이터 생성
-	m_pSceneData = new SceneData();
+	mpSceneData = new SceneData();
 
 	/// mpAstar 초기화 : 원래는 맵 매니저 안에 있는 게 좋지만 현재 레벨 매니저가 상당 부분 처리하고 있어서 밖으로 따로 빼둔 상태다.
 	// 추후 시간이 남을 때 예쁜 구조로 바꿔보자.
 	mpAstar = new AStar();
 	std::vector<std::vector<int>>* astarMap = new std::vector<std::vector<int>>();
-	*astarMap = m_pResourceManager->ParseMapCSV("Stage1.csv");
+	*astarMap = mpResourceManager->ParseMapCSV("Stage1.csv");
 	mpAstar->Initialize(Vector2(-15.0f), Vector2(15.0f), astarMap);
 	mStartPoint = mpAstar->GetMapStartPoint();
 	mEndPoint = mpAstar->GetMapEndPoint();
 
 	/// 매니저 및 시스템 초기화
 	// 유닛 시스템 설정(투사체, 플레이어, NPC 시스템 및 장비 매니저 초기화)
-	mpUnitSystem = new UnitSystem(m_registry, m_pEntityManager, m_pPhysicsManager, m_pInputManager, m_pWorldManager
-		, m_pRenderManager, m_pResourceManager, m_pEventManager, m_pUIManager, m_pSoundManager, mpAstar);
+	mpUnitSystem = new UnitSystem(mRegistry, mpEntityManager, mpPhysicsManager, mpInputManager, mpWorldManager
+		, mpRenderManager, mpResourceManager, mpEventManager, mpUIManager, mpSoundManager, mpAstar);
 	mpUnitSystem->Initialize();
 
-	mpLevelManager = new LevelManager(m_registry, m_pRenderManager, m_pPhysicsManager, m_pInputManager, m_pUIManager, m_pEntityManager
-		, m_pResourceManager, m_pSoundManager, mpUnitSystem, mpAstar);
+	mpLevelManager = new LevelManager(mRegistry, mpRenderManager, mpPhysicsManager, mpInputManager, mpUIManager, mpEntityManager
+		, mpResourceManager, mpSoundManager, mpUnitSystem, mpAstar);
 	mpLevelManager->Initialize(GetUID());
 	mpLevelManager->SetGameState(GameState::PRE_PLACEMENT);
 
@@ -77,7 +77,7 @@ bool ExampleScene::Initialize()
 	auto camera = mpLevelManager->GetWorldCamera();
 	camera->SetEyePos(Vector3(-15.42, 18.06, -17.72));
 	camera->SetDirection(Vector3(0.57735, -0.57735, 0.57735));
-	m_pRenderManager->CameraSetOrthographic(0.03);
+	mpRenderManager->CameraSetOrthographic(0.03);
 
 	/// 오브젝트 생성
 	// 투명 벽 배치(원거리 무기 삭제)
@@ -96,19 +96,19 @@ bool ExampleScene::Initialize()
 	mpUnitSystem->GetNPCSystem()->AddNPC("Chief"); // 아군 용병왕
 	mpUnitSystem->GetNPCSystem()->AddNPC("RVC_C"); // 적군 용병왕
 	//
-	auto ui1 = m_pEntityManager->CreateEntity("UI_T");
-	m_pUIManager->AddUI(ui1, "UI_pnl_MsgBoxClick1.png", Vector2(193, 489), Vector2(432, 210), static_cast<int>(Layer::COM_B), Vector4(1.0f));
-	m_pUIManager->AddText(ui1, u8"안녕, 나는 리치 러커스라고 해", "KIMM_Bold(60).ttf", Vector2(219, 554), static_cast<int>(Layer::COM_B), true, Vector4(1.0f));
-	ui1->GetComponent<Text>().m_scale = 0.33f;
+	auto ui1 = mpEntityManager->CreateEntity("UI_T");
+	mpUIManager->AddUI(ui1, "UI_pnl_MsgBoxClick1.png", Vector2(193, 489), Vector2(432, 210), static_cast<int>(Layer::COM_B), Vector4(1.0f));
+	mpUIManager->AddText(ui1, u8"안녕, 나는 리치 러커스라고 해", "KIMM_Bold(60).ttf", Vector2(219, 554), static_cast<int>(Layer::COM_B), true, Vector4(1.0f));
+	ui1->GetComponent<Text>().mScale = 0.33f;
 
-	auto ui2 = m_pEntityManager->CreateEntity("UI_T_Skip");
-	m_pUIManager->AddUI(ui2, "UI_btn_Skip.png", Vector2(1812, 997), Vector2(83, 58), static_cast<int>(Layer::COM_B), Vector4(1.0f));
-	m_pUIManager->AddButtonAllColor(ui2, Vector4(0.5f, 0.5f, 0.5f, 1.0f), Vector4(1.0f));
+	auto ui2 = mpEntityManager->CreateEntity("UI_T_Skip");
+	mpUIManager->AddUI(ui2, "UI_btn_Skip.png", Vector2(1812, 997), Vector2(83, 58), static_cast<int>(Layer::COM_B), Vector4(1.0f));
+	mpUIManager->AddButtonAllColor(ui2, Vector4(0.5f, 0.5f, 0.5f, 1.0f), Vector4(1.0f));
 
-	auto ui3 = m_pEntityManager->CreateEntity("UI_PointMoney");
-	m_pUIManager->AddUI(ui3, "UI_PointMoney.png", Vector2(915, 490), Vector2(90, 100), static_cast<int>(Layer::EFFECT), Vector4(1.0f), false);
+	auto ui3 = mpEntityManager->CreateEntity("UI_PointMoney");
+	mpUIManager->AddUI(ui3, "UI_PointMoney.png", Vector2(915, 490), Vector2(90, 100), static_cast<int>(Layer::EFFECT), Vector4(1.0f), false);
 
-	auto ui4 = m_pEntityManager->CreateEntity("UI_H"); // 배치를 돕는 영역
+	auto ui4 = mpEntityManager->CreateEntity("UI_H"); // 배치를 돕는 영역
 	ui4->AddComponent<Transform>(Vector3(5.f, 0.f, 0.f), Vector3(0.f), Vector3(0.7f, 0.005f, 0.7f));
 	ui4->AddComponent<MeshRenderer>("box.fbx", "Cube.001");
 	ui4->AddComponent<Texture3D>("White.png");
@@ -116,29 +116,29 @@ bool ExampleScene::Initialize()
  	ui4->AddComponent<OutlineComponent>(1.05, Vector3(0, 0, 1));
 
 	// 장애물 엔티티 -> 초반에 나왔다가 바로 제거될 녀석
-	auto ui5 = m_pEntityManager->CreateEntity("UI_H_Obstacle"); // 배치를 돕는 영역
+	auto ui5 = mpEntityManager->CreateEntity("UI_H_Obstacle"); // 배치를 돕는 영역
 	ui5->AddComponent<Transform>(Vector3(5.f, 0.f, 0.f), Vector3(0.f), Vector3(0.5f, 1.0f, 0.5f));
 	ui5->AddComponent<MeshRenderer>("box.fbx", "Cube.001");
 	ui5->AddComponent<Texture3D>("Log.png");
 
 	// 사각형 이펙트 엔티티
-	auto effectRect = m_pEntityManager->CreateEntity("UI_Effect_Rect");
-	m_pUIManager->AddRect(effectRect, Vector2(925, 410), Vector2(200.f), static_cast<int>(Layer::COM_M), Vector4(0.0f), 8.0f, Vector4(1.0f, 0.38f, 0.0f, 1.0f));
+	auto effectRect = mpEntityManager->CreateEntity("UI_Effect_Rect");
+	mpUIManager->AddRect(effectRect, Vector2(925, 410), Vector2(200.f), static_cast<int>(Layer::COM_M), Vector4(0.0f), 8.0f, Vector4(1.0f, 0.38f, 0.0f, 1.0f));
 	effectRect->AddComponent<ShrinkRectComponent>(Vector2(200.f), Vector2(100.f), 20);
 	effectRect->GetComponent<Box2D>().mIsVisible = false;
 	mIsReadyResetShrinkRect = true;
 
-	/*auto ui5 = m_pEntityManager->CreateEntity("sssss");
-	m_pUIManager->AddText(ui5, u8"안녕,\n 나는\n리치 \n러커스라고\n 해", "KIMM_Bold(60).ttf", Vector2(0, 0), static_cast<int>(Layer::COM_B), true);
-	ui1->GetComponent<Text>().m_scale = 0.7f;*/
+	/*auto ui5 = mpEntityManager->CreateEntity("sssss");
+	mpUIManager->AddText(ui5, u8"안녕,\n 나는\n리치 \n러커스라고\n 해", "KIMM_Bold(60).ttf", Vector2(0, 0), static_cast<int>(Layer::COM_B), true);
+	ui1->GetComponent<Text>().mScale = 0.7f;*/
 
 	/// UI
 	mpLevelManager->AddBasicUI();
-	mpLevelManager->AddBattleUI(dynamic_cast<SceneData*>(m_pSceneData));
+	mpLevelManager->AddBattleUI(dynamic_cast<SceneData*>(mpSceneData));
 	mpLevelManager->AddStageNumAndObjects(u8"튜토리얼");
 	mpLevelManager->AddClassUI(0, true); // UI 클래스 버튼
 	mpLevelManager->AddVerifyPopUpUI();
-	mpLevelManager->AddAnimationUI(true, static_cast<int>(m_pWorldManager->GetCurrentWorld()->GetPreviousScene()));
+	mpLevelManager->AddAnimationUI(true, static_cast<int>(mpWorldManager->GetCurrentWorld()->GetPreviousScene()));
 
 	/// 튜토리얼 상태 정의
 	mTutorialState = TutorialState::CLOUD;
@@ -147,8 +147,8 @@ bool ExampleScene::Initialize()
 	mpLevelManager->SetUIAnimationState(UIAnimationState::PRETUTORIAL);
 
 	/// Sound
-	m_pSoundManager->StopBGM();
-	m_pSoundManager->PlayBGM("Snd_bgm_BeforeBattle");
+	mpSoundManager->StopBGM();
+	mpSoundManager->PlayBGM("Snd_bgm_BeforeBattle");
 	return Scene::Initialize();
 }
 
@@ -160,16 +160,16 @@ void ExampleScene::FixedUpdate(float _dTime)
 		|| mTutorialState == TutorialState::BUFF*/
 		|| mpLevelManager->GetGameState() == GameState::PLAY)
 	{
-		auto playerView = m_registry.view<PlayerComponent>();
-		auto enemyView = m_registry.view<EnemyComponent>();
+		auto playerView = mRegistry.view<PlayerComponent>();
+		auto enemyView = mRegistry.view<EnemyComponent>();
 		for (auto& entity : playerView)
 		{
-			mpUnitSystem->GetPlayerSystem()->FixedUpdate(m_pEntityManager->GetEntity(entity), _dTime); // 아군 유닛을 업데이트 합니다.
+			mpUnitSystem->GetPlayerSystem()->FixedUpdate(mpEntityManager->GetEntity(entity), _dTime); // 아군 유닛을 업데이트 합니다.
 		}
 
 		for (auto& entity : enemyView)
 		{
-			mpUnitSystem->GetPlayerSystem()->FixedUpdate(m_pEntityManager->GetEntity(entity), _dTime); // 적군 유닛을 업데이트 합니다.
+			mpUnitSystem->GetPlayerSystem()->FixedUpdate(mpEntityManager->GetEntity(entity), _dTime); // 적군 유닛을 업데이트 합니다.
 		}
 
 		//mpUnitSystem->GetProjectileSystem()->FixedUpdate(_dTime);
@@ -178,10 +178,10 @@ void ExampleScene::FixedUpdate(float _dTime)
 	if (mTutorialState == TutorialState::ALLY_Play
 		|| mTutorialState == TutorialState::BUFF)
 	{
-		auto playerView = m_registry.view<PlayerComponent>();
+		auto playerView = mRegistry.view<PlayerComponent>();
 		for (auto& entity : playerView)
 		{
-			mpUnitSystem->GetPlayerSystem()->FixedUpdate(m_pEntityManager->GetEntity(entity), _dTime); // 아군 유닛을 업데이트 합니다.
+			mpUnitSystem->GetPlayerSystem()->FixedUpdate(mpEntityManager->GetEntity(entity), _dTime); // 아군 유닛을 업데이트 합니다.
 		}
 		//mpUnitSystem->GetProjectileSystem()->FixedUpdate(_dTime);
 	}
@@ -192,19 +192,19 @@ void ExampleScene::FixedUpdate(float _dTime)
 
 void ExampleScene::Update(float _dTime)
 {
-	SceneData* pSceneData = dynamic_cast<SceneData*>(m_pSceneData);
+	SceneData* pSceneData = dynamic_cast<SceneData*>(mpSceneData);
 
 	//mpLevelManager->BasicUIUpdate(); 세팅창 사용 불가
 
-	auto skipView = m_registry.view<Button>();
+	auto skipView = mRegistry.view<Button>();
 	for (auto& entity : skipView)
 	{
-		auto& name = m_registry.get<Name>(entity).m_name;
-		auto& button = m_registry.get<Button>(entity);
+		auto& name = mRegistry.get<Name>(entity).mName;
+		auto& button = mRegistry.get<Button>(entity);
 
 		if (name == "UI_T_Skip")
 		{
-			if (m_pUIManager->GetButtonState(m_pEntityManager->GetEntity(entity)) == ButtonState::PRESSED)
+			if (mpUIManager->GetButtonState(mpEntityManager->GetEntity(entity)) == ButtonState::PRESSED)
 			{
 				mpLevelManager->SetPopUpState(PopUpState::OPEN_SKIP);
 				break;
@@ -217,23 +217,23 @@ void ExampleScene::Update(float _dTime)
 	if (mpLevelManager->mIsGoMain == true)
 	{
 		mpLevelManager->mIsGoMain == false;
-		m_pWorldManager->GetCurrentWorld()->SetScene(static_cast<uint32_t>(SceneName::MAIN));
+		mpWorldManager->GetCurrentWorld()->SetScene(static_cast<uint32_t>(SceneName::MAIN));
 		return;
 	}
 	else if (mpLevelManager->mIsSkip == true)
 	{
 		mpLevelManager->mIsSkip = false;
 		// 혹시라도 있을 지시 사각형 안 보이게
-		auto shrinkRectView = m_registry.view<ShrinkRectComponent>();
+		auto shrinkRectView = mRegistry.view<ShrinkRectComponent>();
 		for (auto& entity : shrinkRectView)
 		{
-			auto box2D = m_registry.try_get<Box2D>(entity);
+			auto box2D = mRegistry.try_get<Box2D>(entity);
 			box2D->mIsVisible = false;
 		}
 		mTutorialState = TutorialState::END;
 		mpLevelManager->SetGameState(GameState::TUTORIALEND);
 		mpLevelManager->SetUIAnimationState(UIAnimationState::POSTBATTLE);
-		//m_pWorldManager->GetCurrentWorld()->SetScene(static_cast<uint32_t>(SceneName::SCENE1));
+		//mpWorldManager->GetCurrentWorld()->SetScene(static_cast<uint32_t>(SceneName::SCENE1));
 		return;
 	}
 
@@ -247,7 +247,7 @@ void ExampleScene::Update(float _dTime)
 	{
 		// 적군 최대 수 세기
 		int numEnemy = 0;
-		auto enemyView = m_registry.view<EnemyComponent>();
+		auto enemyView = mRegistry.view<EnemyComponent>();
 		for (auto entity : enemyView)
 		{
 			numEnemy++;
@@ -255,34 +255,34 @@ void ExampleScene::Update(float _dTime)
 
 		/// 배치와 관련된 모든 텍스트와 텍스처 살리기
 		// 배치와 관련된 텍스트 보이기
-		auto textView = m_registry.view<Text>();
+		auto textView = mRegistry.view<Text>();
 		for (auto uiEntity : textView)
 		{
-			auto& name = m_registry.get<Name>(uiEntity).m_name;
-			auto& text = m_registry.get<Text>(uiEntity);
+			auto& name = mRegistry.get<Name>(uiEntity).mName;
+			auto& text = mRegistry.get<Text>(uiEntity);
 
 			if (name.find("UI_D") != std::string::npos ||
 				name.find("UI_B") != std::string::npos ||
 				name == "UI_C_OutSetting" ||
 				name.find("UI_T") != std::string::npos)
 			{
-				text.m_isVisible = true;
+				text.mIsVisible = true;
 
 				if (name == "UI_B_Money")
 				{
-					text.m_num1 = dynamic_cast<SceneData*>(pSceneData)->m_heldMoney;
+					text.mNum1 = dynamic_cast<SceneData*>(pSceneData)->m_heldMoney;
 				}
 
 				if (name == "UI_B_StageGuide")
 				{
-					text.m_num1 = numEnemy;
-					text.m_num2 = numEnemy;
+					text.mNum1 = numEnemy;
+					text.mNum2 = numEnemy;
 				}
 
 				// 튜토리얼에서 사용하지 않는 것들은 보이지 않게 한다.
 				if (name == "UI_D_Guide")
 				{
-					text.m_isVisible = false;
+					text.mIsVisible = false;
 				}
 
 			}
@@ -290,15 +290,15 @@ void ExampleScene::Update(float _dTime)
 			// 튜토리얼에서 사용하지 않는 것들은 보이지 않게 한다.
 			if (name == "UI_P_Timer")
 			{
-				text.m_isVisible = false;
+				text.mIsVisible = false;
 			}
 		}
 
-		auto msgView = m_registry.view<MessageBox2D>();
+		auto msgView = mRegistry.view<MessageBox2D>();
 		for (auto uiEntity : msgView)
 		{
-			auto& name = m_registry.get<Name>(uiEntity).m_name;
-			auto& msgComp = m_registry.get<MessageBox2D>(uiEntity);
+			auto& name = mRegistry.get<Name>(uiEntity).mName;
+			auto& msgComp = mRegistry.get<MessageBox2D>(uiEntity);
 
 			if (name == "UI_B_Rank_Gauge")
 			{
@@ -307,19 +307,19 @@ void ExampleScene::Update(float _dTime)
 		}
 
 		// 배치와 관련된 텍스처 보이기
-		auto textureView = m_registry.view<Texture2D>();
+		auto textureView = mRegistry.view<Texture2D>();
 		for (auto uiEntity : textureView)
 		{
-			auto& name = m_registry.get<Name>(uiEntity).m_name;
-			auto& img = m_registry.get<Texture2D>(uiEntity);
-			auto button = m_registry.try_get<Button>(uiEntity);
+			auto& name = mRegistry.get<Name>(uiEntity).mName;
+			auto& img = mRegistry.get<Texture2D>(uiEntity);
+			auto button = mRegistry.try_get<Button>(uiEntity);
 
 			if (name.find("UI_D") != std::string::npos ||
 				name.find("UI_B") != std::string::npos ||
 				name == "UI_C_OutSetting" ||
 				name.find("UI_T") != std::string::npos)
 			{
-				img.m_isVisible = true;
+				img.mIsVisible = true;
 				/// 모든 버튼 비활성화 : 설정창 버튼은 사용 가능해야 한다! + 스킵 버튼도 사용 가능해야 한다!
 				if (button)
 				{
@@ -333,7 +333,7 @@ void ExampleScene::Update(float _dTime)
 			// 튜토리얼에서 사용하지 않는 것들은 보이지 않게 한다.
 			if (name == "UI_P_Timer")
 			{
-				img.m_isVisible = false;
+				img.mIsVisible = false;
 			}
 		}
 		mpLevelManager->FadePreSetting(false);
@@ -343,86 +343,86 @@ void ExampleScene::Update(float _dTime)
 	case GameState::PLACEMENT:
 	{
 		// 현재 좌표
-		Vector3 cursorFollowPos = m_pPhysicsManager->PickObejct("plane");
+		Vector3 cursorFollowPos = mpPhysicsManager->PickObejct("plane");
 		if (cursorFollowPos.x > 0)cursorFollowPos.x += 0.5;
 		else cursorFollowPos.x -= 0.5;
 		if (cursorFollowPos.z < 0) cursorFollowPos.z -= 0.5;
 		bool isPayment = false; /// 이거 위치는 조정해야 될 거다!
 
 		/// 튜토리얼 텍스트 출력
-		auto view2 = m_registry.view<Text>();
+		auto view2 = mRegistry.view<Text>();
 		for (auto& entity : view2)
 		{
-			auto& name = m_registry.get<Name>(entity).m_name;
-			auto& text = m_registry.get<Text>(entity);
-			auto img = m_registry.try_get<Texture2D>(entity);
+			auto& name = mRegistry.get<Name>(entity).mName;
+			auto& text = mRegistry.get<Text>(entity);
+			auto img = mRegistry.try_get<Texture2D>(entity);
 
 			if ((name == "UI_T"))
 			{
 				if (mTutorialTextVec[mTextIdx].idx <= 1) // 리치 러커스용
 				{
-					text.m_position = Vector2(219, 554);
+					text.mPosition = Vector2(219, 554);
 					if (mTutorialTextVec[mTextIdx].idx == 0)
 					{
-						img->m_file = "UI_pnl_MsgBoxClick1.png";
+						img->mFile = "UI_pnl_MsgBoxClick1.png";
 					}
 					else
 					{
-						img->m_file = "UI_pnl_MsgBox1.png";
+						img->mFile = "UI_pnl_MsgBox1.png";
 					}
-					img->m_position = Vector2(193, 489);
-					img->m_size = Vector2(432, 210);
+					img->mPosition = Vector2(193, 489);
+					img->mSize = Vector2(432, 210);
 				}
 				else
 				{
-					text.m_position = Vector2(392, 176);
+					text.mPosition = Vector2(392, 176);
 					if (mTutorialTextVec[mTextIdx].idx == 2)
 					{
-						img->m_file = "UI_pnl_MsgBoxClick2.png";
+						img->mFile = "UI_pnl_MsgBoxClick2.png";
 					}
 					else
 					{
-						img->m_file = "UI_pnl_MsgBox2.png";
+						img->mFile = "UI_pnl_MsgBox2.png";
 					}
-					img->m_position = Vector2(367, 112);
-					img->m_size = Vector2(1182, 170);
+					img->mPosition = Vector2(367, 112);
+					img->mSize = Vector2(1182, 170);
 				}
-				text.m_text = mTutorialTextVec[mTextIdx].text;
+				text.mText = mTutorialTextVec[mTextIdx].text;
 			}
 
 			// 플레이어의 소지금도 언제나 업데이트 한다.
 			if (name == "UI_B_Money")
 			{
-				text.m_num1 = pSceneData->m_heldMoney;
+				text.mNum1 = pSceneData->m_heldMoney;
 			}
 
 			// 배치한 아군의 수를 업데이트한다.
 			if (name == "UI_D_AliveNum")
 			{
-				if (9 < text.m_num1 && text.m_num1 < 20)
+				if (9 < text.mNum1 && text.mNum1 < 20)
 				{
-					text.m_text = u8"%d";
-					text.m_position.x = 867.f;
+					text.mText = u8"%d";
+					text.mPosition.x = 867.f;
 				}
-				else if (text.m_num1 == 20)
+				else if (text.mNum1 == 20)
 				{
-					text.m_text = u8"%d";
-					text.m_position.x = 852.f;
+					text.mText = u8"%d";
+					text.mPosition.x = 852.f;
 				}
 				else
 				{
-					text.m_text = u8"0%d";
-					text.m_position.x = 852.f;
+					text.mText = u8"0%d";
+					text.mPosition.x = 852.f;
 				}
-				text.m_num1 = pSceneData->m_aliveAlly;
+				text.mNum1 = pSceneData->m_aliveAlly;
 			}
 		}
 
 		/// 여기서 용병왕을 업데이트 한다.
-		auto npcView = m_registry.view<NPCComponent>();
+		auto npcView = mRegistry.view<NPCComponent>();
 		for (auto& entity : npcView)
 		{
-			mpUnitSystem->GetNPCSystem()->TutorialUpdate(m_pEntityManager->GetEntity(entity), mTextIdx);
+			mpUnitSystem->GetNPCSystem()->TutorialUpdate(mpEntityManager->GetEntity(entity), mTextIdx);
 		}
 
 		/// 땅에 떨어진 동전 업데이트
@@ -443,11 +443,11 @@ void ExampleScene::Update(float _dTime)
 		{
 			/*mpLevelManager->FadeInScreen(_dTime);
 
-			auto view = m_registry.view<FadeInOut>();
+			auto view = mRegistry.view<FadeInOut>();
 			for (auto& entity : view)
 			{
-				auto& name = m_registry.get<Name>(entity).m_name;
-				auto& img = m_registry.get<FadeInOut>(entity);
+				auto& name = mRegistry.get<Name>(entity).mName;
+				auto& img = mRegistry.get<FadeInOut>(entity);
 				if (name == "FaidInOut")
 				{
 					if (img.IsFadingInFin(_dTime) == true)
@@ -459,11 +459,11 @@ void ExampleScene::Update(float _dTime)
 			}*/
 
 			uint8_t numEnemy = 0;
-			auto enemyView = m_registry.view<EnemyComponent>();
+			auto enemyView = mRegistry.view<EnemyComponent>();
 			for (auto& entity : enemyView)
 			{
-				auto& name = m_registry.get<Name>(entity).m_name;
-				auto& enemyComp = m_registry.get<EnemyComponent>(entity);
+				auto& name = mRegistry.get<Name>(entity).mName;
+				auto& enemyComp = mRegistry.get<EnemyComponent>(entity);
 
 
 				if (enemyComp.mIsDead == false)
@@ -472,14 +472,14 @@ void ExampleScene::Update(float _dTime)
 				}
 			}
 
-			auto view2 = m_registry.view<Text>();
+			auto view2 = mRegistry.view<Text>();
 			for (auto& entity : view2)
 			{
-				auto& name = m_registry.get<Name>(entity).m_name;
-				auto& text = m_registry.get<Text>(entity);
+				auto& name = mRegistry.get<Name>(entity).mName;
+				auto& text = mRegistry.get<Text>(entity);
 				if (name == "UI_B_StageGuide")
 				{
-					text.m_num1 = numEnemy;
+					text.mNum1 = numEnemy;
 				}
 			}
 
@@ -496,17 +496,17 @@ void ExampleScene::Update(float _dTime)
 			{
 				mpUnitSystem->GetProjectileSystem()->Update(_dTime);
 
-				auto shrinkRectView = m_registry.view<ShrinkRectComponent>();
+				auto shrinkRectView = mRegistry.view<ShrinkRectComponent>();
 				for (auto& entity : shrinkRectView)
 				{
-					auto& rect = m_registry.get<ShrinkRectComponent>(entity);
-					auto box2D = m_registry.try_get<Box2D>(entity);
+					auto& rect = mRegistry.get<ShrinkRectComponent>(entity);
+					auto box2D = mRegistry.try_get<Box2D>(entity);
 					box2D->mIsVisible = true;
 					rect.Update(*box2D, _dTime);
 				}
 
 				/// 이벤트 발생 : 임의의 장애물 위치에 던지게 한다.
-				if (m_pInputManager->GetKeyUp(KEY::LBUTTON) && mpLevelManager->AddBlockScreenPos(m_pInputManager->GetMousePos(), Vector2(1812, 997), Vector2(83, 58)))
+				if (mpInputManager->GetKeyUp(KEY::LBUTTON) && mpLevelManager->AddBlockScreenPos(mpInputManager->GetMousePos(), Vector2(1812, 997), Vector2(83, 58)))
 				{
 					if (cursorFollowPos.x >= 5 && cursorFollowPos.x <= 6 && cursorFollowPos.z >= -1 && cursorFollowPos.z <= 1)
 					{
@@ -516,14 +516,14 @@ void ExampleScene::Update(float _dTime)
 						ResettingShrinkRect(Vector2(1215, 460), Vector2(100, 100), 4, 20);
 						mTextIdx = 4;
 
-						auto obsView = m_registry.view<Texture3D>();
+						auto obsView = mRegistry.view<Texture3D>();
 						for (auto& obsEntity : obsView)
 						{
-							auto& name = m_registry.get<Name>(obsEntity).m_name;
-							auto& texture = m_registry.get<Texture3D>(obsEntity);
+							auto& name = mRegistry.get<Name>(obsEntity).mName;
+							auto& texture = mRegistry.get<Texture3D>(obsEntity);
 							if (name == "UI_H_Obstacle")
 							{
-								m_pEntityManager->RemoveEntity(static_cast<UID>(obsEntity));
+								mpEntityManager->RemoveEntity(static_cast<UID>(obsEntity));
 							}
 						}
 
@@ -551,7 +551,7 @@ void ExampleScene::Update(float _dTime)
 				UpdateShrinkRect(_dTime);
 
 				/// 이벤트 발생 : 임의의 적군이 뛰어올 만한 자리에 던진다. + 다른 곳에 던진 동전은 전부 삭제시킨다.
-				if (m_pInputManager->GetKeyUp(KEY::LBUTTON) && mpLevelManager->AddBlockScreenPos(m_pInputManager->GetMousePos(), Vector2(1812, 997), Vector2(83, 58)))
+				if (mpInputManager->GetKeyUp(KEY::LBUTTON) && mpLevelManager->AddBlockScreenPos(mpInputManager->GetMousePos(), Vector2(1812, 997), Vector2(83, 58)))
 				{
 					if (cursorFollowPos.x >= 10 && cursorFollowPos.x <= 11 && cursorFollowPos.z >= -6 && cursorFollowPos.z <= -5)
 					{
@@ -611,33 +611,33 @@ void ExampleScene::Update(float _dTime)
 			else if (3.5f <= mTime) // 적군이 돈을 먹고 가만히 있음
 			{
 				// 근거리 직업 용병 버튼 활성화
-				auto uiView = m_registry.view<Button>();
+				auto uiView = mRegistry.view<Button>();
 				for (auto& uiEntity : uiView)
 				{
-					auto& name = m_registry.get<Name>(uiEntity).m_name;
-					auto& button = m_registry.get<Button>(uiEntity);
-					auto& img = m_registry.get<Texture2D>(uiEntity);
+					auto& name = mRegistry.get<Name>(uiEntity).mName;
+					auto& button = mRegistry.get<Button>(uiEntity);
+					auto& img = mRegistry.get<Texture2D>(uiEntity);
 
 					if (name == "UI_D_Class")
 					{
-						if (img.m_file == "UI_btn_Merc01.png")
+						if (img.mFile == "UI_btn_Merc01.png")
 						{
-							img.m_rgba = Vector4(0.8f, 0.8f, 0.8f, 1.0f);
-							button.mNormalRGBA = img.m_rgba;
+							img.mRgba = Vector4(0.8f, 0.8f, 0.8f, 1.0f);
+							button.mNormalRGBA = img.mRgba;
 							button.mPressedRGBA = Vector4(1.0f);
 							button.mHoveredRGBA = Vector4(0.5f, 0.5f, 0.5f, 1.0f);
 							button.mIsEnable = true;
-							m_pRenderManager->UpdateEntityTexture(m_pEntityManager->GetEntity(uiEntity));
+							mpRenderManager->UpdateEntityTexture(mpEntityManager->GetEntity(uiEntity));
 						}
 					}
 				}
 
 				// 동전 모두 삭제!
-				auto moneyView = m_registry.view<MoneyComponent>();
+				auto moneyView = mRegistry.view<MoneyComponent>();
 				for (auto& entity : moneyView)
 				{
-					auto& money = m_registry.get<MoneyComponent>(entity);
-					m_pEntityManager->RemoveEntity(money.m_pOwner->GetUID());
+					auto& money = mRegistry.get<MoneyComponent>(entity);
+					mpEntityManager->RemoveEntity(money.mpOwner->GetUID());
 				}
 				mTime = 0.0f;
 				mTutorialState = TutorialState::Enemy_Play;
@@ -713,7 +713,7 @@ void ExampleScene::Update(float _dTime)
 				UpdateShrinkRect(_dTime);
 
 				/// 이벤트 발생 : 임의의 아군이 뛰어올 만한 자리에 던진다.
-				if (m_pInputManager->GetKeyUp(KEY::LBUTTON) && mpLevelManager->AddBlockScreenPos(m_pInputManager->GetMousePos(), Vector2(1812, 997), Vector2(83, 58)))
+				if (mpInputManager->GetKeyUp(KEY::LBUTTON) && mpLevelManager->AddBlockScreenPos(mpInputManager->GetMousePos(), Vector2(1812, 997), Vector2(83, 58)))
 				{
 					if (cursorFollowPos.x >= -6 && cursorFollowPos.x <= -5 && cursorFollowPos.z >= -1 && cursorFollowPos.z <= 1)
 					{
@@ -731,20 +731,20 @@ void ExampleScene::Update(float _dTime)
 				}
 			}
 
-			auto textView = m_registry.view<Text>();
+			auto textView = mRegistry.view<Text>();
 			for (auto text : textView)
 			{
-				auto& name = m_registry.get<Name>(text).m_name;
-				auto& textComp = m_registry.get<Text>(text);
+				auto& name = mRegistry.get<Name>(text).mName;
+				auto& textComp = mRegistry.get<Text>(text);
 				if (name == "UI_B_Money")
 				{
-					textComp.m_num1 = pSceneData->m_heldMoney;
+					textComp.mNum1 = pSceneData->m_heldMoney;
 				}
 
 				// 배치한 아군의 수를 업데이트한다.
 				/*if (name == "UI_D_AliveNum")
 				{
-					textComp.m_num1 = pSceneData->m_aliveAlly;
+					textComp.mNum1 = pSceneData->m_aliveAlly;
 				}*/
 
 				if (name == "UI_B_Money")
@@ -754,7 +754,7 @@ void ExampleScene::Update(float _dTime)
 						pSceneData->m_heldMoney -= 100;
 						isPayment == false;
 					}
-					textComp.m_num1 = pSceneData->m_heldMoney;
+					textComp.mNum1 = pSceneData->m_heldMoney;
 				}
 			}
 		}
@@ -766,12 +766,12 @@ void ExampleScene::Update(float _dTime)
 			if (mTime > 1.0f)
 			{
 				// 여기서 플레이어 버프 업뎃 오류를 방지하기 위해 체력바를 추가한다(보이지는 않게)
-				auto playerView = m_registry.view<PlayerComponent>();
+				auto playerView = mRegistry.view<PlayerComponent>();
 				for (auto& entity : playerView)
 				{
-					m_pUIManager->Add3DHPBar(m_pEntityManager->GetEntity(entity), Vector3(0, 3.f, 0), Vector2(50, 5), 5, Vector4(0.2f, 0.2f, 0.2f, 1), Vector4(0.f, 0.f, 1.f, 1));
-					m_registry.get<HealthBarComponenet>(entity).mIsVisible = false;
-					mpUnitSystem->GetPlayerSystem()->SetInitializeState(m_pEntityManager->GetEntity(entity), State::IDLE);
+					mpUIManager->Add3DHPBar(mpEntityManager->GetEntity(entity), Vector3(0, 3.f, 0), Vector2(50, 5), 5, Vector4(0.2f, 0.2f, 0.2f, 1), Vector4(0.f, 0.f, 1.f, 1));
+					mRegistry.get<HealthBarComponenet>(entity).mIsVisible = false;
+					mpUnitSystem->GetPlayerSystem()->SetInitializeState(mpEntityManager->GetEntity(entity), State::IDLE);
 				}
 
 				mTutorialState = TutorialState::ALLY_Play;
@@ -794,22 +794,22 @@ void ExampleScene::Update(float _dTime)
 			}
 
 			// 플레이어 업데이트
-			auto playerView = m_registry.view<PlayerComponent>();
+			auto playerView = mRegistry.view<PlayerComponent>();
 			for (auto& entity : playerView)
 			{
-				auto& playerComp = m_registry.get<PlayerComponent>(entity);
+				auto& playerComp = mRegistry.get<PlayerComponent>(entity);
 
 				// 플레이어 관련하여 업데이트한다.
-				mpUnitSystem->GetPlayerSystem()->PlayerUnitUpdate(m_pEntityManager->GetEntity(entity), _dTime); // 아군 유닛을 업데이트 합니다.
+				mpUnitSystem->GetPlayerSystem()->PlayerUnitUpdate(mpEntityManager->GetEntity(entity), _dTime); // 아군 유닛을 업데이트 합니다.
 
-				physx::PxFilterData filterData = m_pPhysicsManager->GetFilterData(entity);
+				physx::PxFilterData filterData = mpPhysicsManager->GetFilterData(entity);
 				filterData.word1 |= 8;
-				m_pPhysicsManager->SetFilterData(entity, filterData);
+				mpPhysicsManager->SetFilterData(entity, filterData);
 			}
 
 			if (mTextIdx == 21)// 왼쪽 버튼을 꾹 누르고 있으면\n연속해서 던질 수 있어!
 			{
-				if (m_pInputManager->GetKey(KEY::LBUTTON))
+				if (mpInputManager->GetKey(KEY::LBUTTON))
 				{
 					mTime = 0.0f;
 					// 모든 동전 삭제!
@@ -817,7 +817,7 @@ void ExampleScene::Update(float _dTime)
 					mTutorialState = TutorialState::BUFF;
 					return;
 					/*mPressClickTime += _dTime;
-					if (m_pInputManager->GetKeyUp(KEY::LBUTTON) && mpLevelManager->AddBlockScreenPos(m_pInputManager->GetMousePos(), Vector2(1812, 997), Vector2(83, 58)))
+					if (mpInputManager->GetKeyUp(KEY::LBUTTON) && mpLevelManager->AddBlockScreenPos(mpInputManager->GetMousePos(), Vector2(1812, 997), Vector2(83, 58)))
 					{
 						if (mPressClickTime < 1.5f)
 						{
@@ -855,10 +855,10 @@ void ExampleScene::Update(float _dTime)
 				mpUnitSystem->GetPlayerSystem()->AddSceneEnemyUnits(0);
 
 				// 적군 업데이트
-				auto enemyView = m_registry.view<EnemyComponent>();
+				auto enemyView = mRegistry.view<EnemyComponent>();
 				for (auto& entity : enemyView)
 				{
-					m_pRenderManager->InitailizeEntity(m_pEntityManager->GetEntity(entity));
+					mpRenderManager->InitailizeEntity(mpEntityManager->GetEntity(entity));
 				}
 				mTutorialState = TutorialState::ENEMY;
 				return;
@@ -914,12 +914,12 @@ void ExampleScene::Update(float _dTime)
 				mpLevelManager->ResetPlayer(pSceneData);
 
 				// 배치와 관련된 버튼 모두 활성화 + 동전 아이콘 띄우기
-				auto textureView = m_registry.view<Texture2D>();
+				auto textureView = mRegistry.view<Texture2D>();
 				for (auto uiEntity : textureView)
 				{
-					auto& name = m_registry.get<Name>(uiEntity).m_name;
-					auto& img = m_registry.get<Texture2D>(uiEntity);
-					auto button = m_registry.try_get<Button>(uiEntity);
+					auto& name = mRegistry.get<Name>(uiEntity).mName;
+					auto& img = mRegistry.get<Texture2D>(uiEntity);
+					auto button = mRegistry.try_get<Button>(uiEntity);
 
 					if (name.find("UI_D") != std::string::npos ||
 						name.find("UI_B") != std::string::npos)
@@ -930,10 +930,10 @@ void ExampleScene::Update(float _dTime)
 							button->mIsEnable = true;
 						}
 
-						if (button && img.m_file == "UI_btn_Merc02.png")
+						if (button && img.mFile == "UI_btn_Merc02.png")
 						{
-							img.m_rgba = Vector4(0.8f, 0.8f, 0.8f, 1.0f);
-							button->mNormalRGBA = img.m_rgba;
+							img.mRgba = Vector4(0.8f, 0.8f, 0.8f, 1.0f);
+							button->mNormalRGBA = img.mRgba;
 							button->mPressedRGBA = Vector4(1.0f);
 							button->mHoveredRGBA = Vector4(0.5f, 0.5f, 0.5f, 1.0f);
 						}
@@ -941,28 +941,28 @@ void ExampleScene::Update(float _dTime)
 
 					if (name == "UI_PointMoney")
 					{
-						img.m_isVisible = true;
-						if (img.m_position.x > 215)
+						img.mIsVisible = true;
+						if (img.mPosition.x > 215)
 						{
-							img.m_position.x -= 17.5f; // (915 - 215)/40
+							img.mPosition.x -= 17.5f; // (915 - 215)/40
 						}
 						else
 						{
-							img.m_isVisible = false;
+							img.mIsVisible = false;
 							pSceneData->m_totalAmount = 5000;
 							pSceneData->m_heldMoney = 5000;
 						}
-						if (img.m_position.y > 50)
+						if (img.mPosition.y > 50)
 						{
-							img.m_position.y -= 11.f; //( 490 - 50)/40
+							img.mPosition.y -= 11.f; //( 490 - 50)/40
 						}
-						if (img.m_size.x > 45)
+						if (img.mSize.x > 45)
 						{
-							img.m_size.x -= 1.f;
+							img.mSize.x -= 1.f;
 						}
-						if (img.m_size.y > 50)
+						if (img.mSize.y > 50)
 						{
-							img.m_size.y -= 1.f;
+							img.mSize.y -= 1.f;
 						}
 					}
 				}
@@ -973,11 +973,11 @@ void ExampleScene::Update(float _dTime)
 					mTime = 0.0f;
 					/*for (auto uiEntity : textureView)
 					{
-						auto& name = m_registry.get<Name>(uiEntity).m_name;
-						auto& img = m_registry.get<Texture2D>(uiEntity);
+						auto& name = mRegistry.get<Name>(uiEntity).mName;
+						auto& img = mRegistry.get<Texture2D>(uiEntity);
 						if (name == "UI_PointMoney")
 						{
-							img.m_isVisible = false;
+							img.mIsVisible = false;
 						}
 					}*/
 					return;
@@ -1010,17 +1010,17 @@ void ExampleScene::Update(float _dTime)
 			mTime += _dTime;
 			if (mTime > 3.0f)
 			{
-				auto view = m_registry.view<Text>();
+				auto view = mRegistry.view<Text>();
 				for (auto& entity : view)
 				{
-					auto& name = m_registry.get<Name>(entity).m_name;
-					auto& text = m_registry.get<Text>(entity);
-					auto img = m_registry.try_get<Texture2D>(entity);
+					auto& name = mRegistry.get<Name>(entity).mName;
+					auto& text = mRegistry.get<Text>(entity);
+					auto img = mRegistry.try_get<Texture2D>(entity);
 
 					if (name == "UI_T")
 					{
-						text.m_isVisible = false;
-						img->m_isVisible = false;
+						text.mIsVisible = false;
+						img->mIsVisible = false;
 					}
 				}
 				ResettingShrinkRect(Vector2(1605, 950), Vector2(90, 90), 4, 20);
@@ -1036,26 +1036,26 @@ void ExampleScene::Update(float _dTime)
 
 			UpdateShrinkRect(_dTime);
 
-			auto view = m_registry.view<Text>();
+			auto view = mRegistry.view<Text>();
 			for (auto& entity : view)
 			{
-				auto& name = m_registry.get<Name>(entity).m_name;
-				auto& text = m_registry.get<Text>(entity);
-				auto img = m_registry.try_get<Texture2D>(entity);
+				auto& name = mRegistry.get<Name>(entity).mName;
+				auto& text = mRegistry.get<Text>(entity);
+				auto img = mRegistry.try_get<Texture2D>(entity);
 
 				if (name == "UI_T")
 				{
-					text.m_isVisible = true;
-					img->m_isVisible = true;
+					text.mIsVisible = true;
+					img->mIsVisible = true;
 				}
 			}
 
 			// 게임 시작 버튼 활성화
-			auto textureView = m_registry.view<Texture2D>();
+			auto textureView = mRegistry.view<Texture2D>();
 			for (auto uiEntity : textureView)
 			{
-				auto& name = m_registry.get<Name>(uiEntity).m_name;
-				auto button = m_registry.try_get<Button>(uiEntity);
+				auto& name = mRegistry.get<Name>(uiEntity).mName;
+				auto button = mRegistry.try_get<Button>(uiEntity);
 
 				if (name.find("UI_D") != std::string::npos ||
 					name.find("UI_B") != std::string::npos)
@@ -1064,26 +1064,26 @@ void ExampleScene::Update(float _dTime)
 					if (name == "UI_D_Start")
 					{
 						button->mIsEnable = true;
-						if (m_pUIManager->GetButtonState(button->m_pOwner) == ButtonState::PRESSED)
+						if (mpUIManager->GetButtonState(button->mpOwner) == ButtonState::PRESSED)
 						{
-							if (m_pInputManager->GetKeyUp(KEY::LBUTTON) && mpLevelManager->AddBlockScreenPos(m_pInputManager->GetMousePos(), Vector2(1812, 997), Vector2(83, 58)))
+							if (mpInputManager->GetKeyUp(KEY::LBUTTON) && mpLevelManager->AddBlockScreenPos(mpInputManager->GetMousePos(), Vector2(1812, 997), Vector2(83, 58)))
 							{
 								mpLevelManager->SetGameState(GameState::PRE_PLAY);
 								mpLevelManager->SetIsGameStart(true);
 								if (mpLevelManager->GetIsClassButtonPressed() == true)
 								{
 									mpLevelManager->SetmIsOneDeploySet(true);  // 배치 완료 후 상태 변경
-									/*auto entity = m_pEntityManager->GetEntity(mpLevelManager->GetTempUnitUID());
+									/*auto entity = mpEntityManager->GetEntity(mpLevelManager->GetTempUnitUID());
 									entity->GetComponent<PlayerComponent>().mIsDeploy = false;
 
-									m_pEntityManager->RemoveEntity(mpLevelManager->GetTempUnitUID());*/
+									mpEntityManager->RemoveEntity(mpLevelManager->GetTempUnitUID());*/
 									mpLevelManager->SetTempUnitUID(-1);
 									mpLevelManager->SetIsClassButtonPressed(false);
 								}
-								m_pSoundManager->PlaySFX("Snd_sfx_BattleStart");
+								mpSoundManager->PlaySFX("Snd_sfx_BattleStart");
 
 								ResettingShrinkRect(Vector2(925, 410), Vector2(100, 100), 4, 20);
-								// 								m_pSoundManager->PlaySFX("Snd_sfx_ClickBtn");
+								// 								mpSoundManager->PlaySFX("Snd_sfx_ClickBtn");
 																//mpLevelManager->SetPopUpState(PopUpState::OPEN_UNITDEPLOY);
 
 								mTutorialState = TutorialState::PLAYING;
@@ -1101,26 +1101,26 @@ void ExampleScene::Update(float _dTime)
 	case GameState::PRE_PLAY:
 	{
 		mpLevelManager->PreplayUpdate(pSceneData);
-		auto view2 = m_registry.view<Text>();
+		auto view2 = mRegistry.view<Text>();
 		for (auto& entity : view2)
 		{
-			auto& name = m_registry.get<Name>(entity).m_name;
-			auto& text = m_registry.get<Text>(entity);
-			auto img = m_registry.try_get<Texture2D>(entity);
+			auto& name = mRegistry.get<Name>(entity).mName;
+			auto& text = mRegistry.get<Text>(entity);
+			auto img = mRegistry.try_get<Texture2D>(entity);
 
 			if (name == "UI_T")
 			{
-				text.m_isVisible = false;
-				img->m_isVisible = false;
+				text.mIsVisible = false;
+				img->mIsVisible = false;
 			}
 
 			// 타이머를 켭니다.
 			if (name == "UI_P_Timer")
 			{
-				text.m_isVisible = true;
+				text.mIsVisible = true;
 				if (img) // 아 이거 왜 이미지 없어
 				{
-					img->m_isVisible = true;
+					img->mIsVisible = true;
 				}
 			}
 		}
@@ -1140,19 +1140,19 @@ void ExampleScene::Update(float _dTime)
 		SettingRealPlayingIndicator(pSceneData);
 
 		// 체력바
-		auto playerView = m_registry.view<PlayerComponent>();
-		auto enemyView = m_registry.view<EnemyComponent>();
+		auto playerView = mRegistry.view<PlayerComponent>();
+		auto enemyView = mRegistry.view<EnemyComponent>();
 		for (auto& entity : playerView)
 		{
-			auto& playerComp = m_registry.get<PlayerComponent>(entity);
-			if (auto helthBar = m_registry.try_get<HealthBarComponenet>(entity)) // 체력바가 있는 건 다 플레이어 컴포넌트가 있을 것이다.
+			auto& playerComp = mRegistry.get<PlayerComponent>(entity);
+			if (auto helthBar = mRegistry.try_get<HealthBarComponenet>(entity)) // 체력바가 있는 건 다 플레이어 컴포넌트가 있을 것이다.
 			{
 				float healthPercent = playerComp.mHP / playerComp.mMaxHP;
 				helthBar->mHealthPercentage = healthPercent;
 			}
 
 			// 플레이어 관련하여 업데이트한다.
-			mpUnitSystem->GetPlayerSystem()->PlayerUnitUpdate(m_pEntityManager->GetEntity(entity), _dTime); // 아군 유닛을 업데이트 합니다.
+			mpUnitSystem->GetPlayerSystem()->PlayerUnitUpdate(mpEntityManager->GetEntity(entity), _dTime); // 아군 유닛을 업데이트 합니다.
 
 			if (playerComp.mIsDead == false)
 			{
@@ -1160,23 +1160,23 @@ void ExampleScene::Update(float _dTime)
 			}
 			else
 			{
-				physx::PxFilterData filterData = m_pPhysicsManager->GetFilterData(entity);
+				physx::PxFilterData filterData = mpPhysicsManager->GetFilterData(entity);
 				filterData.word1 |= 8;
-				m_pPhysicsManager->SetFilterData(entity, filterData);
+				mpPhysicsManager->SetFilterData(entity, filterData);
 			}
 
 		}
 
 		for (auto& entity : enemyView)
 		{
-			auto& enemyComp = m_registry.get<EnemyComponent>(entity);
-			if (auto helthBar = m_registry.try_get<HealthBarComponenet>(entity)) // 체력바가 있는 건 다 플레이어 컴포넌트가 있을 것이다.
+			auto& enemyComp = mRegistry.get<EnemyComponent>(entity);
+			if (auto helthBar = mRegistry.try_get<HealthBarComponenet>(entity)) // 체력바가 있는 건 다 플레이어 컴포넌트가 있을 것이다.
 			{
 				float healthPercent = enemyComp.mHP / enemyComp.mMaxHP;
 				helthBar->mHealthPercentage = healthPercent;
 			}
 
-			mpUnitSystem->GetPlayerSystem()->EnemyUnitUpdate(m_pEntityManager->GetEntity(entity), _dTime); // 적군 유닛을 업데이트 합니다.
+			mpUnitSystem->GetPlayerSystem()->EnemyUnitUpdate(mpEntityManager->GetEntity(entity), _dTime); // 적군 유닛을 업데이트 합니다.
 
 			if (enemyComp.mIsDead == false)
 			{
@@ -1184,24 +1184,24 @@ void ExampleScene::Update(float _dTime)
 			}
 			else
 			{
-				physx::PxFilterData filterData = m_pPhysicsManager->GetFilterData(entity);
+				physx::PxFilterData filterData = mpPhysicsManager->GetFilterData(entity);
 				filterData.word1 |= 8;
-				m_pPhysicsManager->SetFilterData(entity, filterData);
+				mpPhysicsManager->SetFilterData(entity, filterData);
 			}
 		}
 
 		/// 여기서 용병왕을 업데이트 한다.
-		auto npcView = m_registry.view<NPCComponent>();
+		auto npcView = mRegistry.view<NPCComponent>();
 		for (auto& entity : npcView)
 		{
-			mpUnitSystem->GetNPCSystem()->Update(m_pEntityManager->GetEntity(entity), numAlly, numEnemy);
+			mpUnitSystem->GetNPCSystem()->Update(mpEntityManager->GetEntity(entity), numAlly, numEnemy);
 		}
 
-		auto textView = m_registry.view<Text>();
+		auto textView = mRegistry.view<Text>();
 		for (auto& entity : textView)
 		{
-			auto& name = m_registry.get<Name>(entity).m_name;
-			auto& text = m_registry.get<Text>(entity);
+			auto& name = mRegistry.get<Name>(entity).mName;
+			auto& text = mRegistry.get<Text>(entity);
 			// 타이머
 			if (name == "UI_P_Timer")
 			{
@@ -1216,12 +1216,12 @@ void ExampleScene::Update(float _dTime)
 
 				// std::u8string으로 변환
 				std::string str = oss.str();
-				text.m_text = std::u8string(str.begin(), str.end());
+				text.mText = std::u8string(str.begin(), str.end());
 
 				// 10초 남았을때, 경고효과음 재생
 				if (std::fabs(pSceneData->m_time - 10.0f) < std::numeric_limits<float>::epsilon())
 				{
-					m_pSoundManager->PlaySFX("Snd_sfx_TimeLow");
+					mpSoundManager->PlaySFX("Snd_sfx_TimeLow");
 				}
 
 				// 시간이 다 되면 자동으로 넘어감
@@ -1237,43 +1237,43 @@ void ExampleScene::Update(float _dTime)
 			// 플레이어의 소지금을 업데이트 한다.
 			if (name == "UI_B_Money")
 			{
-				text.m_num1 = pSceneData->m_heldMoney;
+				text.mNum1 = pSceneData->m_heldMoney;
 			}
 
 			if (name == "UI_B_StageGuide")
 			{
-				text.m_num1 = numEnemy;
+				text.mNum1 = numEnemy;
 			}
 
-		} // End for문 : m_pEntityManager->GetEntityMap()
+		} // End for문 : mpEntityManager->GetEntityMap()
 		if (numAlly == 0 || numEnemy == 0)
 		{
 			pSceneData->m_aliveAlly = numAlly;
 			mpLevelManager->SetGameState(GameState::TUTORIALEND);
-			m_pSoundManager->StopBGM();
+			mpSoundManager->StopBGM();
 			if (numAlly == 0)
 			{
-				m_pSoundManager->PlayBGM("Snd_bgm_AfterBattleLose");
+				mpSoundManager->PlayBGM("Snd_bgm_AfterBattleLose");
 			}
 			else
 			{
-				m_pSoundManager->PlayBGM("Snd_bgm_AfterBattleWin");
+				mpSoundManager->PlayBGM("Snd_bgm_AfterBattleWin");
 			}
 			mpLevelManager->FadePreSetting(true);
-			auto HPView = m_registry.view<HealthBarComponenet>();
+			auto HPView = mRegistry.view<HealthBarComponenet>();
 			for (auto entity : HPView)
 			{
-				auto& hpEntity = m_registry.get<HealthBarComponenet>(entity);
+				auto& hpEntity = mRegistry.get<HealthBarComponenet>(entity);
 				hpEntity.mIsVisible = false;
-				auto& animation = m_registry.get<AnimationComponent>(entity);
+				auto& animation = mRegistry.get<AnimationComponent>(entity);
 				animation.mPaused = true;
 			}
 
-			auto rigidView = m_registry.view<Rigidbody>();
+			auto rigidView = mRegistry.view<Rigidbody>();
 			for (auto& entity : rigidView)
 			{
-				auto& rigid = m_registry.get<Rigidbody>(entity);
-				rigid.m_isKinematic = true;
+				auto& rigid = mRegistry.get<Rigidbody>(entity);
+				rigid.mIsKinematic = true;
 			}
 
 			mTutorialState = TutorialState::POSTPLAYEING;
@@ -1287,21 +1287,21 @@ void ExampleScene::Update(float _dTime)
 		if (mTutorialState == TutorialState::POSTPLAYEING)
 		{
 			mTextIdx = 36;
-			auto view2 = m_registry.view<Text>();
+			auto view2 = mRegistry.view<Text>();
 			for (auto& entity : view2)
 			{
-				auto& name = m_registry.get<Name>(entity).m_name;
-				auto& text = m_registry.get<Text>(entity);
-				auto img = m_registry.try_get<Texture2D>(entity);
+				auto& name = mRegistry.get<Name>(entity).mName;
+				auto& text = mRegistry.get<Text>(entity);
+				auto img = mRegistry.try_get<Texture2D>(entity);
 				if (name == "UI_T")
 				{
-					text.m_isVisible = true;
-					img->m_isVisible = true;
-					text.m_position = Vector2(392, 176);
-					img->m_file = "UI_pnl_MsgBox2.png";
-					img->m_position = Vector2(367, 112);
-					img->m_size = Vector2(1182, 170);
-					text.m_text = mTutorialTextVec[mTextIdx].text;
+					text.mIsVisible = true;
+					img->mIsVisible = true;
+					text.mPosition = Vector2(392, 176);
+					img->mFile = "UI_pnl_MsgBox2.png";
+					img->mPosition = Vector2(367, 112);
+					img->mSize = Vector2(1182, 170);
+					text.mText = mTutorialTextVec[mTextIdx].text;
 				}
 			}
 
@@ -1317,19 +1317,19 @@ void ExampleScene::Update(float _dTime)
 
 			if (mpLevelManager->GetUIAnimationState() == UIAnimationState::NEXTSCENE)
 			{
-				m_pWorldManager->GetCurrentWorld()->SetScene(static_cast<uint32_t>(SceneName::SCENE1));
+				mpWorldManager->GetCurrentWorld()->SetScene(static_cast<uint32_t>(SceneName::SCENE1));
 				return;
 			}
-			/*auto view = m_registry.view<FadeInOut>();
+			/*auto view = mRegistry.view<FadeInOut>();
 			for (auto& entity : view)
 			{
-				auto& name = m_registry.get<Name>(entity).m_name;
-				auto& img = m_registry.get<FadeInOut>(entity);
+				auto& name = mRegistry.get<Name>(entity).mName;
+				auto& img = mRegistry.get<FadeInOut>(entity);
 				if (name == "FaidInOut")
 				{
 					if (img.IsFadingOutFin(_dTime / 2, 1.0f) == true)
 					{
-						m_pWorldManager->GetCurrentWorld()->SetScene(static_cast<uint32_t>(SceneName::SCENE1));
+						mpWorldManager->GetCurrentWorld()->SetScene(static_cast<uint32_t>(SceneName::SCENE1));
 						return;
 					}
 				}
@@ -1347,21 +1347,21 @@ void ExampleScene::Update(float _dTime)
 
 void ExampleScene::LateUpdate(float _dTime)
 {
-	if (m_pInputManager->GetKeyUp(KEY::M))
+	if (mpInputManager->GetKeyUp(KEY::M))
 	{
 		auto camera = mpLevelManager->GetWorldCamera();
 		camera->SetEyePos(Vector3(0, 17, -17.5));
 		camera->SetDirection(Vector3(0, -0.8, 0.6));
 
-		m_pRenderManager->CameraSetPerspective();
+		mpRenderManager->CameraSetPerspective();
 	}
-	if (m_pInputManager->GetKeyUp(KEY::N))
+	if (mpInputManager->GetKeyUp(KEY::N))
 	{
 		auto camera = mpLevelManager->GetWorldCamera();
 		camera->SetEyePos(Vector3(-15.42, 18.06, -17.72));
 		camera->SetDirection(Vector3(0.57735, -0.57735, 0.57735));
 
-		m_pRenderManager->CameraSetOrthographic(0.03);
+		mpRenderManager->CameraSetOrthographic(0.03);
 	}
 }
 
@@ -1382,84 +1382,84 @@ void ExampleScene::Finalize()
 	{
 		delete mpAstar;
 	}
-	if (m_pSceneData)
+	if (mpSceneData)
 	{
-		delete m_pSceneData;
+		delete mpSceneData;
 	}
 }
 
 void ExampleScene::AddResource()
 {
-	//m_pResourceManager->GetFileManager()->PrintAll(false);
+	//mpResourceManager->GetFileManager()->PrintAll(false);
 	/// 리소스 추가
 	// 모델 추가
-	//m_pRenderManager->AddModel("../TestAsset/", "box.fbx");
+	//mpRenderManager->AddModel("../TestAsset/", "box.fbx");
 
 	/////UI
-	//m_pUIManager->AddTexture2D("../Resources/Texture/", "blue.png");
+	//mpUIManager->AddTexture2D("../Resources/Texture/", "blue.png");
 
 	//// 애니메이션 추가
-	//m_pResourceManager->AddFilesInDirAni("Animation");
+	//mpResourceManager->AddFilesInDirAni("Animation");
 
 	//// 3D 텍스처 추가
-	//m_pResourceManager->AddFilesInDir3D("Texture3D");
+	//mpResourceManager->AddFilesInDir3D("Texture3D");
 
 	//// 큐브맵 텍스처 추가
-	//m_pResourceManager->AddFilesInDirDDS("CubeMap");
+	//mpResourceManager->AddFilesInDirDDS("CubeMap");
 
 	//// Fbx 추가 -> 추후 클래스 별로 쪼갤 것
-	//m_pResourceManager->AddFilesInDirModel("Mercenary");
-	//m_pResourceManager->AddFilesInDirModel("Environment");
-	//m_pResourceManager->AddFilesInDirModel("Archer");
-	//m_pResourceManager->AddFilesInDirModel("Enemy");
-	//m_pResourceManager->AddFilesInDirModel("money");
-	//m_pResourceManager->AddFilesInDirModel("Chief");
+	//mpResourceManager->AddFilesInDirModel("Mercenary");
+	//mpResourceManager->AddFilesInDirModel("Environment");
+	//mpResourceManager->AddFilesInDirModel("Archer");
+	//mpResourceManager->AddFilesInDirModel("Enemy");
+	//mpResourceManager->AddFilesInDirModel("money");
+	//mpResourceManager->AddFilesInDirModel("Chief");
 }
 
 void ExampleScene::SettingDeployIndicator(Vector3 _cursorPos, SceneData* _pSceneData)
 {
 	// 타일 인디케이터는 언제나 실행시킨다.
-	auto indicatorView = m_registry.view<IndicatorComponent>();
+	auto indicatorView = mRegistry.view<IndicatorComponent>();
 	for (auto indiEntity : indicatorView)
 	{
-		if (m_registry.get<Name>(indiEntity).m_name == "selectedSquare")
+		if (mRegistry.get<Name>(indiEntity).mName == "selectedSquare")
 		{
-			auto& texture3dComp = m_registry.get<Texture3D>(indiEntity);
-			auto& indicatorComp = m_registry.get<IndicatorComponent>(indiEntity);
+			auto& texture3dComp = mRegistry.get<Texture3D>(indiEntity);
+			auto& indicatorComp = mRegistry.get<IndicatorComponent>(indiEntity);
 
-			auto outline = m_registry.try_get<OutlineComponent>(indiEntity);
-			auto alpha = m_registry.try_get<AlphaBlendComponent>(indiEntity);
+			auto outline = mRegistry.try_get<OutlineComponent>(indiEntity);
+			auto alpha = mRegistry.try_get<AlphaBlendComponent>(indiEntity);
 
-			if (alpha->m_alpha < 0.5)
+			if (alpha->mAlpha < 0.5)
 			{
-				alpha->m_alpha += 0.01;
+				alpha->mAlpha += 0.01;
 			}
 			else
 			{
-				alpha->m_alpha = 0;
+				alpha->mAlpha = 0;
 			}
 
 			if (_cursorPos.x >= -15 && _cursorPos.x <= 15 && _cursorPos.z >= -15 && _cursorPos.z <= 15)
 			{
 				if (mpLevelManager->IsCanClickAreaXZ(_cursorPos, Vector2(-15, 10), Vector2(-9, -10), _pSceneData->m_aliveAlly) == true)
 				{
-					if (texture3dComp.m_diffuse != indicatorComp.mOriginalColor)
+					if (texture3dComp.mDiffuse != indicatorComp.mOriginalColor)
 					{
-						texture3dComp.m_diffuse = indicatorComp.mOriginalColor;
-						outline->m_color = Vector3(0, 0, 1);
-						m_pRenderManager->UpdateEntityTexture(m_pEntityManager->GetEntity(indiEntity));
+						texture3dComp.mDiffuse = indicatorComp.mOriginalColor;
+						outline->mColor = Vector3(0, 0, 1);
+						mpRenderManager->UpdateEntityTexture(mpEntityManager->GetEntity(indiEntity));
 					}
 				}
 				else
 				{
-					if (texture3dComp.m_diffuse != indicatorComp.mChangedColor)
+					if (texture3dComp.mDiffuse != indicatorComp.mChangedColor)
 					{
-						texture3dComp.m_diffuse = indicatorComp.mChangedColor;
-						outline->m_color = Vector3(1, 0, 0);
-						m_pRenderManager->UpdateEntityTexture(m_pEntityManager->GetEntity(indiEntity));
+						texture3dComp.mDiffuse = indicatorComp.mChangedColor;
+						outline->mColor = Vector3(1, 0, 0);
+						mpRenderManager->UpdateEntityTexture(mpEntityManager->GetEntity(indiEntity));
 					}
 				}
-				texture3dComp.m_pOwner->GetComponent<Transform>().m_localPosition = Vector3(static_cast<int>(_cursorPos.x), 0.1f, static_cast<int>(_cursorPos.z));
+				texture3dComp.mpOwner->GetComponent<Transform>().mLocalPosition = Vector3(static_cast<int>(_cursorPos.x), 0.1f, static_cast<int>(_cursorPos.z));
 			}
 		}
 	}
@@ -1468,13 +1468,13 @@ void ExampleScene::SettingDeployIndicator(Vector3 _cursorPos, SceneData* _pScene
 void ExampleScene::SettingPlayingIndicator()
 {
 	// 배치 타일 색 바꾸기
-	auto indicatorView = m_registry.view<IndicatorComponent>();
+	auto indicatorView = mRegistry.view<IndicatorComponent>();
 	for (auto& entity : indicatorView)
 	{
-		if (m_registry.get<Name>(entity).m_name == "selectedSquare")
+		if (mRegistry.get<Name>(entity).mName == "selectedSquare")
 		{
-			auto& tile = m_registry.get<Texture3D>(entity);
-			Vector3 cursorPos = m_pPhysicsManager->PickObejct("plane");
+			auto& tile = mRegistry.get<Texture3D>(entity);
+			Vector3 cursorPos = mpPhysicsManager->PickObejct("plane");
 			if (cursorPos.x > 0)cursorPos.x += 0.5;
 			else cursorPos.x -= 0.5;
 			if (cursorPos.z < 0) cursorPos.z -= 0.5;
@@ -1486,15 +1486,15 @@ void ExampleScene::SettingPlayingIndicator()
 				mpAstar->AdjustToTileCenter(cursorPos, astarPos);
 				if ((*mpAstar->GetAstarMap())[static_cast<int>(astarPos.y + abs(mStartPoint.y))][static_cast<int>(astarPos.x + abs(mStartPoint.x))] == 0) // 장애물이 없는 곳만 클릭 가능
 				{
-					tile.m_diffuse = "blue.png";
-					m_pRenderManager->UpdateEntityTexture(m_pEntityManager->GetEntity(entity));
+					tile.mDiffuse = "blue.png";
+					mpRenderManager->UpdateEntityTexture(mpEntityManager->GetEntity(entity));
 				}
 				else
 				{
-					tile.m_diffuse = "red.png";
-					m_pRenderManager->UpdateEntityTexture(m_pEntityManager->GetEntity(entity));
+					tile.mDiffuse = "red.png";
+					mpRenderManager->UpdateEntityTexture(mpEntityManager->GetEntity(entity));
 				}
-				tile.m_pOwner->GetComponent<Transform>().m_localPosition = cursorPos;
+				tile.mpOwner->GetComponent<Transform>().mLocalPosition = cursorPos;
 			}
 		}
 	}
@@ -1502,27 +1502,27 @@ void ExampleScene::SettingPlayingIndicator()
 
 void ExampleScene::SettingRealPlayingIndicator(SceneData* _pSceneData)
 {
-	auto indicatorView = m_registry.view<IndicatorComponent>();
+	auto indicatorView = mRegistry.view<IndicatorComponent>();
 	for (auto indiEntity : indicatorView)
 	{
-		if (m_registry.get<Name>(indiEntity).m_name == "selectedSquare")
+		if (mRegistry.get<Name>(indiEntity).mName == "selectedSquare")
 		{
-			auto& texture3dComp = m_registry.get<Texture3D>(indiEntity);
-			auto& indicatorComp = m_registry.get<IndicatorComponent>(indiEntity);
-			auto outline = m_registry.try_get<OutlineComponent>(indiEntity);
-			auto alpha = m_registry.try_get<AlphaBlendComponent>(indiEntity);
-			Vector3 cursorFollowPos = m_pPhysicsManager->PickObejct("plane");
+			auto& texture3dComp = mRegistry.get<Texture3D>(indiEntity);
+			auto& indicatorComp = mRegistry.get<IndicatorComponent>(indiEntity);
+			auto outline = mRegistry.try_get<OutlineComponent>(indiEntity);
+			auto alpha = mRegistry.try_get<AlphaBlendComponent>(indiEntity);
+			Vector3 cursorFollowPos = mpPhysicsManager->PickObejct("plane");
 			if (cursorFollowPos.x > 0)cursorFollowPos.x += 0.5;
 			else cursorFollowPos.x -= 0.5;
 			if (cursorFollowPos.z < 0) cursorFollowPos.z -= 0.5;
 
-			if (alpha->m_alpha < 0.5)
+			if (alpha->mAlpha < 0.5)
 			{
-				alpha->m_alpha += 0.01;
+				alpha->mAlpha += 0.01;
 			}
 			else
 			{
-				alpha->m_alpha = 0;
+				alpha->mAlpha = 0;
 			}
 
 			if (cursorFollowPos.x >= -15 && cursorFollowPos.x <= 15 && cursorFollowPos.z >= -15 && cursorFollowPos.z <= 15)
@@ -1532,17 +1532,17 @@ void ExampleScene::SettingRealPlayingIndicator(SceneData* _pSceneData)
 				mpAstar->AdjustToTileCenter(cursorFollowPos, astarPos);
 				if ((*mpAstar->GetAstarMap())[static_cast<int>(astarPos.y + abs(mStartPoint.y))][static_cast<int>(astarPos.x + abs(mStartPoint.x))] == 0) // 장애물이 없는 곳만 클릭 가능
 				{
-					texture3dComp.m_diffuse = "blue.png";
-					outline->m_color = Vector3(0, 0, 1);
-					m_pRenderManager->UpdateEntityTexture(m_pEntityManager->GetEntity(indiEntity));
+					texture3dComp.mDiffuse = "blue.png";
+					outline->mColor = Vector3(0, 0, 1);
+					mpRenderManager->UpdateEntityTexture(mpEntityManager->GetEntity(indiEntity));
 				}
 				else
 				{
-					texture3dComp.m_diffuse = "red.png";
-					outline->m_color = Vector3(1, 0, 0);
-					m_pRenderManager->UpdateEntityTexture(m_pEntityManager->GetEntity(indiEntity));
+					texture3dComp.mDiffuse = "red.png";
+					outline->mColor = Vector3(1, 0, 0);
+					mpRenderManager->UpdateEntityTexture(mpEntityManager->GetEntity(indiEntity));
 				}
-				texture3dComp.m_pOwner->GetComponent<Transform>().m_localPosition = cursorFollowPos;
+				texture3dComp.mpOwner->GetComponent<Transform>().mLocalPosition = cursorFollowPos;
 			}
 		}
 	}
@@ -1550,21 +1550,21 @@ void ExampleScene::SettingRealPlayingIndicator(SceneData* _pSceneData)
 
 void ExampleScene::ChangeGuideTile(const std::string& _texFileName, Vector2 _posXZ, Vector2 _sizeXZ)
 {
-	auto view = m_registry.view<Texture3D>();
+	auto view = mRegistry.view<Texture3D>();
 	for (auto& entity : view)
 	{
-		auto& name = m_registry.get<Name>(entity).m_name;
-		auto& img = m_registry.get<Texture3D>(entity);
+		auto& name = mRegistry.get<Name>(entity).mName;
+		auto& img = mRegistry.get<Texture3D>(entity);
 		if (name == "UI_H")
 		{
-			auto trs = m_registry.try_get<Transform>(entity);
-			img.m_diffuse = _texFileName;
-			trs->m_localPosition.x = _posXZ.x;
-			trs->m_localPosition.y = 0.005f;
-			trs->m_localPosition.z = _posXZ.y;
-			trs->m_localScale.x = _sizeXZ.x;
-			trs->m_localScale.z = _sizeXZ.y;
-			m_pRenderManager->UpdateEntityTexture(m_pEntityManager->GetEntity(entity));
+			auto trs = mRegistry.try_get<Transform>(entity);
+			img.mDiffuse = _texFileName;
+			trs->mLocalPosition.x = _posXZ.x;
+			trs->mLocalPosition.y = 0.005f;
+			trs->mLocalPosition.z = _posXZ.y;
+			trs->mLocalScale.x = _sizeXZ.x;
+			trs->mLocalScale.z = _sizeXZ.y;
+			mpRenderManager->UpdateEntityTexture(mpEntityManager->GetEntity(entity));
 			return;
 		}
 	}
@@ -1572,19 +1572,19 @@ void ExampleScene::ChangeGuideTile(const std::string& _texFileName, Vector2 _pos
 
 void ExampleScene::ChangeGuideTileTrs(Vector2 _posXZ, Vector2 _sizeXZ)
 {
-	auto view = m_registry.view<Texture3D>();
+	auto view = mRegistry.view<Texture3D>();
 	for (auto& entity : view)
 	{
-		auto& name = m_registry.get<Name>(entity).m_name;
-		auto& img = m_registry.get<Texture3D>(entity);
+		auto& name = mRegistry.get<Name>(entity).mName;
+		auto& img = mRegistry.get<Texture3D>(entity);
 		if (name == "UI_H")
 		{
-			auto trs = m_registry.try_get<Transform>(entity);
-			trs->m_localPosition.x = _posXZ.x;
-			trs->m_localPosition.y = 0.005f;
-			trs->m_localPosition.z = _posXZ.y;
-			trs->m_localScale.x = _sizeXZ.x;
-			trs->m_localScale.z = _sizeXZ.y;
+			auto trs = mRegistry.try_get<Transform>(entity);
+			trs->mLocalPosition.x = _posXZ.x;
+			trs->mLocalPosition.y = 0.005f;
+			trs->mLocalPosition.z = _posXZ.y;
+			trs->mLocalScale.x = _sizeXZ.x;
+			trs->mLocalScale.z = _sizeXZ.y;
 			return;
 		}
 	}
@@ -1592,15 +1592,15 @@ void ExampleScene::ChangeGuideTileTrs(Vector2 _posXZ, Vector2 _sizeXZ)
 
 void ExampleScene::InvisibleGuideTile()
 {
-	auto view = m_registry.view<Texture3D>();
+	auto view = mRegistry.view<Texture3D>();
 	for (auto& entity : view)
 	{
-		auto& name = m_registry.get<Name>(entity).m_name;
-		auto& img = m_registry.get<Texture3D>(entity);
+		auto& name = mRegistry.get<Name>(entity).mName;
+		auto& img = mRegistry.get<Texture3D>(entity);
 		if (name == "UI_H")
 		{
-			auto trs = m_registry.try_get<Transform>(entity);
-			trs->m_localPosition.y = -0.1f;
+			auto trs = mRegistry.try_get<Transform>(entity);
+			trs->mLocalPosition.y = -0.1f;
 			return;
 		}
 	}
@@ -1608,15 +1608,15 @@ void ExampleScene::InvisibleGuideTile()
 
 void ExampleScene::ChangeGuideTileTex(const std::string& _texFileName)
 {
-	auto view = m_registry.view<Texture3D>();
+	auto view = mRegistry.view<Texture3D>();
 	for (auto& entity : view)
 	{
-		auto& name = m_registry.get<Name>(entity).m_name;
-		auto& img = m_registry.get<Texture3D>(entity);
+		auto& name = mRegistry.get<Name>(entity).mName;
+		auto& img = mRegistry.get<Texture3D>(entity);
 		if (name == "UI_H")
 		{
-			img.m_diffuse = _texFileName;
-			m_pRenderManager->UpdateEntityTexture(m_pEntityManager->GetEntity(entity));
+			img.mDiffuse = _texFileName;
+			mpRenderManager->UpdateEntityTexture(mpEntityManager->GetEntity(entity));
 			return;
 		}
 	}
@@ -1714,7 +1714,7 @@ void ExampleScene::PrintIntroText(TutorialState _tutorialState)
 
 void ExampleScene::SkipText(int _endIdx)
 {
-	while (mTextIdx < _endIdx && m_pInputManager->GetKeyUp(KEY::LBUTTON) && mpLevelManager->AddBlockScreenPos(m_pInputManager->GetMousePos(), Vector2(1812, 997), Vector2(83, 58)))
+	while (mTextIdx < _endIdx && mpInputManager->GetKeyUp(KEY::LBUTTON) && mpLevelManager->AddBlockScreenPos(mpInputManager->GetMousePos(), Vector2(1812, 997), Vector2(83, 58)))
 	{
 		mTextIdx++;
 		mIsReadyResetShrinkRect = true;
@@ -1724,11 +1724,11 @@ void ExampleScene::SkipText(int _endIdx)
 
 void ExampleScene::UpdateShrinkRect(float _dTime)
 {
-	auto shrinkRectView = m_registry.view<ShrinkRectComponent>();
+	auto shrinkRectView = mRegistry.view<ShrinkRectComponent>();
 	for (auto& entity : shrinkRectView)
 	{
-		auto& rect = m_registry.get<ShrinkRectComponent>(entity);
-		auto box2D = m_registry.try_get<Box2D>(entity);
+		auto& rect = mRegistry.get<ShrinkRectComponent>(entity);
+		auto box2D = mRegistry.try_get<Box2D>(entity);
 		box2D->mIsVisible = true;
 		rect.Update(*box2D, _dTime);
 	}
@@ -1739,11 +1739,11 @@ void ExampleScene::ResettingShrinkRect(Vector2 _targetRectPos, Vector2 _targetSi
 	if (mIsReadyResetShrinkRect == true)
 	{
 		Vector2 adjustPos = _targetRectPos - _targetSize * (_sizeMultiplier - 1) * 0.5f;
-		auto shrinkRectView = m_registry.view<ShrinkRectComponent>();
+		auto shrinkRectView = mRegistry.view<ShrinkRectComponent>();
 		for (auto& entity : shrinkRectView)
 		{
-			auto& rect = m_registry.get<ShrinkRectComponent>(entity);
-			auto box2D = m_registry.try_get<Box2D>(entity);
+			auto& rect = mRegistry.get<ShrinkRectComponent>(entity);
+			auto box2D = mRegistry.try_get<Box2D>(entity);
 			box2D->mIsVisible = false;
 			rect.Resetting(*box2D, adjustPos, _targetSize * _sizeMultiplier, _targetSize, _shrinkAmount);
 		}

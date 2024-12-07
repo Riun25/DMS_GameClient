@@ -8,7 +8,7 @@
 #include "directxtk/GeometricPrimitive.h"
 
 WeaponManager::WeaponManager(entt::registry& _registry, RenderManager* _renderManager)
-	: m_registry(_registry), m_pRenderManager(_renderManager)
+	: mRegistry(_registry), mpRenderManager(_renderManager)
 {
 
 }
@@ -20,13 +20,13 @@ bool WeaponManager::Initialize()
 
 void WeaponManager::FixedUpdate(float _fixedDTime)
 {
-	// 	auto view = m_registry.view<Rigidbody, WeaponComponent>();
+	// 	auto view = mRegistry.view<Rigidbody, WeaponComponent>();
 	// 	for (auto entity : view)
 	// 	{
-	// 		auto rigidbody = m_registry.try_get<Rigidbody>(entity);
-	// 		auto weapon = m_registry.try_get<WeaponComponent>(entity);
+	// 		auto rigidbody = mRegistry.try_get<Rigidbody>(entity);
+	// 		auto weapon = mRegistry.try_get<WeaponComponent>(entity);
 	// 
-	// 		Vector3 pos = Vector3(weapon->m_position.x, weapon->m_position.y, weapon->m_position.z);
+	// 		Vector3 pos = Vector3(weapon->mPosition.x, weapon->mPosition.y, weapon->mPosition.z);
 	// 		Quaternion qut = Quaternion::CreateFromYawPitchRoll(weapon->m_rotation);
 	// 
 	// 		if (rigidbody->m_pRigidActor)
@@ -38,11 +38,11 @@ void WeaponManager::FixedUpdate(float _fixedDTime)
 	// 		}
 	// 	}
 // 
-// 	auto view = m_registry.view<BoxCollider, TargetBoneComponent>();
+// 	auto view = mRegistry.view<BoxCollider, TargetBoneComponent>();
 // 	for (auto entity : view)
 // 	{
-// 		auto collider = m_registry.try_get<BoxCollider>(entity);
-// 		auto target = m_registry.try_get<TargetBoneComponent>(entity);
+// 		auto collider = mRegistry.try_get<BoxCollider>(entity);
+// 		auto target = mRegistry.try_get<TargetBoneComponent>(entity);
 // 
 // 		collider->m_center = Vector3(
 // 			target->mTargetBoneAboveMatrix._41
@@ -56,31 +56,31 @@ void WeaponManager::FixedUpdate(float _fixedDTime)
 
 void WeaponManager::Update(float _dTime)
 {
-	// 	auto view = m_registry.view<Transform, WeaponComponent>();
+	// 	auto view = mRegistry.view<Transform, WeaponComponent>();
 	// 	for (auto entity : view)
 	// 	{
-	// 		auto transform = m_registry.try_get<Transform>(entity);	// m_localPosition, m_localRotation, m_localScale;
-	// 		auto weapon = m_registry.try_get<WeaponComponent>(entity);
+	// 		auto transform = mRegistry.try_get<Transform>(entity);	// mLocalPosition, mLocalRotation, mLocalScale;
+	// 		auto weapon = mRegistry.try_get<WeaponComponent>(entity);
 	// 
-	// 		auto& child = weapon->m_pAttachedEntity->GetComponent<TargetBoneComponent>();
+	// 		auto& child = weapon->mpAttachedEntity->GetComponent<TargetBoneComponent>();
 	// 		
-	// 		child.mTargetBoneAboveMatrix = m_pRenderManager->m_pGraphicsEngine->
-	// 				GetTargetBoneAboveMatrix(weapon->m_targetModel, weapon->m_targetBone, weapon->m_scale);	// Matrix
-			//child.m_pOwner->GetComponent<Transform>().m_localMatrix = child.mTargetBoneAboveMatrix;
+	// 		child.mTargetBoneAboveMatrix = mpRenderManager->m_pGraphicsEngine->
+	// 				GetTargetBoneAboveMatrix(weapon->m_targetModel, weapon->m_targetBone, weapon->mScale);	// Matrix
+			//child.mpOwner->GetComponent<Transform>().m_localMatrix = child.mTargetBoneAboveMatrix;
 	// 	}
 }
 
 void WeaponManager::LateUpdate(float _dTime)
 {
-	// 	auto view = m_registry.view<Transform, BoxCollider, WeaponComponent, TargetBoneComponent>();
+	// 	auto view = mRegistry.view<Transform, BoxCollider, WeaponComponent, TargetBoneComponent>();
 	// 	for (auto entity : view)
 	// 	{
-	// 		auto transform = m_registry.try_get<Transform>(entity);	// m_localPosition, m_localRotation, m_localScale;
-	// 		auto targetBone = m_registry.try_get<TargetBoneComponent>(entity);
-	// 		auto weapon = m_registry.try_get<WeaponComponent>(entity);
-	// 		auto collider = m_registry.try_get<BoxCollider>(entity);
+	// 		auto transform = mRegistry.try_get<Transform>(entity);	// mLocalPosition, mLocalRotation, mLocalScale;
+	// 		auto targetBone = mRegistry.try_get<TargetBoneComponent>(entity);
+	// 		auto weapon = mRegistry.try_get<WeaponComponent>(entity);
+	// 		auto collider = mRegistry.try_get<BoxCollider>(entity);
 	// 		Quaternion qut = Quaternion::CreateFromYawPitchRoll(weapon->m_rotation);
-	// 		Matrix matrix = transform->m_pParent->GetTransformMatrix();
+	// 		Matrix matrix = transform->mpParent->GetTransformMatrix();
 	// 
 	// 		matrix = matrix * targetBone->mTargetBoneAboveMatrix;
 	// 
@@ -111,7 +111,7 @@ void WeaponManager::LateUpdate(float _dTime)
 	// 
 	// 		Vector3 rotation = Vector3(pitch, yaw, roll);
 	// 
-	// 		m_pRenderManager->m_pGraphicsEngine->Rend_DebugBox(scale, rotation, position);
+	// 		mpRenderManager->m_pGraphicsEngine->Rend_DebugBox(scale, rotation, position);
 	// 	}
 }
 
@@ -122,16 +122,16 @@ void WeaponManager::Finalize()
 
 void WeaponManager::Render()
 {
-	auto view = m_registry.view<WeaponCollider>();
+	auto view = mRegistry.view<WeaponCollider>();
 	for (auto entity : view)
 	{
-// 		auto transform = m_registry.try_get<Transform>(entity);
-// 		auto collider = m_registry.try_get<WeaponCollider>(entity);
-// 		// collider->m_weaponAABB.mMax *= 1;
-// 		// collider->m_weaponAABB.mMin *= 1;
-// 		//auto matrix = m_registry.try_get<TargetBoneComponent>(entity)->mTargetBoneData.targrtBoneMatrix	* transform->GetTransformMatrix();
+// 		auto transform = mRegistry.try_get<Transform>(entity);
+// 		auto collider = mRegistry.try_get<WeaponCollider>(entity);
+// 		// collider->mWeaponAABB.mMax *= 1;
+// 		// collider->mWeaponAABB.mMin *= 1;
+// 		//auto matrix = mRegistry.try_get<TargetBoneComponent>(entity)->mTargetBoneData.targrtBoneMatrix	* transform->GetTransformMatrix();
 // 		auto matrix = transform->GetTransformMatrix();
-// 		m_pRenderManager->m_pGraphicsEngine->Rend_DebugBox(
+// 		mpRenderManager->m_pGraphicsEngine->Rend_DebugBox(
 // 			Matrix()
 // 			, Matrix()
 // 			, matrix

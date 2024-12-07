@@ -89,7 +89,7 @@ public:
 
 private:
 
-	PhysicsManager* m_pPhysicsManager;
-	EntityManager* m_pEntityManager;
+	PhysicsManager* mpPhysicsManager;
+	EntityManager* mpEntityManager;
 };
 

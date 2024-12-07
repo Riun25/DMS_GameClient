@@ -68,7 +68,7 @@
 //			//목표 == nullptr ||  공격 대상이 적이고, 사거리 < 목표와의 거리)
 //			if (!(a->GetComponent<PlayerComponent>().mpTarget) ||
 //				a->GetComponent<PlayerComponent>().mIsAlly != a->GetComponent<PlayerComponent>().mpTarget->GetComponent<PlayerComponent>().mIsAlly
-//				&& a->GetComponent<PlayerComponent>().mAttackRange > (a->GetComponent<PlayerComponent>().mpTarget->GetComponent<Transform>().m_localPosition - a->GetComponent<Transform>().m_localPosition).Length())
+//				&& a->GetComponent<PlayerComponent>().mAttackRange > (a->GetComponent<PlayerComponent>().mpTarget->GetComponent<Transform>().mLocalPosition - a->GetComponent<Transform>().mLocalPosition).Length())
 //			{
 //				return true;
 //			}
@@ -128,8 +128,8 @@
 //	// 돈과 유닛의 충돌
 //	mFuncMap["Conflict_Money"] = [](std::shared_ptr<Entity> _entity)->bool
 //		{
-//			float distance = (_entity->GetComponent<Transform>().m_localPosition
-//				- _entity->GetComponent<PlayerComponent>().mpTarget->GetComponent<Transform>().m_localPosition).Length();
+//			float distance = (_entity->GetComponent<Transform>().mLocalPosition
+//				- _entity->GetComponent<PlayerComponent>().mpTarget->GetComponent<Transform>().mLocalPosition).Length();
 //
 //
 //			if (distance <= 0.1f)
@@ -146,8 +146,8 @@
 //	// 적이고, 사거리 내에 존재하는가?
 //	mFuncMap["Enemy_In_Range"] = [](std::shared_ptr<Entity> _entity)->bool
 //		{
-//			float distance = (_entity->GetComponent<Transform>().m_localPosition
-//				- _entity->GetComponent<PlayerComponent>().mpTarget->GetComponent<Transform>().m_localPosition).Length();
+//			float distance = (_entity->GetComponent<Transform>().mLocalPosition
+//				- _entity->GetComponent<PlayerComponent>().mpTarget->GetComponent<Transform>().mLocalPosition).Length();
 //
 //
 //			if (_entity->GetComponent<PlayerComponent>().mIsAlly != _entity->GetComponent<PlayerComponent>().mpTarget->GetComponent<PlayerComponent>().mIsAlly
@@ -228,8 +228,8 @@
 //			else
 //			{
 //				// 사거리 계산
-//				float distance = (_entity->GetComponent<Transform>().m_localPosition
-//					- tempTarget->GetComponent<Transform>().m_localPosition).Length();
+//				float distance = (_entity->GetComponent<Transform>().mLocalPosition
+//					- tempTarget->GetComponent<Transform>().mLocalPosition).Length();
 //
 //				switch (newStateEnum)
 //				{

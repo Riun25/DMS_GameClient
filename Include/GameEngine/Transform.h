@@ -13,9 +13,9 @@ struct Transform
 public:
 	Transform(std::shared_ptr<Entity> _owner, Vector3 _localPosition = Vector3(), Vector3 _localRotation = Vector3(), Vector3 _localScale = Vector3(1.f)
 		, Vector3 _parentPosition = Vector3(), Vector3 _parentRotation = Vector3(), Vector3 _parentScale = Vector3(1.f))
-		: Component(_owner), m_localPosition(_localPosition), m_localRotation(_localRotation), m_localScale(_localScale)
-		, m_worldPosition(_parentPosition), m_worldRotation(_parentRotation), m_worldScale(_parentScale)
-		, m_pParent(nullptr)
+		: Component(_owner), mLocalPosition(_localPosition), mLocalRotation(_localRotation), mLocalScale(_localScale)
+		, mWorldPosition(_parentPosition), mWorldRotation(_parentRotation), mWorldScale(_parentScale)
+		, mpParent(nullptr)
 	{
 	}
 
@@ -27,17 +27,17 @@ public:
 	Matrix GetTransformMatrix();
 
 public:
-	Transform* m_pParent;
+	Transform* mpParent;
 
 	// 월드 객체 내에서의 위치, 회전, 크기를 나타냅니다.
-	Vector3 m_localPosition;
-	Vector3 m_localRotation;
-	Vector3 m_localScale;
+	Vector3 mLocalPosition;
+	Vector3 mLocalRotation;
+	Vector3 mLocalScale;
 
 	// 부모 객체의 위치, 회전, 크기를 나타냅니다.
-	Vector3 m_worldPosition;
-	Vector3 m_worldRotation;
-	Vector3 m_worldScale;
+	Vector3 mWorldPosition;
+	Vector3 mWorldRotation;
+	Vector3 mWorldScale;
 
-	Matrix m_localMatrix;
+	Matrix mLocalMatrix;
 };

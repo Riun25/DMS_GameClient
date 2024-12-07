@@ -17,7 +17,7 @@ public:
 	/// 컴포넌트를 소유중인 엔티티의 이름/uid등을 알기 위해 생성자
 	/// </summary>
 	/// <param name="_owner"></param>
-	Component(std::shared_ptr<Entity> _owner) :m_pOwner(_owner) {}
+	Component(std::shared_ptr<Entity> _owner) :mpOwner(_owner) {}
 
 	/// <summary>
 	/// 컴포넌트 복사 메서드	// 추후 툴에서 프리펩같은
@@ -28,7 +28,7 @@ public:
 
 	std::string GetOwnerName() const;
 
- 	std::shared_ptr<Entity> m_pOwner;
+ 	std::shared_ptr<Entity> mpOwner;
 };
 
 

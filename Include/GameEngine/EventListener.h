@@ -24,20 +24,20 @@ protected:
 	void UnregisterEvent(const std::string& _eventName);
 
 protected:
-	EventManager* m_pEventManager;	// 이벤트 매니저
-	std::unordered_map<std::string, HandlerID> m_registeredImmediateHandlers;	// 즉각적인 이벤트들의 id 맵
-	std::unordered_map<std::string, HandlerID> m_registeredDelayedHandlers;		// 지연된 이벤트들의 id 맵
+	EventManager* mpEventManager;	// 이벤트 매니저
+	std::unordered_map<std::string, HandlerID> mRegisteredImmediateHandlers;	// 즉각적인 이벤트들의 id 맵
+	std::unordered_map<std::string, HandlerID> mRegisteredDelayedHandlers;		// 지연된 이벤트들의 id 맵
 
 	friend class EventManager;
 };
 
 // 즉각적인 이벤트 등록 매크로
 #define REGISTER_IMMEDIATE_EVENT(EVENT_NAME, HANDLER) \
-    m_registeredImmediateHandlers[EVENT_NAME] = RegisterImmediateEvent(EVENT_NAME, [this](const Event& _event) { HANDLER(_event); })
+    mRegisteredImmediateHandlers[EVENT_NAME] = RegisterImmediateEvent(EVENT_NAME, [this](const Event& _event) { HANDLER(_event); })
 
 // 지연된 이벤트 등록 매크로
 #define REGISTER_DELAYED_EVENT(EVENT_NAME, HANDLER) \
-    m_registeredDelayedHandlers[EVENT_NAME] = RegisterDelayedEvent(EVENT_NAME, [this](const Event& _event) { HANDLER(_event); })
+    mRegisteredDelayedHandlers[EVENT_NAME] = RegisterDelayedEvent(EVENT_NAME, [this](const Event& _event) { HANDLER(_event); })
 
 // 이벤트 등록 해제 매크로
 #define UNREGISTER_EVENT(EVENT_NAME) \

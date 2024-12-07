@@ -60,7 +60,7 @@ auto& filterData = GetFilterData(_pEntity)로 해당 객체의 리지드바디의 필터 데이�
 filterData |= 추가할 플래그;	// 플래그 추가
 혹은
 filterData = 플래그;	// 플래그 전체 초기화
-m_pPhysicsManager->SetFilterData(_pEntity, filterData);
+mpPhysicsManager->SetFilterData(_pEntity, filterData);
 혹은 
 physx::PxShape* shape[1];
 _pEntity->GetComponent<Rigidbody>().m_pRigidActor->getShapes(shape,1);

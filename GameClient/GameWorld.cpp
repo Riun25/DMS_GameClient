@@ -43,7 +43,7 @@ bool GameWorld::Initialize()
 
 	/// 씬 추가
 	//0
-	auto logoScene = std::make_shared<LogoScene>(m_registry, "logo"
+	auto logoScene = std::make_shared<LogoScene>(mRegistry, "logo"
 		, m_pEngine->GetEventManager(), m_pEngine->GetRenderManager()
 		, m_pEngine->GetPhysicsManager(), m_pEngine->GetInputManager()
 		, m_pEngine->GetWorldManager(), m_pEngine->GetUIManager()
@@ -52,7 +52,7 @@ bool GameWorld::Initialize()
 	m_pEngine->GetWorldManager()->GetCurrentWorld()->AddScene(logoScene);
 
 	//1
-	auto mainScene = std::make_shared<MainMenuScene>(m_registry, "main menu"
+	auto mainScene = std::make_shared<MainMenuScene>(mRegistry, "main menu"
 		, m_pEngine->GetEventManager(), m_pEngine->GetRenderManager()
 		, m_pEngine->GetPhysicsManager(), m_pEngine->GetInputManager()
 		, m_pEngine->GetWorldManager(), m_pEngine->GetUIManager()
@@ -61,7 +61,7 @@ bool GameWorld::Initialize()
 	m_pEngine->GetWorldManager()->GetCurrentWorld()->AddScene(mainScene);
 
 	//2
-	auto loadingScene = std::make_shared<LoadingScene>(m_registry, "loading"
+	auto loadingScene = std::make_shared<LoadingScene>(mRegistry, "loading"
 		, m_pEngine->GetEventManager(), m_pEngine->GetRenderManager()
 		, m_pEngine->GetPhysicsManager(), m_pEngine->GetInputManager()
 		, m_pEngine->GetWorldManager(), m_pEngine->GetUIManager()
@@ -70,7 +70,7 @@ bool GameWorld::Initialize()
 	m_pEngine->GetWorldManager()->GetCurrentWorld()->AddScene(loadingScene);
 
 	// 	//3
-	// 	auto stageScene1 = std::make_shared<TutorialScene>(m_registry, "stage1"
+	// 	auto stageScene1 = std::make_shared<TutorialScene>(mRegistry, "stage1"
 	// 		, m_pEngine->GetEventManager(), m_pEngine->GetRenderManager()
 	// 		, m_pEngine->GetPhysicsManager(), m_pEngine->GetInputManager()
 	// 		, m_pEngine->GetWorldManager(), m_pEngine->GetUIManager()
@@ -80,7 +80,7 @@ bool GameWorld::Initialize()
 	// 	m_pEngine->GetWorldManager()->GetCurrentWorld()->AddScene(stageScene1);
 	// 
 	// 	//4
-	// 	auto stageScene2 = std::make_shared<TutorialScene>(m_registry, "stage2"
+	// 	auto stageScene2 = std::make_shared<TutorialScene>(mRegistry, "stage2"
 	// 		, m_pEngine->GetEventManager(), m_pEngine->GetRenderManager()
 	// 		, m_pEngine->GetPhysicsManager(), m_pEngine->GetInputManager()
 	// 		, m_pEngine->GetWorldManager(), m_pEngine->GetUIManager()
@@ -90,7 +90,7 @@ bool GameWorld::Initialize()
 	// 	m_pEngine->GetWorldManager()->GetCurrentWorld()->AddScene(stageScene2);
 	// 
 	// 	//5
-	// 	auto stageScene3 = std::make_shared<StageScene1_3>(m_registry, "stage3"
+	// 	auto stageScene3 = std::make_shared<StageScene1_3>(mRegistry, "stage3"
 	// 		, m_pEngine->GetEventManager(), m_pEngine->GetRenderManager()
 	// 		, m_pEngine->GetPhysicsManager(), m_pEngine->GetInputManager()
 	// 		, m_pEngine->GetWorldManager(), m_pEngine->GetUIManager()
@@ -99,7 +99,7 @@ bool GameWorld::Initialize()
 	// 	m_pEngine->GetWorldManager()->GetCurrentWorld()->AddScene(stageScene3);
 
 		//6 //3
-	auto test1 = std::make_shared<TutorialScene2>(m_registry, "test1"
+	auto test1 = std::make_shared<TutorialScene2>(mRegistry, "test1"
 		, m_pEngine->GetEventManager(), m_pEngine->GetRenderManager()
 		, m_pEngine->GetPhysicsManager(), m_pEngine->GetInputManager()
 		, m_pEngine->GetWorldManager(), m_pEngine->GetUIManager()
@@ -108,7 +108,7 @@ bool GameWorld::Initialize()
 	m_pEngine->GetWorldManager()->GetCurrentWorld()->AddScene(test1);
 
 	//7	//4
-	auto animationTestScene = std::make_shared<AnimationTestScene>(m_registry, "AniTest"
+	auto animationTestScene = std::make_shared<AnimationTestScene>(mRegistry, "AniTest"
 		, m_pEngine->GetEventManager(), m_pEngine->GetRenderManager()
 		, m_pEngine->GetPhysicsManager(), m_pEngine->GetInputManager()
 		, m_pEngine->GetWorldManager(), m_pEngine->GetUIManager()
@@ -116,7 +116,7 @@ bool GameWorld::Initialize()
 	m_pEngine->GetWorldManager()->GetCurrentWorld()->AddScene(animationTestScene);
 
 	//8 //5
-	auto TestScene = std::make_shared<BattleScene>(m_registry, "Test2"
+	auto TestScene = std::make_shared<BattleScene>(mRegistry, "Test2"
 		, m_pEngine->GetEventManager(), m_pEngine->GetRenderManager()
 		, m_pEngine->GetPhysicsManager(), m_pEngine->GetInputManager()
 		, m_pEngine->GetWorldManager(), m_pEngine->GetUIManager()
@@ -124,7 +124,7 @@ bool GameWorld::Initialize()
 	m_pEngine->GetWorldManager()->GetCurrentWorld()->AddScene(TestScene);
 
 	//9 //6
-	auto creditScene = std::make_shared<CreditScene>(m_registry, "credit"
+	auto creditScene = std::make_shared<CreditScene>(mRegistry, "credit"
 		, m_pEngine->GetEventManager(), m_pEngine->GetRenderManager()
 		, m_pEngine->GetPhysicsManager(), m_pEngine->GetInputManager()
 		, m_pEngine->GetWorldManager(), m_pEngine->GetUIManager()
@@ -133,7 +133,7 @@ bool GameWorld::Initialize()
 	m_pEngine->GetWorldManager()->GetCurrentWorld()->AddScene(creditScene);
 
 	//10 //7
-	auto tutorialScene = std::make_shared<ExampleScene>(m_registry, "tutorial"
+	auto tutorialScene = std::make_shared<ExampleScene>(mRegistry, "tutorial"
 		, m_pEngine->GetEventManager(), m_pEngine->GetRenderManager()
 		, m_pEngine->GetPhysicsManager(), m_pEngine->GetInputManager()
 		, m_pEngine->GetWorldManager(), m_pEngine->GetUIManager()
@@ -175,53 +175,53 @@ void GameWorld::Update(float _dTime)
 	{
 		if (m_pEngine->GetInputManager()->GetKeyUp(KEY::F1))
 		{
-			// 		m_pEventManager->TriggerEvent(Event("Change Scene", UID(0)));
+			// 		mpEventManager->TriggerEvent(Event("Change Scene", UID(0)));
 			SetScene(SceneName::LOGO);
 		}
 		else if (m_pEngine->GetInputManager()->GetKeyUp(KEY::F2))
 		{
-			// 		m_pEventManager->TriggerEvent(Event("Change Scene", UID(1)));
+			// 		mpEventManager->TriggerEvent(Event("Change Scene", UID(1)));
 			SetScene(SceneName::MAIN);
 		}
 		else if (m_pEngine->GetInputManager()->GetKeyUp(KEY::F3))
 		{
-			// 		m_pEventManager->TriggerEvent(Event("Change Scene", UID(2)));
+			// 		mpEventManager->TriggerEvent(Event("Change Scene", UID(2)));
 			SetScene(SceneName::LOADING);
 		}
 		// 		else if (m_pEngine->GetInputManager()->GetKeyUp(KEY::F4))
 		// 		{
-		// 			// 		m_pEventManager->TriggerEvent(Event("Change Scene", UID(3)));
+		// 			// 		mpEventManager->TriggerEvent(Event("Change Scene", UID(3)));
 		// 			SetScene(SceneName::SCENE1);
 		// 		}
 		// 		else if (m_pEngine->GetInputManager()->GetKeyUp(KEY::F5))
 		// 		{
-		// 			//m_pEventManager->TriggerEvent(Event("Change Scene", UID(4)));
+		// 			//mpEventManager->TriggerEvent(Event("Change Scene", UID(4)));
 		// 			SetScene(SceneName::SCENE2);
 		// 		}
 		// 		else if (m_pEngine->GetInputManager()->GetKeyUp(KEY::F6))
 		// 		{
-		// 			//m_pEventManager->TriggerEvent(Event("Change Scene", UID(5)));
+		// 			//mpEventManager->TriggerEvent(Event("Change Scene", UID(5)));
 		// 			SetScene(SceneName::SCENE3);
 		// 		}
 		else if (m_pEngine->GetInputManager()->GetKeyUp(KEY::F7))
 		{
-			//m_pEventManager->TriggerEvent(Event("Change Scene", UID(5)));
+			//mpEventManager->TriggerEvent(Event("Change Scene", UID(5)));
 			SetScene(SceneName::TUTORIAL);
 		}
 		// 	else if (m_pEngine->GetInputManager()->GetKeyUp(KEY::F8))
 		// 	{
-		// 		//m_pEventManager->TriggerEvent(Event("Change Scene", UID(5)));
+		// 		//mpEventManager->TriggerEvent(Event("Change Scene", UID(5)));
 		// 		SetScene(SceneName::ANITEST);
 		// 	}
 		// 	else if (m_pEngine->GetInputManager()->GetKeyUp(KEY::F9))
 		// 	{
-		// 		//m_pEventManager->TriggerEvent(Event("Change Scene", UID(5)));
+		// 		//mpEventManager->TriggerEvent(Event("Change Scene", UID(5)));
 		// 		SetScene(SceneName::TEST2);
 		// 	}
 			//else if (m_pEngine->GetInputManager()->GetKeyUp(KEY::F10))
 		else if (m_pEngine->GetInputManager()->GetKeyUp(KEY::F8))
 		{
-			//m_pEventManager->TriggerEvent(Event("Change Scene", UID(5)));
+			//mpEventManager->TriggerEvent(Event("Change Scene", UID(5)));
 			SetScene(SceneName::CREDIT);
 		}
 
@@ -303,11 +303,11 @@ void GameWorld::LateUpdate(float _dTime)
 			moveCameraMode = !moveCameraMode;
 		}
 		// 플라잉 카메라
-		auto view = m_registry.view<CameraComponent>();
+		auto view = mRegistry.view<CameraComponent>();
 		for (auto entity : view)
 		{
-			auto camera = m_registry.try_get<CameraComponent>(entity)->m_pCamera;
-			if (m_registry.try_get<CameraComponent>(entity)->m_cameraEnum == 0 && !moveCameraMode)
+			auto camera = mRegistry.try_get<CameraComponent>(entity)->mpCamera;
+			if (mRegistry.try_get<CameraComponent>(entity)->mCameraEnum == 0 && !moveCameraMode)
 			{
 				if (camera)
 				{
@@ -355,7 +355,7 @@ void GameWorld::LateUpdate(float _dTime)
 
 				}
 			}
-			if (m_registry.try_get<CameraComponent>(entity)->m_cameraEnum == 1 && moveCameraMode)
+			if (mRegistry.try_get<CameraComponent>(entity)->mCameraEnum == 1 && moveCameraMode)
 			{
 				if (camera)
 				{
@@ -409,7 +409,7 @@ void GameWorld::LateUpdate(float _dTime)
 
 void GameWorld::Finalize()
 {
-	auto wData = dynamic_pointer_cast<UserData>(m_pWorldData["config"]);
+	auto wData = dynamic_pointer_cast<UserData>(mpWorldData["config"]);
 	wData->Save();
 	World::Finalize();
 	UNREGISTER_EVENT("Change Scene");
@@ -472,7 +472,7 @@ void GameWorld::LoadWorldSetting()
 {
 	/// 월드 데이터 로드
 	std::shared_ptr<IData> worldData = std::make_shared<UserData>("config.json");
-	m_pWorldData["config"] = worldData;
+	mpWorldData["config"] = worldData;
 	auto wData = dynamic_pointer_cast<UserData>(worldData);
 	wData->Load();
 
@@ -497,7 +497,7 @@ void GameWorld::CreateSceneFromTable()
 
 	for (auto& scene : sceneTable)
 	{
-		auto stageScene = std::make_shared<TutorialScene>(m_registry, scene.sceneName
+		auto stageScene = std::make_shared<TutorialScene>(mRegistry, scene.sceneName
 			, m_pEngine->GetEventManager(), m_pEngine->GetRenderManager()
 			, m_pEngine->GetPhysicsManager(), m_pEngine->GetInputManager()
 			, m_pEngine->GetWorldManager(), m_pEngine->GetUIManager()

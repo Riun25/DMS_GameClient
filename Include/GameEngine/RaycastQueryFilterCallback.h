@@ -17,7 +17,7 @@ public:
 		, const physx::PxQueryHit& hit, const physx::PxShape* shape, const physx::PxRigidActor* actor) override;
 
 private:
-	std::string m_targetName;
+	std::string mTargetName;
 
 };
 

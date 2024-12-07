@@ -44,17 +44,16 @@ protected:
 	void CreateConsole();
 
 protected:
-	HWND m_hWnd;
-	HINSTANCE m_hInstance;
-	HACCEL m_hAccelTable;
-	MSG m_msg;
-	WCHAR m_szTitle[100];
-	int m_iconResourceId;
+	HWND mHWnd;
+	HINSTANCE mHInstance;
+	HACCEL mHAccelTable;
+	MSG mMsg;
+	WCHAR mSzTitle[100];
+	int mIconResourceId;
 
-	uint16_t m_screenWidth = 1920;
-	uint16_t m_screenHeight = 1080;
-	uint16_t m_screenPosX = 0;
-	uint16_t m_screenPosY = 0;
-
+	uint16_t mScreenWidth = 1920;
+	uint16_t mScreenHeight = 1080;
+	uint16_t mScreenPosX = 0;
+	uint16_t mScreenPosY = 0;
 };
 

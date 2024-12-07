@@ -7,15 +7,15 @@
 /// </summary>
 struct Equipment
 {
-	std::string m_modelFileName;	// 모델 파일 이름
-	std::string m_meshName;			// 메쉬 이름
-	std::string m_diffuseTexture;	// 디퓨즈 텍스쳐 파일명
-	std::string m_normalTexture;	// 노말 텍스쳐 파일명
-	std::string m_targetModelName;	// 장착시킬 모델의 이름
-	std::string m_boneName;			// 본의 이름
-	std::shared_ptr<ModelBuffer> m_pModelBuffer;	// 모델 버퍼
-	int m_targetBoneIndex;			// 본 인덱스
-	VSTargetBoneConstantBufferData m_targetBoneConstantBufferData;	// 본 매트릭스
+	std::string mModelFileName;	// 모델 파일 이름
+	std::string mMeshName;			// 메쉬 이름
+	std::string mDiffuseTexture;	// 디퓨즈 텍스쳐 파일명
+	std::string mNormalTexture;	// 노말 텍스쳐 파일명
+	std::string mTargetModelName;	// 장착시킬 모델의 이름
+	std::string mBoneName;			// 본의 이름
+	std::shared_ptr<ModelBuffer> mpModelBuffer;	// 모델 버퍼
+	int mTargetBoneIndex;			// 본 인덱스
+	VSTargetBoneConstantBufferData mTargetBoneConstantBufferData;	// 본 매트릭스
 };
 
 /// <summary>
@@ -43,7 +43,7 @@ public:
 		, const std::string& _diffuse = "", const std::string& _normal = "");
 
 public:
-	std::vector<std::shared_ptr<Equipment>> m_pEquipments;	// 장비들의 벡터
+	std::vector<std::shared_ptr<Equipment>> mpEquipments;	// 장비들의 벡터
 
 };
 

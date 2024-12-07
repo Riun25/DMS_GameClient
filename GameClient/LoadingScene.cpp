@@ -29,39 +29,39 @@ bool LoadingScene::Initialize()
 	tempEasing = new EasingFunc();
 	accumulateTime = 0;
 
-	mpLevelManager = new LevelManager(m_registry, m_pRenderManager, m_pInputManager, m_pUIManager, m_pEntityManager
-		, m_pResourceManager, m_pSoundManager);
+	mpLevelManager = new LevelManager(mRegistry, mpRenderManager, mpInputManager, mpUIManager, mpEntityManager
+		, mpResourceManager, mpSoundManager);
 	mpLevelManager->InitializeforNoneFbx(GetUID());
 
 	// 카메라 엔티티 생성, 세팅
 	mpLevelManager->AddCamera(Vector3(0.f, 5.f, -50.f), Vector3(0.f, 0.f, 1.f));
 
 	// 로딩씬 랜덤 이미지
-	auto ui2 = m_pEntityManager->CreateEntity("UI_L_Img"); // 기준을 1080+96 = 1176으로 잡아준다.
+	auto ui2 = mpEntityManager->CreateEntity("UI_L_Img"); // 기준을 1080+96 = 1176으로 잡아준다.
 	std::string randimLodingImg = "UI_img_LoadingImg" + to_string(RandomUtil::RandomInt(1, 10)) + ".png";
-	m_pUIManager->AddUI(ui2, randimLodingImg, Vector2(495, -1080), Vector2(930, 797), static_cast<int>(Layer::BG), Vector4(1.f), false);
+	mpUIManager->AddUI(ui2, randimLodingImg, Vector2(495, -1080), Vector2(930, 797), static_cast<int>(Layer::BG), Vector4(1.f), false);
 
 	// 로딩 게이지 뒷배경 + 게이지 내용 + 로딩 텍스트
-	auto ui3 = m_pEntityManager->CreateEntity("UI_L_Loading");
-	m_pUIManager->AddUI(ui3, "UI_img_LoadingBG.png", Vector2(190, -185), Vector2(1540, 100), static_cast<int>(Layer::BG_P), Vector4(1.f), false);
-	m_pUIManager->AddMessageBox2D(ui3, "UI_img_LoadingBar.png", Vector2(210, -185), Vector2(1500, 60), Vector4(1.0f), u8"Now Loading...", Vector2(759, -271), 0.8f, "KIMM_Bold(60).ttf", Vector4(1.0f), static_cast<int>(Layer::BG_B), false);
+	auto ui3 = mpEntityManager->CreateEntity("UI_L_Loading");
+	mpUIManager->AddUI(ui3, "UI_img_LoadingBG.png", Vector2(190, -185), Vector2(1540, 100), static_cast<int>(Layer::BG_P), Vector4(1.f), false);
+	mpUIManager->AddMessageBox2D(ui3, "UI_img_LoadingBar.png", Vector2(210, -185), Vector2(1500, 60), Vector4(1.0f), u8"Now Loading...", Vector2(759, -271), 0.8f, "KIMM_Bold(60).ttf", Vector4(1.0f), static_cast<int>(Layer::BG_B), false);
 
 	/// UI
-	mpLevelManager->AddAnimationUI(false, static_cast<int>(m_pWorldManager->GetCurrentWorld()->GetPreviousScene()));
+	mpLevelManager->AddAnimationUI(false, static_cast<int>(mpWorldManager->GetCurrentWorld()->GetPreviousScene()));
 	mpLevelManager->SetUIAnimationState(UIAnimationState::PRELOADING); // UI 애니메이션 상태 설정
 	tempTime = 0.0f;
 
 	// 이전 씬이 배틀씬이었는지 확인
-	if (m_pWorldManager->GetCurrentWorld()->GetPreviousScene() >= static_cast<uint32_t>(SceneName::TUTORIAL))
+	if (mpWorldManager->GetCurrentWorld()->GetPreviousScene() >= static_cast<uint32_t>(SceneName::TUTORIAL))
 	{
-		auto view = m_registry.view<Texture2D>();
+		auto view = mRegistry.view<Texture2D>();
 		for (auto& entity : view)
 		{
-			auto& name = m_registry.get<Name>(entity).m_name;
-			auto& texture = m_registry.get<Texture2D>(entity);
+			auto& name = mRegistry.get<Name>(entity).mName;
+			auto& texture = mRegistry.get<Texture2D>(entity);
 			if (name.find("UI_A_Cloud") != std::string::npos)
 			{
-				texture.m_position.y = -726.f;
+				texture.mPosition.y = -726.f;
 			}
 		}
 	}
@@ -77,23 +77,23 @@ void LoadingScene::FixedUpdate(float _dTime)
 	{
 		tempTime += _dTime;
 
-		auto view = m_registry.view<Texture2D>();
+		auto view = mRegistry.view<Texture2D>();
 		for (auto& entity : view)
 		{
-			auto& name = m_registry.get<Name>(entity).m_name;
-			auto& texture = m_registry.get<Texture2D>(entity);
+			auto& name = mRegistry.get<Name>(entity).mName;
+			auto& texture = mRegistry.get<Texture2D>(entity);
 			if (name.find("UI_A_Cloud") != std::string::npos)
 			{
-				if (m_pWorldManager->GetCurrentWorld()->GetPreviousScene() == static_cast<uint32_t>(SceneName::MAIN))
+				if (mpWorldManager->GetCurrentWorld()->GetPreviousScene() == static_cast<uint32_t>(SceneName::MAIN))
 				{
-					tempEasing->EasingFuncMap["easeInSine"](-2983, 1080, tempTime, &texture.m_position.y);
+					tempEasing->EasingFuncMap["easeInSine"](-2983, 1080, tempTime, &texture.mPosition.y);
 				}
 				else // 재로딩 시에는 시작 위치가 -726
 				{
-					tempEasing->EasingFuncMap["easeInSine"](-726, 1080, tempTime, &texture.m_position.y);
+					tempEasing->EasingFuncMap["easeInSine"](-726, 1080, tempTime, &texture.mPosition.y);
 				}
 
-				if (texture.m_position.y == 1080)
+				if (texture.mPosition.y == 1080)
 				{
 					mpLevelManager->SetUIAnimationState(UIAnimationState::VISIBLE); // UI 애니메이션 상태 설정
 					tempTime = 0.0f;
@@ -106,22 +106,22 @@ void LoadingScene::FixedUpdate(float _dTime)
 	break;
 	case UIAnimationState::VISIBLE:	  // 씬마다 코딩 :여기서 로딩과 관련된 ui를 보이게 설정합니다.
 	{
-		auto view = m_registry.view<Texture2D>();
+		auto view = mRegistry.view<Texture2D>();
 		for (auto& entity : view)
 		{
-			auto& name = m_registry.get<Name>(entity).m_name;
-			auto& texture = m_registry.get<Texture2D>(entity);
+			auto& name = mRegistry.get<Name>(entity).mName;
+			auto& texture = mRegistry.get<Texture2D>(entity);
 			if (name.find("UI_L") != std::string::npos)
 			{
-				texture.m_isVisible = true;
+				texture.mIsVisible = true;
 			}
 		}
 
-		auto uiView = m_registry.view<MessageBox2D>();
+		auto uiView = mRegistry.view<MessageBox2D>();
 		for (auto& loadingEntity : uiView)
 		{
-			auto& loadingBar = m_registry.get<MessageBox2D>(loadingEntity);
-			auto& name = m_registry.get<Name>(loadingEntity).m_name;
+			auto& loadingBar = mRegistry.get<MessageBox2D>(loadingEntity);
+			auto& name = mRegistry.get<Name>(loadingEntity).mName;
 			if (name == "UI_L_Loading")
 			{
 				loadingBar.mIsImgVisible = true;
@@ -136,27 +136,27 @@ void LoadingScene::FixedUpdate(float _dTime)
 	{
 		tempTime += _dTime;
 
-		auto view = m_registry.view<Texture2D>();
+		auto view = mRegistry.view<Texture2D>();
 		for (auto& entity : view)
 		{
-			auto& name = m_registry.get<Name>(entity).m_name;
-			auto& texture = m_registry.get<Texture2D>(entity);
+			auto& name = mRegistry.get<Name>(entity).mName;
+			auto& texture = mRegistry.get<Texture2D>(entity);
 			if (name == "UI_L_Img")
 			{
-				tempEasing->EasingFuncMap["easeOutSine"](-1080, 96, tempTime * 0.5f, &texture.m_position.y);
+				tempEasing->EasingFuncMap["easeOutSine"](-1080, 96, tempTime * 0.5f, &texture.mPosition.y);
 			}
 
 			if (name == "UI_L_Loading")
 			{
-				tempEasing->EasingFuncMap["easeOutSine"](-185, 971, tempTime * 0.5f, &texture.m_position.y);
+				tempEasing->EasingFuncMap["easeOutSine"](-185, 971, tempTime * 0.5f, &texture.mPosition.y);
 			}
 		}
 
-		auto uiView = m_registry.view<MessageBox2D>();
+		auto uiView = mRegistry.view<MessageBox2D>();
 		for (auto& loadingEntity : uiView)
 		{
-			auto& loadingBar = m_registry.get<MessageBox2D>(loadingEntity);
-			auto& name = m_registry.get<Name>(loadingEntity).m_name;
+			auto& loadingBar = mRegistry.get<MessageBox2D>(loadingEntity);
+			auto& name = mRegistry.get<Name>(loadingEntity).mName;
 			if (name == "UI_L_Loading")
 			{
 				tempEasing->EasingFuncMap["easeOutSine"](-185, 991, tempTime * 0.5f, &loadingBar.mTexturePosition.y);
@@ -169,27 +169,27 @@ void LoadingScene::FixedUpdate(float _dTime)
 	{
 		tempTime += _dTime;
 
-		auto view = m_registry.view<Texture2D>();
+		auto view = mRegistry.view<Texture2D>();
 		for (auto& entity : view)
 		{
-			auto& name = m_registry.get<Name>(entity).m_name;
-			auto& texture = m_registry.get<Texture2D>(entity);
+			auto& name = mRegistry.get<Name>(entity).mName;
+			auto& texture = mRegistry.get<Texture2D>(entity);
 			if (name == "UI_L_Img")
 			{
-				tempEasing->EasingFuncMap["easeOutSine"](96, -1080, tempTime, &texture.m_position.y);
+				tempEasing->EasingFuncMap["easeOutSine"](96, -1080, tempTime, &texture.mPosition.y);
 			}
 
 			if (name == "UI_L_Loading")
 			{
-				tempEasing->EasingFuncMap["easeOutSine"](991, -185, tempTime, &texture.m_position.y);
+				tempEasing->EasingFuncMap["easeOutSine"](991, -185, tempTime, &texture.mPosition.y);
 			}
 
 			if (name.find("UI_A_Cloud") != std::string::npos)
 			{
 				if (tempTime > 1.0f)
 				{
-					tempEasing->EasingFuncMap["easeInSine"](1080, -726, (tempTime - 1.0f), &texture.m_position.y);
-					if (name == "UI_A_CloudR" && texture.m_position.y == -726)
+					tempEasing->EasingFuncMap["easeInSine"](1080, -726, (tempTime - 1.0f), &texture.mPosition.y);
+					if (name == "UI_A_CloudR" && texture.mPosition.y == -726)
 					{
 						mpLevelManager->SetUIAnimationState(UIAnimationState::NEXTSCENE); // UI 애니메이션 상태 설정
 						tempTime = 0.0f;
@@ -199,11 +199,11 @@ void LoadingScene::FixedUpdate(float _dTime)
 			}
 		}
 
-		auto uiView = m_registry.view<MessageBox2D>();
+		auto uiView = mRegistry.view<MessageBox2D>();
 		for (auto& loadingEntity : uiView)
 		{
-			auto& loadingBar = m_registry.get<MessageBox2D>(loadingEntity);
-			auto& name = m_registry.get<Name>(loadingEntity).m_name;
+			auto& loadingBar = mRegistry.get<MessageBox2D>(loadingEntity);
+			auto& name = mRegistry.get<Name>(loadingEntity).mName;
 			if (name == "UI_L_Loading")
 			{
 				tempEasing->EasingFuncMap["easeOutSine"](991, -185, tempTime, &loadingBar.mTexturePosition.y);
@@ -217,13 +217,13 @@ void LoadingScene::FixedUpdate(float _dTime)
 		tempTime = 0.0f;
 		accumulateTime = 0.0f;
 
-		if (m_pWorldManager->GetCurrentWorld()->GetPreviousScene() >= static_cast<uint32_t>(SceneName::SCENE1))
+		if (mpWorldManager->GetCurrentWorld()->GetPreviousScene() >= static_cast<uint32_t>(SceneName::SCENE1))
 		{
-			m_pWorldManager->GetCurrentWorld()->SetScene(m_pWorldManager->GetCurrentWorld()->GetPreviousScene() + 1);
+			mpWorldManager->GetCurrentWorld()->SetScene(mpWorldManager->GetCurrentWorld()->GetPreviousScene() + 1);
 		}
-		else if (m_pWorldManager->GetCurrentWorld()->GetPreviousScene() == static_cast<uint32_t>(SceneName::MAIN))
+		else if (mpWorldManager->GetCurrentWorld()->GetPreviousScene() == static_cast<uint32_t>(SceneName::MAIN))
 		{
-			m_pWorldManager->GetCurrentWorld()->SetScene(static_cast<uint32_t>(SceneName::TUTORIAL)); // [TODO] 이 부분 자기가 깬 걸로 해서 가져와야 할텐데
+			mpWorldManager->GetCurrentWorld()->SetScene(static_cast<uint32_t>(SceneName::TUTORIAL)); // [TODO] 이 부분 자기가 깬 걸로 해서 가져와야 할텐데
 		}
 	}
 	break;
@@ -253,18 +253,18 @@ void LoadingScene::Finalize()
 void LoadingScene::AddResource()
 {
 	//리소스 추가
-	m_pRenderManager->AddModel("../TestAsset/", "box.fbx");
+	mpRenderManager->AddModel("../TestAsset/", "box.fbx");
 }
 
 void LoadingScene::LoadingTextUpdate()
 {
 	// 텍스트 변경
-	auto uiView = m_registry.view<MessageBox2D>();
+	auto uiView = mRegistry.view<MessageBox2D>();
 	for (auto& loadingEntity : uiView)
 	{
-		auto& loadingBar = m_registry.get<MessageBox2D>(loadingEntity);
-		auto img = m_registry.try_get<Texture2D>(loadingEntity);
-		auto& name = m_registry.get<Name>(loadingEntity).m_name;
+		auto& loadingBar = mRegistry.get<MessageBox2D>(loadingEntity);
+		auto img = mRegistry.try_get<Texture2D>(loadingEntity);
+		auto& name = mRegistry.get<Name>(loadingEntity).mName;
 		float nowSize = 0;
 
 		if (accumulateTime > maxTimeforPercetage)
@@ -312,45 +312,45 @@ void LoadingScene::LoadingResourceUpdate()
 	// 0~1초: 모델 추가, UI 텍스처 추가, 애니메이션 추가
 	if (accumulateTime > 0.0f && mIsResourceLoaded1 == false)
 	{
-		m_pResourceManager->AddFilesInDirModel("Geometry");
-		m_pResourceManager->AddFilesInDirAni("Animation");
+		mpResourceManager->AddFilesInDirModel("Geometry");
+		mpResourceManager->AddFilesInDirAni("Animation");
 		mIsResourceLoaded1 = true;
 	}
 
 	// 1~6초: 3D 텍스처 추가
 	if (accumulateTime > 1.0f && mIsResourceLoaded2 == false)
 	{
-		m_pResourceManager->AddFilesInDir3D("Texture3D");
-		m_pResourceManager->AddFilesInDirDDS("CubeMap");
+		mpResourceManager->AddFilesInDir3D("Texture3D");
+		mpResourceManager->AddFilesInDirDDS("CubeMap");
 		mIsResourceLoaded2 = true;
 	}
 
 	// 5초: 큐브맵 텍스처 추가
 	if (accumulateTime > 2.0f && mIsResourceLoaded3 == false)
 	{
-		m_pResourceManager->AddFilesInDirModel("Mercenary");
-		m_pResourceManager->AddFilesInDirModel("Archer");
+		mpResourceManager->AddFilesInDirModel("Mercenary");
+		mpResourceManager->AddFilesInDirModel("Archer");
 		mIsResourceLoaded3 = true;
 	}
 
 	// 6초 ~ 10초: 모델 추가 (분할), 사운드 추가
 	if (accumulateTime > 3.0f && mIsResourceLoaded4 == false)
 	{
-		m_pResourceManager->AddFilesInDirModel("Enemy");
-		m_pResourceManager->AddFilesInDirModel("money");
-		m_pResourceManager->AddFilesInDirModel("Chief");
+		mpResourceManager->AddFilesInDirModel("Enemy");
+		mpResourceManager->AddFilesInDirModel("money");
+		mpResourceManager->AddFilesInDirModel("Chief");
 		mIsResourceLoaded4 = true;
 
 	}
 	else if (accumulateTime > 5.0f && mIsResourceLoaded5 == false)
 	{
-		m_pResourceManager->AddFilesInDirModel("Environment");
+		mpResourceManager->AddFilesInDirModel("Environment");
 		mIsResourceLoaded5 = true;
 	}
 	else if (accumulateTime > 6.0f)
 	{
-		m_pResourceManager->AddFilesInDirBGMSound("BGM");
-		m_pResourceManager->AddFilesInDirSFXSound("SFX"); // 추후 다른 곳에 옮김
+		mpResourceManager->AddFilesInDirBGMSound("BGM");
+		mpResourceManager->AddFilesInDirSFXSound("SFX"); // 추후 다른 곳에 옮김
 		// 로딩 완료 후 씬 전환
 		mIsResourcesAlreadyLoaded = true;
 		mpLevelManager->SetUIAnimationState(UIAnimationState::POSTLOATING); // UI 애니메이션 상태 설정

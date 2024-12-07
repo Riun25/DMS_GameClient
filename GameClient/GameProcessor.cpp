@@ -5,12 +5,12 @@
 
 GameProcessor::GameProcessor(HINSTANCE _hInstance, const WCHAR* _szTitle, int _iconResourceId)
 	: BaseWindowsProcessor(_hInstance, _szTitle, _iconResourceId)
-	, m_pGameEngine(nullptr)
-	, m_fixedDeltaTime()
-	, m_deltaTime()
+	, mpGameEngine(nullptr)
+	, mFixedDeltaTime()
+	, mDeltaTime()
 {
-	m_screenPosX = 0;
-	m_screenPosY = 0;
+	mScreenPosX = 0;
+	mScreenPosY = 0;
 }
 
 bool GameProcessor::Initialize()
@@ -22,48 +22,48 @@ bool GameProcessor::Initialize()
 	}
 
 	/// 게임 엔진 초기화
-	m_pGameEngine = std::make_unique<GameEngine>(m_hWnd, m_screenWidth, m_screenHeight);
-	m_pGameEngine->Initialize();
-	m_pGameEngine->GetTimeManager()->SetTargetFPS(60);
+	mpGameEngine = std::make_unique<GameEngine>(mHWnd, mScreenWidth, mScreenHeight);
+	mpGameEngine->Initialize();
+	mpGameEngine->GetTimeManager()->SetTargetFPS(60);
 
 	/// 추가로 작성한 매니저 클래스 생성, 초기화
-// 	std::shared_ptr<IManager> weaponManager = std::make_shared<WeaponManager>(m_pGameEngine->m_registry, m_pGameEngine->GetRenderManager());
+// 	std::shared_ptr<IManager> weaponManager = std::make_shared<WeaponManager>(m_pGameEngine->mRegistry, m_pGameEngine->GetRenderManager());
 // 	weaponManager->Initialize();
 // 	m_pManagers.push_back(weaponManager);
 
 	/// 월드 생성
-	auto gameWorld = std::make_shared<GameWorld>(m_pGameEngine->m_registry, m_pGameEngine.get()
-		, m_pGameEngine->GetEventManager());
-	m_pGameEngine->GetWorldManager()->AddWorld(gameWorld);
+	auto gameWorld = std::make_shared<GameWorld>(mpGameEngine->mRegistry, mpGameEngine.get()
+		, mpGameEngine->GetEventManager());
+	mpGameEngine->GetWorldManager()->AddWorld(gameWorld);
 	gameWorld->Initialize();
-	m_pGameEngine->GetWorldManager()->GetCurrentWorld()->SetScene(0);
+	mpGameEngine->GetWorldManager()->GetCurrentWorld()->SetScene(0);
 
 	return true;
 }
 
 void GameProcessor::Run()
 {
-	auto timer = m_pGameEngine->GetTimeManager();
+	auto timer = mpGameEngine->GetTimeManager();
 
 	while (true)
 	{
-		if (PeekMessage(&m_msg, NULL, 0, 0, PM_REMOVE))
+		if (PeekMessage(&mMsg, NULL, 0, 0, PM_REMOVE))
 		{
-			if (m_msg.message == WM_QUIT)
+			if (mMsg.message == WM_QUIT)
 			{
 				break;
 			}
 
-			if (!TranslateAccelerator(m_msg.hwnd, m_hAccelTable, &m_msg))
+			if (!TranslateAccelerator(mMsg.hwnd, mHAccelTable, &mMsg))
 			{
-				TranslateMessage(&m_msg);
-				DispatchMessage(&m_msg);
+				TranslateMessage(&mMsg);
+				DispatchMessage(&mMsg);
 			}
 		}
 		else
 		{
 			// 게임 엔진에서 종료 요청 확인
-			if (m_pGameEngine->GetWorldManager()->ShouldQuit())
+			if (mpGameEngine->GetWorldManager()->ShouldQuit())
 			{
 				// Finalize 호출 후 안전하게 PostQuitMessage 호출
 				Finalize();
@@ -102,7 +102,7 @@ void GameProcessor::Run()
 void GameProcessor::Finalize()
 {
 	__super::Finalize();
-	m_pGameEngine->Finalize();
+	mpGameEngine->Finalize();
 }
 
 LRESULT CALLBACK GameProcessor::WndProc(HWND _hWnd, UINT _message, WPARAM _wParam, LPARAM _lParam)
@@ -139,53 +139,53 @@ LRESULT CALLBACK GameProcessor::WndProc(HWND _hWnd, UINT _message, WPARAM _wPara
 void GameProcessor::Update()
 {
 	// 타이머 업데이트
-	auto timer = m_pGameEngine->GetTimeManager();
+	auto timer = mpGameEngine->GetTimeManager();
 	timer->Update();
 
-	m_fixedDeltaTime = timer->FixedDeltaTime();
+	mFixedDeltaTime = timer->FixedDeltaTime();
 
-	m_deltaTime = timer->DeltaTime();
-	m_accumulator += m_deltaTime;
+	mDeltaTime = timer->DeltaTime();
+	mAccumulator += mDeltaTime;
 
 	// 고정된 프레임 업데이트
-	if(m_accumulator >= m_fixedDeltaTime)
+	if(mAccumulator >= mFixedDeltaTime)
 	{
-		m_pGameEngine->FixedUpdate(m_fixedDeltaTime);
+		mpGameEngine->FixedUpdate(mFixedDeltaTime);
 
 		// 추가 매니저 고정 프레임 업데이트
-		for (auto& manager : m_pManagers)
+		for (auto& manager : mpManagers)
 		{
-			manager->FixedUpdate(m_fixedDeltaTime);
+			manager->FixedUpdate(mFixedDeltaTime);
 		}
 
-		m_accumulator -= m_fixedDeltaTime; // 누적값에서 고정된 프레임 시간만큼 뺌
+		mAccumulator -= mFixedDeltaTime; // 누적값에서 고정된 프레임 시간만큼 뺌
 	}
 
 	// 업데이트
-	m_pGameEngine->Update(m_deltaTime);
+	mpGameEngine->Update(mDeltaTime);
 
 	// 추가 매니저 업데이트
-	for (auto& manager : m_pManagers)
+	for (auto& manager : mpManagers)
 	{
-		manager->Update(m_deltaTime);
+		manager->Update(mDeltaTime);
 	}
 
 	// 후처리 업데이트
-	m_pGameEngine->LateUpdate(m_deltaTime);
+	mpGameEngine->LateUpdate(mDeltaTime);
 
 	// 추가 매니저 후처리 업데이트
-	for (auto& manager : m_pManagers)
+	for (auto& manager : mpManagers)
 	{
-		manager->LateUpdate(m_deltaTime);
+		manager->LateUpdate(mDeltaTime);
 	}
 
 	// 렌더링
-	m_pGameEngine->BeginRender();
+	mpGameEngine->BeginRender();
 	
 	// ingui에서 매 프레임 BeginRender시에 마우스 커서를 초기화시키기때문에 여기에 추가함
-	m_pGameEngine->GetInputManager()->SetMouseCursor();	
+	mpGameEngine->GetInputManager()->SetMouseCursor();	
 	
-	m_pGameEngine->Render(m_deltaTime);
-	m_pGameEngine->EndRender();
+	mpGameEngine->Render(mDeltaTime);
+	mpGameEngine->EndRender();
 
 }

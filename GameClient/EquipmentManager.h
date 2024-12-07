@@ -56,8 +56,6 @@ private:
 	// ¹è¿­
 	std::array<std::pair<int, std::string>, 14> mEquipPart;
 
-	int asc[2];
-
 	PhysicsManager* mpPhysicsManager;
 	RenderManager* mpRenderManager;
 	ResourceManager* mpResourceManager;

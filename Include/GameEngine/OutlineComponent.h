@@ -13,7 +13,7 @@ struct OutlineComponent
 {
 public:
 	OutlineComponent(std::shared_ptr<Entity> _owner, float _thickness = 1.01, const Vector3& _color = Vector3(1.f))
-		: Component(_owner), m_thickness(_thickness), m_color(_color)
+		: Component(_owner), mThickness(_thickness), mColor(_color)
 	{}
 
 	std::shared_ptr<Component> Clone() const override
@@ -22,10 +22,10 @@ public:
 	}
 
 public:
-	float m_thickness;	// 두께
-	Vector3 m_color;	// 색
+	float mThickness;	// 두께
+	Vector3 mColor;	// 색
 
-	VSEdgeConstantBufferData m_VSEdgeCBD;
-	PSEdgeConstantBufferData m_PSEdgeCBD;
+	VSEdgeConstantBufferData mVSEdgeCBD;
+	PSEdgeConstantBufferData mPSEdgeCBD;
 
 };

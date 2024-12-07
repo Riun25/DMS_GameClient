@@ -1,7 +1,7 @@
 #include "SampleManager.h"
 
 SampleManager::SampleManager(entt::registry& _registry)
-	: m_registry(_registry)
+	: mRegistry(_registry)
 {
 
 }

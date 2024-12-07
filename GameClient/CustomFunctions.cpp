@@ -145,9 +145,9 @@ CustomFunctions::CustomFunctions()
 
 				if (playerComp.mpTarget->HasComponent<MoneyComponent>())									   //타겟이 돈을 가지고 있는가?
 				{
-					auto& a1 = _entity->GetComponent<Transform>().m_localPosition;
-					//auto& a2 = playerComp.mpTarget->GetComponent<ProjectileComponent>().m_targetPosition;
-					auto& a2 = playerComp.mpTarget->GetComponent<Transform>().m_localPosition;
+					auto& a1 = _entity->GetComponent<Transform>().mLocalPosition;
+					//auto& a2 = playerComp.mpTarget->GetComponent<ProjectileComponent>().mTargetPosition;
+					auto& a2 = playerComp.mpTarget->GetComponent<Transform>().mLocalPosition;
 
 					//float halfTileScale = mTileScale * 0.5f;
 					//Vector2 currentPos = Vector2(static_cast<int>((a1.x + halfTileScale) / mTileScale), static_cast<int>((a1.z + halfTileScale) / mTileScale));
@@ -156,7 +156,7 @@ CustomFunctions::CustomFunctions()
 					float distance = pow(a1.x - a2.x, 2) + pow(a1.z - a2.z, 2);
 
 					// 에이스타 오류를 줄이기 위하여, distance 보간을 추가하도록 한다. (대각선 거리 1.414의 보정  사용)
-					if (playerComp.mpTarget->GetComponent<ProjectileComponent>().m_isTriggered || 1.0f > distance)
+					if (playerComp.mpTarget->GetComponent<ProjectileComponent>().mIsTriggered || 1.0f > distance)
 					{
 						return true;
 					}
@@ -173,9 +173,9 @@ CustomFunctions::CustomFunctions()
 
 				if (playerComp.mpTarget->HasComponent<MoneyComponent>())									   //타겟이 돈을 가지고 있는가?
 				{
-					auto& a1 = _entity->GetComponent<Transform>().m_localPosition;
-					//auto& a2 = playerComp.mpTarget->GetComponent<ProjectileComponent>().m_targetPosition;
-					auto& a2 = playerComp.mpTarget->GetComponent<Transform>().m_localPosition;
+					auto& a1 = _entity->GetComponent<Transform>().mLocalPosition;
+					//auto& a2 = playerComp.mpTarget->GetComponent<ProjectileComponent>().mTargetPosition;
+					auto& a2 = playerComp.mpTarget->GetComponent<Transform>().mLocalPosition;
 
 					//float halfTileScale = mTileScale * 0.5f;
 					//Vector2 currentPos = Vector2(static_cast<int>((a1.x + halfTileScale) / mTileScale), static_cast<int>((a1.z + halfTileScale) / mTileScale));
@@ -184,7 +184,7 @@ CustomFunctions::CustomFunctions()
 					float distance = pow(a1.x - a2.x, 2) + pow(a1.z - a2.z, 2);
 
 					// 에이스타 오류를 줄이기 위하여, distance 보간을 추가하도록 한다. (대각선 거리 1.414의 보정  사용)
-					if (playerComp.mpTarget->GetComponent<ProjectileComponent>().m_isTriggered || 1.5f > distance)
+					if (playerComp.mpTarget->GetComponent<ProjectileComponent>().mIsTriggered || 1.5f > distance)
 					{
 						return true;
 					}
@@ -201,8 +201,8 @@ CustomFunctions::CustomFunctions()
 				auto& playerComp = _entity->GetComponent<PlayerComponent>();
 				if (playerComp.mpTarget->HasComponent<EnemyComponent>())
 				{
-					float distance = (_entity->GetComponent<Transform>().m_localPosition
-						- playerComp.mpTarget->GetComponent<Transform>().m_localPosition).Length();
+					float distance = (_entity->GetComponent<Transform>().mLocalPosition
+						- playerComp.mpTarget->GetComponent<Transform>().mLocalPosition).Length();
 
 					if (playerComp.mAttackRange >= distance)
 					{
@@ -225,8 +225,8 @@ CustomFunctions::CustomFunctions()
 
 				if (enemyComp.mpTarget->HasComponent<PlayerComponent>())
 				{
-					float distance = (_entity->GetComponent<Transform>().m_localPosition
-						- enemyComp.mpTarget->GetComponent<Transform>().m_localPosition).Length();
+					float distance = (_entity->GetComponent<Transform>().mLocalPosition
+						- enemyComp.mpTarget->GetComponent<Transform>().mLocalPosition).Length();
 
 					if (enemyComp.mAttackRange >= distance)
 					{

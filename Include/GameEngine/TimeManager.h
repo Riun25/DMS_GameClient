@@ -34,22 +34,22 @@ public:
 
 	std::chrono::system_clock::time_point GetSystemTime();
 
-	float GetTargetFPS() const { return m_targetFPS; }
+	float GetTargetFPS() const { return mTargetFPS; }
 private:
-	double m_secPerCount = 0;
-	double m_deltaTime = 0;
-	double m_fixedDeltaTime = 1.0 / 60.0;
-	float m_maxDeltaTime = 0.1f;  // 델타 타임을 최대 0.1초로 제한
+	double mSecPerCount = 0;
+	double mDeltaTime = 0;
+	double mFixedDeltaTime = 1.0 / 60.0;
+	float mMaxDeltaTime = 0.1f;  // 델타 타임을 최대 0.1초로 제한
 
-	uint64_t m_baseTime = 0;
-	uint64_t m_pausedTime = 0;
-	uint64_t m_stopTime = 0;
-	uint64_t m_prevTime = 0;
-	uint64_t m_curTime = 0;
+	uint64_t mBaseTime = 0;
+	uint64_t mPausedTime = 0;
+	uint64_t mStopTime = 0;
+	uint64_t mPrevTime = 0;
+	uint64_t mCurTime = 0;
 
-	bool m_stopped = false;
-	float m_targetFPS = 144.f;	// 목표 fps
-	float m_currentFPS = 0.f;     // 현재 FPS를 저장
-	int m_frameCount = 0;
-	double m_elapsedTime = 0.0;
+	bool mStopped = false;
+	float mTargetFPS = 144.f;	// 목표 fps
+	float mCurrentFPS = 0.f;     // 현재 FPS를 저장
+	int mFrameCount = 0;
+	double mElapsedTime = 0.0;
 };

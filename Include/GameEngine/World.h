@@ -114,10 +114,10 @@ public:
 	std::shared_ptr<IData> GetWorldData(const std::string& _name);
 
 protected:
-	UID m_uid;													// 객체의 고유식별자
-	std::unordered_map<UID, std::shared_ptr<Scene>> m_pScenes;	// 월드에 존재하는 씬 맵핑
-	std::shared_ptr<Scene> m_pCurrentScene;						// 현재 씬
-	std::unordered_map<std::string, std::shared_ptr<IData>> m_pWorldData;						// 월드에서 사용되는 데이터들
-	entt::registry& m_registry;									// 엔티티 레지스트리
-	UID m_previousScene;										// 이전 씬
+	UID mUid;													// 객체의 고유식별자
+	std::unordered_map<UID, std::shared_ptr<Scene>> mpScenes;	// 월드에 존재하는 씬 맵핑
+	std::shared_ptr<Scene> mpCurrentScene;						// 현재 씬
+	std::unordered_map<std::string, std::shared_ptr<IData>> mpWorldData;						// 월드에서 사용되는 데이터들
+	entt::registry& mRegistry;									// 엔티티 레지스트리
+	UID mPreviousScene;										// 이전 씬
 };

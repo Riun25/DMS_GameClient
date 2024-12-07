@@ -52,32 +52,32 @@ public:
 
 private:
 	// 매니저 객체들의 포인터
-	TimeManager* m_pTimeManager;
-	InputManager* m_pInputManager;
-	ResourceManager* m_pResourceManager;
-	SoundManager* m_pSoundManager;
-	EventManager* m_pEventManager;
-	WorldManager* m_pWorldManager;
-	PhysicsManager* m_pPhysicsManager;
-	RenderManager* m_pRenderManager;
-	UIManager* m_pUIManager;
-	EntityManager* m_pEntityManager;
-	FileManager* m_pFileManager;
-	GameInfo* m_pInfo;
+	TimeManager* mpTimeManager;
+	InputManager* mpInputManager;
+	ResourceManager* mpResourceManager;
+	SoundManager* mpSoundManager;
+	EventManager* mpEventManager;
+	WorldManager* mpWorldManager;
+	PhysicsManager* mpPhysicsManager;
+	RenderManager* mpRenderManager;
+	UIManager* mpUIManager;
+	EntityManager* mpEntityManager;
+	FileManager* mpFileManager;
+	GameInfo* mpInfo;
 
 	// 그래픽스 엔진 객체
-	std::shared_ptr<DearsGraphicsEngine> m_pGraphicsEngine;
+	std::shared_ptr<DearsGraphicsEngine> mpGraphicsEngine;
 
 public:
-	entt::registry m_registry;
+	entt::registry mRegistry;
 
-	HWND m_hWnd;
-	int m_width;
-	int m_height;
+	HWND mHWnd;
+	int mWidth;
+	int mHeight;
 
 private:
-	float m_fixedDeltaTime;
-	float m_deltaTime;
-	float m_accumulator;
+	float mFixedDeltaTime;
+	float mDeltaTime;
+	float mAccumulator;
 };
 

@@ -15,6 +15,6 @@ public:
 
 
 public:
-	bool m_onGround;
+	bool mIsOnGround;
 
 };

@@ -28,7 +28,7 @@ void DeadState::Enter(std::shared_ptr<Entity> _entity)
 void DeadState::Update(float _dTime, std::shared_ptr<Entity> _entity)
 {
 	// 엔티티의 위치를 고정
-	//mpPhysicsManager->UpdatePosition(_entity, _entity->GetComponent<Transform>().m_localPosition);
+	//mpPhysicsManager->UpdatePosition(_entity, _entity->GetComponent<Transform>().mLocalPosition);
 	if (_entity->HasComponent<Rigidbody>())
 	{
 		mpPhysicsManager->SetVelocity(_entity, Vector3());

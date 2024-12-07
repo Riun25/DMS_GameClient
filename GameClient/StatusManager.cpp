@@ -84,8 +84,8 @@ void StatusManager::UpdateAllyStatus(std::shared_ptr<Entity> _entity, const std:
 			// 체력 새로 적용 및 현재 체력 비율은 일정하게 유지
 			playerComp.mMaxHP = statusTable.maxHP;
 			playerComp.mHP = playerComp.mMaxHP * currentHP;
-			_entity->GetComponent<Transform>().m_localScale = Vector3(statusTable.unitSize * pow(mBuffUnitSizeCoef, _buffLv));
-			//_entity->GetComponent<CapsuleCollider>().m_radius = 30.f * _entity->GetComponent<Transform>().m_localScale.x * pow(mBuffUnitSizeCoef, _buffLv);
+			_entity->GetComponent<Transform>().mLocalScale = Vector3(statusTable.unitSize * pow(mBuffUnitSizeCoef, _buffLv));
+			//_entity->GetComponent<CapsuleCollider>().m_radius = 30.f * _entity->GetComponent<Transform>().mLocalScale.x * pow(mBuffUnitSizeCoef, _buffLv);
 			playerComp.mAttackPower = statusTable.attackPower;
 			playerComp.mAttackSpeed = statusTable.attackSpeed;
 			playerComp.mMoveOriSpeed = statusTable.moveSpeed;
@@ -107,7 +107,7 @@ void StatusManager::UpdateStautsNClass(std::shared_ptr<Entity> _entity, const st
 			playerComp.mPlaceMoney = statusTable.placeMoney;
 			playerComp.mMaxHP = statusTable.maxHP;
 			playerComp.mHP = playerComp.mMaxHP;
-			_entity->GetComponent<Transform>().m_localScale = Vector3(statusTable.unitSize * pow(mBuffUnitSizeCoef, 0));
+			_entity->GetComponent<Transform>().mLocalScale = Vector3(statusTable.unitSize * pow(mBuffUnitSizeCoef, 0));
 			playerComp.mAttackPower =  statusTable.attackPower;
 			playerComp.mAttackSpeed = statusTable.attackSpeed;
 			playerComp.mMoveOriSpeed = statusTable.moveSpeed;
@@ -126,9 +126,4 @@ void StatusManager::UpdateStautsNClass(std::shared_ptr<Entity> _entity, const st
 std::string StatusManager::ConvertClasstypeToString(ClassType _classTypeEnum)
 {
 	 return mpClassManager->ConvertClasstypeToString(_classTypeEnum);
-}
-
-std::vector<std::pair<std::string, ClassType>>* StatusManager::GetClassTypeVec()
-{
-	return mpClassManager->GetClassTypeVec();
 }

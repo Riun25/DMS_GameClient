@@ -26,7 +26,7 @@ public:
 	///--------------------------------------------------------------
 
 private:
-	entt::registry& m_registry;
+	entt::registry& mRegistry;
 	std::shared_ptr<DearsGraphicsEngine> mpGraphicsEngine;	// 그래픽 엔진 객체
 
 	void SettingLoopAnimation(std::shared_ptr<Entity> _entity);

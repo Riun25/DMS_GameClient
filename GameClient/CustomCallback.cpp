@@ -13,7 +13,7 @@
 #include "MoneyComponent.h"
 
 CustomCallback::CustomCallback(PhysicsManager* _pPhysicsManager, EventManager* _pEventManager, EntityManager* _pEntityManager)
-	:m_pPhysicsManager(_pPhysicsManager), EventListener(_pEventManager), m_pEntityManager(_pEntityManager)
+	:mpPhysicsManager(_pPhysicsManager), EventListener(_pEventManager), mpEntityManager(_pEntityManager)
 {
 }
 
@@ -54,14 +54,14 @@ void CustomCallback::onContact(const physx::PxContactPairHeader& _pairHeader, co
 				if ((filterData0.word0 & TYPE_GOLD) && (filterData1.word0 & TYPE_GROUND))
 				{
 					filterData0.word1 |= ATTR_ON_GROUND;
-					m_pPhysicsManager->SetFilterData(shape0, filterData0);
-					m_pPhysicsManager->SetFilterData(shape1, filterData1);
+					mpPhysicsManager->SetFilterData(shape0, filterData0);
+					mpPhysicsManager->SetFilterData(shape1, filterData1);
 				}
 				if ((filterData1.word0 & TYPE_GOLD) && (filterData0.word0 & TYPE_GROUND))
 				{
 					filterData1.word1 |= ATTR_ON_GROUND;
-					m_pPhysicsManager->SetFilterData(shape0, filterData0);
-					m_pPhysicsManager->SetFilterData(shape1, filterData1);
+					mpPhysicsManager->SetFilterData(shape0, filterData0);
+					mpPhysicsManager->SetFilterData(shape1, filterData1);
 				}
 
 				// 
@@ -138,7 +138,7 @@ void CustomCallback::onTrigger(physx::PxTriggerPair* _pairs, physx::PxU32 _count
 				{
 					if (filterData1.word0 & TYPE_WEAPON)
 					{
-						//m_pEventManager->TriggerEvent(Event("HandleMeleeWeaponHit", actorPair));
+						//mpEventManager->TriggerEvent(Event("HandleMeleeWeaponHit", actorPair));
 						HandleMeleeWeaponHit(actor0, actor1);
 					}
 					else if (filterData1.word0 & TYPE_GOLD)
@@ -212,13 +212,13 @@ void CustomCallback::HandleProjectileHit(physx::PxRigidActor* _unit, physx::PxRi
 	auto second = _projectile;
 
 	// 유닛의 엔티티
-	auto firstEntity = m_pPhysicsManager->GetEntityFromActor(first);
+	auto firstEntity = mpPhysicsManager->GetEntityFromActor(first);
 	// 투사체의 엔티티
-	auto secondEntity = m_pPhysicsManager->GetEntityFromActor(second);
+	auto secondEntity = mpPhysicsManager->GetEntityFromActor(second);
 
 	DLOG(LOG_INFO, "HandleProjectileHit: " + std::to_string(firstEntity->GetUID()) + '/' + std::to_string(secondEntity->GetUID()));
 	// 투사체의 공격력
-	auto& damage = secondEntity->GetComponent<ProjectileComponent>().m_damage;
+	auto& damage = secondEntity->GetComponent<ProjectileComponent>().mDamage;
 
 	// 투사체의 공격력만큼 유닛의 HP를 감소시킴
 	if (firstEntity->HasComponent<PlayerComponent>())
@@ -227,7 +227,7 @@ void CustomCallback::HandleProjectileHit(physx::PxRigidActor* _unit, physx::PxRi
 		//std::cout << "hp: " << hp << '/';
 		hp -= damage;
 		//std::cout << "damage: " << damage << "/current hp: " << hp;
-		secondEntity->GetComponent<ProjectileComponent>().m_isTriggered = true;
+		secondEntity->GetComponent<ProjectileComponent>().mIsTriggered = true;
 	}
 	else if (firstEntity->HasComponent<EnemyComponent>())
 	{
@@ -235,7 +235,7 @@ void CustomCallback::HandleProjectileHit(physx::PxRigidActor* _unit, physx::PxRi
 		//std::cout << "hp: " << hp << '/';
 		hp -= damage;
 		//std::cout << "damage: " << damage << "/current hp: " << hp;
-		secondEntity->GetComponent<ProjectileComponent>().m_isTriggered = true;
+		secondEntity->GetComponent<ProjectileComponent>().mIsTriggered = true;
 	}
 }
 
@@ -251,9 +251,9 @@ void CustomCallback::HandleMeleeWeaponHit(physx::PxRigidActor* _unit, physx::PxR
 	auto second = _weapon;
 
 	// 공격받는 유닛의 엔티티
-	auto firstEntity = m_pPhysicsManager->GetEntityFromActor(first);
+	auto firstEntity = mpPhysicsManager->GetEntityFromActor(first);
 	// 무기의 엔티티
-	auto secondEntity = m_pPhysicsManager->GetEntityFromActor(second);
+	auto secondEntity = mpPhysicsManager->GetEntityFromActor(second);
 
 	DLOG(LOG_INFO, "HandleMeleeWeaponHit: " + std::to_string(firstEntity->GetUID()) + '/' + std::to_string(secondEntity->GetUID()));
 
@@ -265,9 +265,9 @@ void CustomCallback::HandleMeleeWeaponHit(physx::PxRigidActor* _unit, physx::PxR
 	{
 		// 공격한 캐릭터의 공격력
 		float attackPower = 0.f;
-		if (secondEntity->GetComponent<Transform>().m_pParent->m_pOwner->HasComponent<EnemyComponent>())
+		if (secondEntity->GetComponent<Transform>().mpParent->mpOwner->HasComponent<EnemyComponent>())
 		{
-			attackPower = secondEntity->GetComponent<Transform>().m_pParent->m_pOwner->GetComponent<EnemyComponent>().mAttackPower;
+			attackPower = secondEntity->GetComponent<Transform>().mpParent->mpOwner->GetComponent<EnemyComponent>().mAttackPower;
 		}
 
 		// 공격한 캐릭터의 attakPower만큼 HP를 감소시킴
@@ -277,7 +277,7 @@ void CustomCallback::HandleMeleeWeaponHit(physx::PxRigidActor* _unit, physx::PxR
 	else if (firstEntity->HasComponent<EnemyComponent>())
 	{
 		// 공격한 캐릭터의 공격력
-		auto& attackPower = secondEntity->GetComponent<Transform>().m_pParent->m_pOwner->GetComponent<PlayerComponent>().mAttackPower;
+		auto& attackPower = secondEntity->GetComponent<Transform>().mpParent->mpOwner->GetComponent<PlayerComponent>().mAttackPower;
 
 		// 공격한 캐릭터의 attakPower만큼 HP를 감소시킴
 		auto& hp = firstEntity->GetComponent<EnemyComponent>().mHP;
@@ -298,12 +298,12 @@ void CustomCallback::HandleCoinCollision(physx::PxRigidActor* _unit, physx::PxRi
 	auto second = _gold;
 
 	// 유닛의 엔티티
-	auto firstEntity = m_pPhysicsManager->GetEntityFromActor(first);
+	auto firstEntity = mpPhysicsManager->GetEntityFromActor(first);
 	// 동전의 엔티티
-	auto secondEntity = m_pPhysicsManager->GetEntityFromActor(second);
+	auto secondEntity = mpPhysicsManager->GetEntityFromActor(second);
 	DLOG(LOG_INFO, "HandleCoinCollision: " + std::to_string(firstEntity->GetUID()) + '/' + std::to_string(secondEntity->GetUID()));
 
-	if (!secondEntity->GetComponent<ProjectileComponent>().m_isTriggered)
+	if (!secondEntity->GetComponent<ProjectileComponent>().mIsTriggered)
 	{
 
 		if (firstEntity->HasComponent<PlayerComponent>())
@@ -311,7 +311,7 @@ void CustomCallback::HandleCoinCollision(physx::PxRigidActor* _unit, physx::PxRi
 
 			if (firstEntity->GetComponent<PlayerComponent>().mpTarget == secondEntity)
 			{
-				secondEntity->GetComponent<ProjectileComponent>().m_isTriggered = true;
+				secondEntity->GetComponent<ProjectileComponent>().mIsTriggered = true;
 			}
 
 		}
@@ -319,15 +319,15 @@ void CustomCallback::HandleCoinCollision(physx::PxRigidActor* _unit, physx::PxRi
 		{
 			if (firstEntity->GetComponent<EnemyComponent>().mpTarget == secondEntity)
 			{
-				secondEntity->GetComponent<ProjectileComponent>().m_isTriggered = true;
+				secondEntity->GetComponent<ProjectileComponent>().mIsTriggered = true;
 			}
 		}
 
-		secondEntity->GetComponent<MoneyComponent>().m_pTarget = firstEntity;
+		secondEntity->GetComponent<MoneyComponent>().mpTarget = firstEntity;
 	}
 
 	// 	// 동전의 금액
-	// 	auto& amount = secondEntity->GetComponent<MoneyComponent>().m_amount;
+	// 	auto& amount = secondEntity->GetComponent<MoneyComponent>().mAmount;
 	// 
 	// 	// 캐릭터에게 금액만큼 소지금을 추가
 	// 	firstEntity->GetComponent<PlayerComponent>().mMoney + amount;
@@ -343,11 +343,11 @@ void CustomCallback::HandleWallCollision(physx::PxRigidActor* _wall, physx::PxRi
 	auto second = _projectile;
 
 	// 벽의 엔티티
-	auto firstEntity = m_pPhysicsManager->GetEntityFromActor(first);
+	auto firstEntity = mpPhysicsManager->GetEntityFromActor(first);
 	// 투사체의 엔티티
-	auto secondEntity = m_pPhysicsManager->GetEntityFromActor(second);
+	auto secondEntity = mpPhysicsManager->GetEntityFromActor(second);
 
 	DLOG(LOG_INFO, "HandleWallCollision: " + std::to_string(firstEntity->GetUID()) + '/' + std::to_string(secondEntity->GetUID()));
-	secondEntity->GetComponent<ProjectileComponent>().m_isTriggered = true;
+	secondEntity->GetComponent<ProjectileComponent>().mIsTriggered = true;
 }
 

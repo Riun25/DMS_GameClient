@@ -66,7 +66,7 @@ void MoveState::Exit(std::shared_ptr<Entity> _entity)
 	if (tempTarget->HasComponent<Transform>())
 	{
 		// 캐릭터가 보고 있는 타깃을 보도록 한 번 더 점검
-		mpFSMHelper->LookAtTarget(trsComp.m_localPosition, tempTarget->GetComponent<Transform>().m_localPosition, playerComp.tempDirection, trsComp.m_localRotation.y);
+		mpFSMHelper->LookAtTarget(trsComp.mLocalPosition, tempTarget->GetComponent<Transform>().mLocalPosition, playerComp.tempDirection, trsComp.mLocalRotation.y);
 	}
 
 	/// 디버깅용
@@ -92,13 +92,13 @@ void MoveState::FixedUpdate(float _fixedTime, std::shared_ptr<Entity> _entity)
 		auto& previousTarget = playerComp.mPreviousTarget; // 이전 타겟 : 현재 지정된 타겟과 동일한지 확인하여, 다르면 경로를 재계산하기 위해 선언함
 		auto& previousTargetPos = playerComp.mPreviousTargetPos;			 // 이전 타깃의 위치
 		auto& tempTarget = playerComp.mpTarget;			 // 현재 타겟 : 현재 지정된 타겟
-		auto& position = trsComp.m_localPosition;			 // 유닛의 위치
+		auto& position = trsComp.mLocalPosition;			 // 유닛의 위치
 		auto& speed = playerComp.mMoveSpeed;				 // 유닛의 속도
 		auto& direction = playerComp.tempDirection;		 // 유닛의 방향
 		auto& pathdirection = playerComp.pathDirection;		 // 유닛의 방향(경로 방향)
 		size_t& currentPathIndex = playerComp.mPathIndex;	 // path 인덱스
 		Vector2& currentPos = playerComp.mAstarPos;	 // tempRawPath
-		Vector3& targetPos = tempTarget->GetComponent<Transform>().m_localPosition;
+		Vector3& targetPos = tempTarget->GetComponent<Transform>().mLocalPosition;
 		Vector2 goalXZPos = Vector2();
 
 		/// 현재의 좌표를 타일 내에 존재하는 중점으로 조정한다. (Astar에서는 타일 중점으로 계산을 하기 때문이다.)
@@ -128,7 +128,7 @@ void MoveState::FixedUpdate(float _fixedTime, std::shared_ptr<Entity> _entity)
 			currentPathIndex = 0;
 
 			// 캐릭터가 바라보고 있는 방향을 업데이트
-			mpFSMHelper->LookAtTarget(position, targetPos, direction, trsComp.m_localRotation.y);
+			mpFSMHelper->LookAtTarget(position, targetPos, direction, trsComp.mLocalRotation.y);
 
 			// 타깃이 달라지면 같은 상태에서도 애니메이션이 바뀌어야 한다. 타깃이 바뀌는 특수 상황에서만 애니메이션이 변경된다.
 			if (tempTarget->HasComponent<EnemyComponent>())
@@ -151,7 +151,7 @@ void MoveState::FixedUpdate(float _fixedTime, std::shared_ptr<Entity> _entity)
 				currentPathIndex = 0;
 
 				// 캐릭터가 바라보고 있는 방향을 업데이트
-				mpFSMHelper->LookAtPathDir(position, targetPos, playerComp.mpPath, currentPathIndex, pathdirection, trsComp.m_localRotation.y);
+				mpFSMHelper->LookAtPathDir(position, targetPos, playerComp.mpPath, currentPathIndex, pathdirection, trsComp.mLocalRotation.y);
 				return;
 			}
 		}
@@ -164,7 +164,7 @@ void MoveState::FixedUpdate(float _fixedTime, std::shared_ptr<Entity> _entity)
 			currentPathIndex = 0;
 
 			// 캐릭터가 바라보고 있는 방향을 업데이트
-			mpFSMHelper->LookAtPathDir(position, targetPos, playerComp.mpPath, currentPathIndex, pathdirection, trsComp.m_localRotation.y);
+			mpFSMHelper->LookAtPathDir(position, targetPos, playerComp.mpPath, currentPathIndex, pathdirection, trsComp.mLocalRotation.y);
 		}
 		else
 		{
@@ -179,7 +179,7 @@ void MoveState::FixedUpdate(float _fixedTime, std::shared_ptr<Entity> _entity)
 				}
 
 				currentPathIndex++;
-				mpFSMHelper->LookAtPathDir(position, targetPos, playerComp.mpPath, currentPathIndex, pathdirection, trsComp.m_localRotation.y);
+				mpFSMHelper->LookAtPathDir(position, targetPos, playerComp.mpPath, currentPathIndex, pathdirection, trsComp.mLocalRotation.y);
 			}
 			pathdirection.Normalize();
 		}
@@ -210,7 +210,7 @@ void MoveState::FixedUpdate(float _fixedTime, std::shared_ptr<Entity> _entity)
 				// 경로 재계산
 				mpFSMHelper->CalculatePath(playerComp.mpPath, currentPos, goalXZPos);
 				currentPathIndex = 0;
-				mpFSMHelper->LookAtPathDir(position, targetPos, playerComp.mpPath, currentPathIndex, pathdirection, trsComp.m_localRotation.y);
+				mpFSMHelper->LookAtPathDir(position, targetPos, playerComp.mpPath, currentPathIndex, pathdirection, trsComp.mLocalRotation.y);
 				return;
 			}
 		}

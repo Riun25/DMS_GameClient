@@ -72,9 +72,9 @@ public:
 	IData* GetSceneData();
 
 private:
-	entt::registry& m_registry;
-	std::unordered_map<UID, std::shared_ptr<World>> m_pWorld;	// 월드 맵핑
-	std::shared_ptr<World> m_pCurrentWorld;						// 현재 월드
+	entt::registry& mRegistry;
+	std::unordered_map<UID, std::shared_ptr<World>> mpWorld;	// 월드 맵핑
+	std::shared_ptr<World> mpCurrentWorld;						// 현재 월드
 
-	bool m_shouldQuit = false;	// 엔진을 종료할 것인지 확인하는 플래그
+	bool mShouldQuit = false;	// 엔진을 종료할 것인지 확인하는 플래그
 };

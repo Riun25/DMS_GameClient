@@ -37,13 +37,13 @@ private:
 	void Update() override;
 
 private:
-    std::unique_ptr<GameEngine> m_pGameEngine;          // 게임 엔진
-    std::vector<std::shared_ptr<IManager>> m_pManagers; // 추가로 작성한 매니저들
+    std::unique_ptr<GameEngine> mpGameEngine;          // 게임 엔진
+    std::vector<std::shared_ptr<IManager>> mpManagers; // 추가로 작성한 매니저들
 
-    float m_accumulator = 0;
-    float m_accumulator2 = 0;
+    float mAccumulator = 0;
+    float mAccumulator2 = 0;
 
-    float m_fixedDeltaTime;
-    float m_deltaTime;
+    float mFixedDeltaTime;
+    float mDeltaTime;
 };
 

@@ -43,8 +43,8 @@ public:
 // alpha값과 state 상태를 원하는 걸로 설정한 후, 관련된 함수를 호출하면 실행이 완료된 후 FadeInOutState::NONE가 된다.
 //
 /// 초기화 부분
-//auto ui5 = m_pEntityManager->CreateEntity("FaidInOut");
-//m_pUIManager->AddUI(ui5, "Black.png", Vector2(0, 0), Vector2(1920, 1080), 2, Vector4(1.f, 1.0f, 1.0f, 1.0f), true);
+//auto ui5 = mpEntityManager->CreateEntity("FaidInOut");
+//mpUIManager->AddUI(ui5, "Black.png", Vector2(0, 0), Vector2(1920, 1080), 2, Vector4(1.f, 1.0f, 1.0f, 1.0f), true);
 //ui5->AddComponent<FadeInOut>(&ui5->GetComponent<Texture2D>(), 0.0f, FadeInOutState::FADE_IN);
 
 /// 실행 업데이트 부분

@@ -160,18 +160,18 @@ public:
 private:
 	// 	struct Impl;
 	// 	std::unique_ptr<Impl> m_pImpl;
-	GameEngine* m_pEngine;
-	entt::registry& m_registry;
+	GameEngine* mpEngine;
+	entt::registry& mRegistry;
 
 	// physx 관련 멤버들
-	physx::PxDefaultAllocator m_allocator;				// 기본 메모리 할당자
-	physx::PxDefaultErrorCallback m_errorCallback;		// 기본 에러 콜백
-	physx::PxFoundation* m_pFoundation;					// Foundation 객체, physx의 전반적인 설정 및 리소스를 관리
-	physx::PxPhysics* m_pPhysics;						// Physics 객체
-	physx::PxDefaultCpuDispatcher* m_pDispatcher;		// CPU 디스패쳐, 병렬 시뮬레이션을 위해 필요
-	physx::PxScene* m_pScene;							// physx Scene 객체
-	physx::PxMaterial* m_pMaterial;						// 디폴트로 사용 될 physx Material 객체
-	physx::PxControllerManager* m_pControllerManager;	// physx Controller Manager 객체
+	physx::PxDefaultAllocator mAllocator;				// 기본 메모리 할당자
+	physx::PxDefaultErrorCallback mErrorCallback;		// 기본 에러 콜백
+	physx::PxFoundation* mpFoundation;					// Foundation 객체, physx의 전반적인 설정 및 리소스를 관리
+	physx::PxPhysics* mpPhysics;						// Physics 객체
+	physx::PxDefaultCpuDispatcher* mpDispatcher;		// CPU 디스패쳐, 병렬 시뮬레이션을 위해 필요
+	physx::PxScene* mpScene;							// physx Scene 객체
+	physx::PxMaterial* mpMaterial;						// 디폴트로 사용 될 physx Material 객체
+	physx::PxControllerManager* mpControllerManager;	// physx Controller Manager 객체
 
 	// 
 #ifdef _DEBUG
@@ -184,10 +184,10 @@ private:
  
  	//std::vector<physx::PxMaterial*> m_pMaterials;
 
-	bool m_simulationOn = true;
+	bool mIsSimulationOn = true;
 
-	std::queue<std::pair<physx::PxShape*, physx::PxFilterData>> m_filterDataUpdates;
+	std::queue<std::pair<physx::PxShape*, physx::PxFilterData>> mFilterDataUpdates;
 
-	std::unique_ptr<entt::observer> m_pRigidbodyObserber;
+	std::unique_ptr<entt::observer> mpRigidbodyObserber;
 };
 

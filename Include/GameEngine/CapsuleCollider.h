@@ -15,7 +15,7 @@ public:
 	CapsuleCollider(std::shared_ptr<Entity> _owner, bool _isTrigger = false, const Vector3& _center = Vector3()
 		, float _radius = 1.f, float _height = 1.f, int _direction = 1)
 		: Collider(_owner, _isTrigger, _center, Vector3(1.f))
-		, m_radius(_radius), m_height(_height), m_direction(_direction)
+		, mRadius(_radius), mHeight(_height), mDirection(_direction)
 	{}
 
 	std::shared_ptr<Component> Clone() const override
@@ -24,7 +24,7 @@ public:
 	}
 
 public:
-	float m_radius;        // Ä¸½¶ÀÇ ¹İÁö¸§
-	float m_height;        // Ä¸½¶ÀÇ ³ôÀÌ
-	int m_direction;       // Ä¸½¶ÀÇ ¹æÇâ (0: XÃà, 1: YÃà, 2: ZÃà)	// Vector3·Î ¼öÁ¤ÇÒ°Í
+	float mRadius;        // Ä¸½¶ÀÇ ¹İÁö¸§
+	float mHeight;        // Ä¸½¶ÀÇ ³ôÀÌ
+	int mDirection;       // Ä¸½¶ÀÇ ¹æÇâ (0: XÃà, 1: YÃà, 2: ZÃà)	// Vector3·Î ¼öÁ¤ÇÒ°Í
 };

@@ -68,8 +68,6 @@ public:
 	ButtonState mButtonState;
 	bool mIsDrag; // 드래그를 기능으로 쓰려면 활성화할 것
 
-
-	std::function<void()> mOnClick; // 음, 이건 콜백함수라는데 사용을 보고 좀 더 이해해야될 거 같다. 지금은 이해하기 어려워.
 	int mOrder; // 버튼의 순서를 나타내는 변수 (레이어와 비슷하게, 순서를 강제해서 다른 버튼이 동시에 눌리지 않게 한다.)
 	bool mIsEnable; // 버튼의 활성화 여부를 나타내는 플래그 : 클릭 불가 및 시각적으로도 보이지 않음
 	bool mCanDrag; // UI 매니저 내부에서 사용하는 플래그이므로 건들지 말 것 

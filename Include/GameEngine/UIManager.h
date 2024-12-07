@@ -15,9 +15,9 @@ class UIManager
 public:
 	UIManager() = delete;
 	UIManager(entt::registry& _registry, InputManager* _pInputManager, std::shared_ptr<DearsGraphicsEngine> _pGraphicsEngine
-		, GameInfo* _info)
+		, GameInfo* _pInfo)
 		: mRegistry(_registry), mpInputManager(_pInputManager), mpGraphicsEngine(_pGraphicsEngine)
-		, mIsAlreadyFontLoaded(false), maxNumLayer(1), mViewMatrix(Matrix()), mProjMatrix(Matrix()), mpInfo(_info) {}
+		, mIsAlreadyFontLoaded(false), mMaxNumLayer(1), mViewMatrix(Matrix()), mProjMatrix(Matrix()), mpInfo(_pInfo) {}
 
 	~UIManager() = default;
 
@@ -172,14 +172,14 @@ private:
 	InputManager* mpInputManager;
 	bool mIsAlreadyFontLoaded; // 이미 폰트가 추가됐는지 확인해서, 추가 완료를 막는 플래그
 
-	int maxNumLayer;  // 현재 사용된 최대 레이어 번호
+	int mMaxNumLayer;  // 현재 사용된 최대 레이어 번호
 	Matrix mViewMatrix; // 카메라의 뷰행렬
 	Matrix mProjMatrix; // 카메라의 프로젝션 행렬
 
 	GameInfo* mpInfo;
 
-	bool m_rendFPS = true;
-	bool m_rendCameraInfo = true;
+	bool mRendFPS = true;
+	bool mRendCameraInfo = true;
 
 private:
 

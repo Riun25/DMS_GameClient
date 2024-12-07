@@ -140,7 +140,7 @@ void PlayerSystem::AddUnit(std::shared_ptr<Entity> _entity, const std::string& _
 {
 	// 테이블로부터 기본 스텟과 메쉬를 추가한다.
 	mpStatusManager->AddInitStatus(_entity, _classType);
-	_entity->GetComponent<Transform>().m_localPosition = _pos;
+	_entity->GetComponent<Transform>().mLocalPosition = _pos;
 
 	// 장비를 추가한다.
 	mpEquipmentManager->AddInitUnitEquipment(_entity, _classType);
@@ -196,14 +196,14 @@ void PlayerSystem::AddPhysics(std::shared_ptr<Entity> _entity)
 {
 	// 피직스 정보를 추가한다.
 	_entity->AddComponent<CapsuleCollider>(false, Vector3(0, 0.78f, 0), 0.3f, 0.38f);
-	//_entity->GetComponent<CapsuleCollider>().m_radius = 30 * _entity->GetComponent<Transform>().m_localScale.x/*0.4 * 100 * pow(mBuffUnitSizeCoef, _buffLv)*/;
+	//_entity->GetComponent<CapsuleCollider>().m_radius = 30 * _entity->GetComponent<Transform>().mLocalScale.x/*0.4 * 100 * pow(mBuffUnitSizeCoef, _buffLv)*/;
 	_entity->AddComponent<Rigidbody>(50.f, 0.f, 0.f, true, false, 0.5, 0.8, 0.8);
 
 	// 부족한 정보 업데이트
 	if (_entity->HasComponent<PlayerComponent>())
 	{
 		//_entity->GetComponent<Tr
-		//_entity->GetComponent<PlayerComponent>().mAstarPos = Vector2(_entity->GetComponent<Transform>().m_localPosition.x, _entity->GetComponent<Transform>().m_localPosition.z);
+		//_entity->GetComponent<PlayerComponent>().mAstarPos = Vector2(_entity->GetComponent<Transform>().mLocalPosition.x, _entity->GetComponent<Transform>().mLocalPosition.z);
 		mpPhysicsManager->AddPhysicsObject(_entity->GetUID(), TYPE_UNIT, ATTR_ALLY);
 	}
 	else if (_entity->HasComponent<EnemyComponent>())
@@ -234,13 +234,13 @@ void PlayerSystem::SetInitializeState(std::shared_ptr<Entity> _entity, State _st
 	{
 		auto& playerComponent = _entity->GetComponent<PlayerComponent>();
 		playerComponent.mCurrentSM = mpAllyFSM->GetState(_state);
-		playerComponent.mCurrentSM->Enter(playerComponent.m_pOwner);
+		playerComponent.mCurrentSM->Enter(playerComponent.mpOwner);
 	}
 	else if (_entity->HasComponent<EnemyComponent>())
 	{
 		auto& enemyComponent = _entity->GetComponent<EnemyComponent>();
 		enemyComponent.mCurrentSM = mpEnemyFSM->GetState(_state);
-		enemyComponent.mCurrentSM->Enter(enemyComponent.m_pOwner);
+		enemyComponent.mCurrentSM->Enter(enemyComponent.mpOwner);
 	}
 }
 
@@ -259,10 +259,10 @@ void PlayerSystem::ShowState(std::shared_ptr<Entity> _entity)
 {
 	// 폰트 추가
 	auto& textComp = _entity->AddComponent<Text>(u8" ", "KIMM_Bold(60).ttf", Vector2(), 2, true, Vector4(0.0f, 0.0f, 0.0f, 1.0f));
-	textComp.m_hasDepth = true;
-	textComp.m_idx = TEXT_IDX::FLOAT2;
-	textComp.m_offset = Vector3(0, 5, 0);
-	textComp.m_scale = 0.4f;
+	textComp.mHasDepth = true;
+	textComp.mIdx = TEXT_IDX::FLOAT2;
+	textComp.mOffset = Vector3(0, 5, 0);
+	textComp.mScale = 0.4f;
 }
 
 void PlayerSystem::UpdateStateText(std::shared_ptr<Entity> _entity)
@@ -305,11 +305,11 @@ void PlayerSystem::UpdateStateText(std::shared_ptr<Entity> _entity)
 
 	// std::string을 std::u8string으로 변환
 	auto& textComp = _entity->GetComponent<Text>();
-	textComp.m_text = stateText;
-	Vector3& playerPos = _entity->GetComponent<Transform>().m_localPosition;
-	textComp.m_worldPosition = playerPos;
-	textComp.m_num3 = playerPos.x;
-	textComp.m_num4 = playerPos.z;
+	textComp.mText = stateText;
+	Vector3& playerPos = _entity->GetComponent<Transform>().mLocalPosition;
+	textComp.mWorldPosition = playerPos;
+	textComp.mNum3 = playerPos.x;
+	textComp.mNum4 = playerPos.z;
 }
 
 void PlayerSystem::DetectGroundMoney()
@@ -345,7 +345,7 @@ void PlayerSystem::DetectGroundMoney()
 			if (playerComp.mOwnState != State::DEAD) // 타겟이 죽었으면 행동하지 않는다.
 			{
 				// 현재 유닛과 가장 가까운 돈의 엔티티와 거리값을 우선순위 큐로 뽑아온다.
-				std::pair<std::shared_ptr<Entity>, float> nearlistMoney = FindClosestEntity(trsComp.m_localPosition);
+				std::pair<std::shared_ptr<Entity>, float> nearlistMoney = FindClosestEntity(trsComp.mLocalPosition);
 
 				// 돈의 인식범위 이내이고, 돈이 nullptr이 아니면 타겟으로 지정한다. 이 부분에서 ground를 계산하는 것은, 우선순위 큐에서 벡터마다 Get을 하는 것보다 여기서 한 번 하는 게 낫기 때문이다..
 				if (playerComp.mRecogRange > nearlistMoney.second && nearlistMoney.first != nullptr)
@@ -372,7 +372,7 @@ void PlayerSystem::DetectGroundMoney()
 			//if (enemyComp.mOwnState != State::DEAD) // 타겟이 죽었으면 행동하지 않는다.
 			//{
 			//	// 현재 유닛과 가장 가까운 돈의 엔티티와 거리값을 우선순위 큐로 뽑아온다.
-			//	std::pair<std::shared_ptr<Entity>, float> nearlistMoney = FindClosestEntity(trsComp.m_localPosition);
+			//	std::pair<std::shared_ptr<Entity>, float> nearlistMoney = FindClosestEntity(trsComp.mLocalPosition);
 
 			//	// 돈의 인식범위 이내이고, 돈이 nullptr이 아니면 타겟으로 지정한다.
 			//	if (enemyComp.mRecogRange > nearlistMoney.second && nearlistMoney.first != nullptr)
@@ -391,7 +391,7 @@ void PlayerSystem::DetectGroundMoney()
 			if (enemyComp->mOwnState != State::DEAD) // 타겟이 죽었으면 행동하지 않는다.
 			{
 				// 현재 유닛과 가장 가까운 돈의 엔티티와 거리값을 우선순위 큐로 뽑아온다.
-				std::pair<std::shared_ptr<Entity>, float> nearlistMoney = FindClosestEntity(trsComp.m_localPosition);
+				std::pair<std::shared_ptr<Entity>, float> nearlistMoney = FindClosestEntity(trsComp.mLocalPosition);
 
 				// 돈의 인식범위 이내이고, 돈이 nullptr이 아니면 타겟으로 지정한다.
 				if (enemyComp->mRecogRange > nearlistMoney.second && nearlistMoney.first != nullptr)
@@ -423,7 +423,7 @@ std::shared_ptr<Entity> PlayerSystem::TargetNearestEnemy(std::shared_ptr<Entity>
 	//		|	\______________↑__________|
 	//		|__________________|
 
-	auto& position = _entity->GetComponent<Transform>().m_localPosition;
+	auto& position = _entity->GetComponent<Transform>().mLocalPosition;
 
 	// 거리 순으로 정렬하기 위한 주머니 선언
 	std::vector<std::pair<std::shared_ptr<Entity>, float>> entities;
@@ -440,9 +440,9 @@ std::shared_ptr<Entity> PlayerSystem::TargetNearestEnemy(std::shared_ptr<Entity>
 		}
 
 		// 가장 가까운 타깃을 계산한다.
-		Vector3& notAllyUnit = mRegistry.get<Transform>(entity).m_localPosition; // 타깃 유닛의 위치
+		Vector3& notAllyUnit = mRegistry.get<Transform>(entity).mLocalPosition; // 타깃 유닛의 위치
 		float distance = (notAllyUnit - position).Length();
-		entities.emplace_back(enemyComponent.m_pOwner, distance);
+		entities.emplace_back(enemyComponent.mpOwner, distance);
 	}
 
 	// 가장 가까운 엔티티 반환
@@ -489,7 +489,7 @@ std::shared_ptr<Entity> PlayerSystem::EnemyTargetInRange(std::shared_ptr<Entity>
 
 std::shared_ptr<Entity> PlayerSystem::TargetNearestPlayer(std::shared_ptr<Entity> _entity)// _entity가 나고, entity가 남이야
 {
-	auto& position = _entity->GetComponent<Transform>().m_localPosition;
+	auto& position = _entity->GetComponent<Transform>().mLocalPosition;
 
 	// 거리 순으로 정렬하기 위한 주머니 선언
 	std::vector<std::pair<std::shared_ptr<Entity>, float>> entities;
@@ -507,9 +507,9 @@ std::shared_ptr<Entity> PlayerSystem::TargetNearestPlayer(std::shared_ptr<Entity
 			}
 
 			// 가장 가까운 타깃을 계산한다.
-			Vector3& notAllyUnit = mRegistry.get<Transform>(entity).m_localPosition; // 타깃 유닛의 위치
+			Vector3& notAllyUnit = mRegistry.get<Transform>(entity).mLocalPosition; // 타깃 유닛의 위치
 			float distance = (notAllyUnit - position).Length();
-			entities.emplace_back(playerComponent.m_pOwner, distance);
+			entities.emplace_back(playerComponent.mpOwner, distance);
 		}
 	}
 

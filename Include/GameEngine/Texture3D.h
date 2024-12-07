@@ -12,7 +12,7 @@ struct Texture3D
 {
 public:
 	Texture3D(std::shared_ptr<Entity> _owner, const std::string& _diffuse = "", const std::string& _normal = "")
-		: Component(_owner), m_diffuse(_diffuse), m_normal(_normal)
+		: Component(_owner), mDiffuse(_diffuse), mNormal(_normal)
 	{}
 
 	std::shared_ptr<Component> Clone() const override
@@ -21,8 +21,8 @@ public:
 	}
 
 public:
-	std::string m_diffuse;
-	std::string m_specular;
-	std::string m_normal;
+	std::string mDiffuse;
+	std::string mSpecular;
+	std::string mNormal;
 
 };

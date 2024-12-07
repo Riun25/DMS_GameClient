@@ -215,13 +215,13 @@ private:
 	}
 
 private:
-	std::ofstream m_logFile;	// 현재 저장중인 파일
-	std::size_t m_maxFileSize = 5 * 1024 * 1024;	// 로그 파일의 최대 크기
+	std::ofstream mLogFile;	// 현재 저장중인 파일
+	std::size_t mMaxFileSize = 5 * 1024 * 1024;	// 로그 파일의 최대 크기
 
 };
 
 // 전역 로거 포인터 선언
-extern ILogger* g_pLogger;
+extern ILogger* gpLogger;
 
 // 로거 초기화 및 정리 함수 선언
 void InitializeLogger();
@@ -229,7 +229,7 @@ void PrintLoggerInfo();
 void CleanupLogger();
 
 #define DLOG(_logLevel, _message) \
-if(g_pLogger) g_pLogger->Log(_logLevel, _message)
+if(gpLogger) gpLogger->Log(_logLevel, _message)
 
 #define SET_LOG_LEVEL(level) \
-if(g_pLogger) g_pLogger->SetLogLevel(level)
+if(gpLogger) gpLogger->SetLogLevel(level)

@@ -7,16 +7,16 @@ class Singleton
 public:
 	static T* GetInstance()
 	{
-		if (m_pInstance == nullptr)
+		if (mpInstance == nullptr)
 		{
-			m_pInstance = new T;
+			mpInstance = new T;
 		}
-		return m_pInstance;
+		return mpInstance;
 	}
 
 	void Finalize()
 	{
-		delete m_pInstance;
+		delete mpInstance;
 	}
 
 
@@ -28,8 +28,8 @@ protected:
 	Singleton& operator=(Singleton&&) = delete;
 	virtual ~Singleton() = default;
 
- 	static T* m_pInstance;
+ 	static T* mpInstance;
 };
 
  template <typename T>
-T* Singleton<T>::m_pInstance = nullptr;
+T* Singleton<T>::mpInstance = nullptr;

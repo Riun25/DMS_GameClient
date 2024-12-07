@@ -15,7 +15,7 @@ public:
 
 	/// <summary>
 	/// 클래스에서 엔티티들의 컴포넌트를 사용할 경우 
-	/// "entt::registry& m_registry" 멤버로 추가하고, 생성자 추가
+	/// "entt::registry& mRegistry" 멤버로 추가하고, 생성자 추가
 	/// </summary>
 	/// <param name="_registry"></param>
 	SampleManager(entt::registry& _registry);
@@ -52,6 +52,6 @@ public:
 	virtual void Finalize() override;
 
 private:
-	entt::registry& m_registry;
+	entt::registry& mRegistry;
 };
 

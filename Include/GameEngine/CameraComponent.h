@@ -30,11 +30,11 @@ public:
 	void setViewDir(Vector3 _viewDir);						   //#Sung 컴포넌트안에 세팅하는 함수를 만든다.
 	void setEyePos(Vector3 _eyePos);
 	void setLightCameraIndex(unsigned int _lightIndex);
-	unsigned int m_cameraEnum;
+	unsigned int mCameraEnum;
 public:
-	Camera* m_pCamera;
-	unsigned int m_lightIndex;
-	bool m_isPerspective = true;
-	static uint8_t m_numCamera;
+	Camera* mpCamera;
+	unsigned int mLightIndex;
+	bool mIsPerspective = true;
+	static uint8_t mNumCamera;
 
 };

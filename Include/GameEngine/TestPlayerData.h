@@ -15,10 +15,10 @@ public:
     void Deserialize();
 
 private:
-    int m_gold;
-    int m_wood;
-    int m_iron;
-    float m_level;
+    int mGold;
+    int mWood;
+    int mIron;
+    float mLevel;
 
 };
 

@@ -8,10 +8,10 @@
         "fps": 60
     },
     "debug": {
-        "drawCameraInfo": false,
+        "drawCameraInfo": true,
         "drawCollider": false,
         "drawFps": false,
-        "flyingCamera": false,
+        "flyingCamera": true,
         "inputSceneChange": true,
         "logging": false
     },

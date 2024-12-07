@@ -1,6 +1,10 @@
 #pragma once
 #include "Component.h"
 #include "Graphics/ModelInfo.h"
+
+/// <summary>
+/// 애니메이션의 동작에 관여하는 컴포넌트입니다.
+/// </summary>
 struct AnimationComponent
 	: public Component
 {
