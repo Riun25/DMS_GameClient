@@ -37,7 +37,7 @@ public:
 	// 방향을 보간하는 함수[내 위치, 상대 위치, 내 방향, 목표 회전값]
 	void LookAtTarget(const Vector3& _unitPos, const Vector3& _targetPos, Vector3& _direction, float& _realRotationY);
 	void LookAtPathDir(const Vector3& _unitPos, const Vector3& _targetPos, std::vector<Vector2>*& _path, const size_t& _currentPathIdx, Vector3& _direction, float& _realRotationY);
-	void LookAtPathDir2(const Vector3& _unitPos, const Vector3& _targetPos, std::vector<Vector2>*& _path, const size_t& _currentPathIdx, Vector3& _direction, float& _realRotationY);
+	void LookAtPathDirE(const Vector3& _unitPos, const Vector3& _targetPos, std::vector<Vector2>*& _path, const size_t& _currentPathIdx, Vector3& _direction, float& _realRotationY);
 
 private:
 	ResourceManager* mpResourceManager;

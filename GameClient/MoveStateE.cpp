@@ -148,7 +148,7 @@ void MoveStateE::FixedUpdate(float _fixedTime, std::shared_ptr<Entity> _entity)
 				currentPathIndex = 0;
 
 				// 캐릭터가 바라보고 있는 방향을 업데이트
-				mpFSMHelper->LookAtPathDir2(position, targetPos, enemyComp.mpPath, currentPathIndex, pathdirection, trsComp.m_localRotation.y);
+				mpFSMHelper->LookAtPathDirE(position, targetPos, enemyComp.mpPath, currentPathIndex, pathdirection, trsComp.m_localRotation.y);
 				return;
 			}
 		}
@@ -162,7 +162,7 @@ void MoveStateE::FixedUpdate(float _fixedTime, std::shared_ptr<Entity> _entity)
 			currentPathIndex = 0;
 
 			// 캐릭터가 바라보고 있는 방향을 업데이트
-			mpFSMHelper->LookAtPathDir2(position, targetPos, enemyComp.mpPath, currentPathIndex, pathdirection, trsComp.m_localRotation.y);
+			mpFSMHelper->LookAtPathDirE(position, targetPos, enemyComp.mpPath, currentPathIndex, pathdirection, trsComp.m_localRotation.y);
 		}
 		else
 		{
@@ -176,7 +176,7 @@ void MoveStateE::FixedUpdate(float _fixedTime, std::shared_ptr<Entity> _entity)
 					return;
 				}
 				currentPathIndex++;
-				mpFSMHelper->LookAtPathDir2(position, targetPos, enemyComp.mpPath, currentPathIndex, pathdirection, trsComp.m_localRotation.y);
+				mpFSMHelper->LookAtPathDirE(position, targetPos, enemyComp.mpPath, currentPathIndex, pathdirection, trsComp.m_localRotation.y);
 			}
 			pathdirection.Normalize();
 		}
@@ -199,7 +199,7 @@ void MoveStateE::FixedUpdate(float _fixedTime, std::shared_ptr<Entity> _entity)
 				// 경로 재계산
 				mpFSMHelper->CalculatePathforEnemy(enemyComp.mpPath, currentPos, goalXZPos);
 				currentPathIndex = 0;
-				mpFSMHelper->LookAtPathDir2(position, targetPos, enemyComp.mpPath, currentPathIndex, pathdirection, trsComp.m_localRotation.y);
+				mpFSMHelper->LookAtPathDirE(position, targetPos, enemyComp.mpPath, currentPathIndex, pathdirection, trsComp.m_localRotation.y);
 				return;
 			}
 		}

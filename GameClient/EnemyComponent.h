@@ -15,7 +15,7 @@ public:
 	EnemyComponent(std::shared_ptr<Entity> _owner, ClassType _classType = ClassType::LAST)
 		:Component(_owner), mClassType(_classType), mpTarget(nullptr), mPreviousTarget(nullptr), mPreviousTargetPos(Vector3())
 		, mbuffLv(0), mHP(0.0f), mMaxHP(0.0f), mAttackPower(0.0f), mAttackSpeed(0.0f)
-		, mMoveSpeed(0.0f), mAttackRange(0.0f), mRecogRange(0.0f),mMoney(0), mBuffMoney(0)
+		, mMoveSpeed(0.0f), mAttackRange(0.0f), mRecogRange(0.0f),mMoney(0)
 		, mIsDead(false), mIsAttacked(false), mIsShot(false)
 		, mpPath(nullptr), mPathIndex(0), mAstarPos(Vector2()), tempDirection(Vector3())
 		, mOwnState(State::IDLE), mCurrentSM(nullptr)
@@ -43,7 +43,6 @@ public:
 	float mAttackRange;			// ◆
 	float mRecogRange;			// ◆ 돈 인식 범위
 	int mMoney;					// 플레이어의 소지금
-	int mBuffMoney;				// ◆ 다음 버프 상태로 가기 위한 돈
 
 	bool mIsDead; // 유닛이 죽었는지 안 죽었는지 판별하기 위한 변수
 	bool mIsAttacked; // 무기 콜라이더와 충돌했는가?

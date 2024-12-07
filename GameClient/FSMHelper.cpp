@@ -110,7 +110,7 @@ void FSMHelper::LookAtTarget(const Vector3& _unitPos, const Vector3& _targetPos,
 	}
 	else
 	{
-		_direction = { 0.0f,0.0f,0.0f }; // 분모가 0이면 걍 움직이지 못하게 함
+		_direction = { 0.0f,0.0f,0.0f }; // 분모가 0이면 움직이지 못하게 함
 	}
 }
 
@@ -186,11 +186,11 @@ void FSMHelper::LookAtPathDir(const Vector3& _unitPos, const Vector3& _targetPos
 	}
 	else
 	{
-		_direction = { 0.0f,0.0f,0.0f }; // 분모가 0이면 걍 움직이지 못하게 함
+		_direction = { 0.0f,0.0f,0.0f }; // 분모가 0이면 움직이지 못하게 함
 	}
 }
 
-void FSMHelper::LookAtPathDir2(const Vector3& _unitPos, const Vector3& _targetPos, std::vector<Vector2>*& _path, const size_t& _currentPathIdx, Vector3& _direction, float& _realRotationY)
+void FSMHelper::LookAtPathDirE(const Vector3& _unitPos, const Vector3& _targetPos, std::vector<Vector2>*& _path, const size_t& _currentPathIdx, Vector3& _direction, float& _realRotationY)
 {
 	// 경로가 없다면 종료함
 	if (_path == nullptr)
@@ -260,6 +260,6 @@ void FSMHelper::LookAtPathDir2(const Vector3& _unitPos, const Vector3& _targetPo
 	}
 	else
 	{
-		_direction = { 0.0f,0.0f,0.0f }; // 분모가 0이면 걍 움직이지 못하게 함
+		_direction = { 0.0f,0.0f,0.0f }; // 분모가 0이면 움직이지 못하게 함
 	}
 }
