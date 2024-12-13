@@ -135,8 +135,8 @@ struct CSParticleData
 
 struct ParticleVertexInput
 {
-	Matrix ScalexTrans;
-	Matrix Rot;
+	Matrix scalexTrans;
+	Matrix rot;
 	Vector3 color;
-	float Opacity;
+	float opacity;
 };

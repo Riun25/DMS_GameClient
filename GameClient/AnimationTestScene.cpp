@@ -122,7 +122,7 @@ bool AnimationTestScene::Initialize()
 	tester->AddComponent<Rigidbody>(50.f, 1.f, 1.f, true);
 	tester->AddComponent<MeshRenderer>("Character 01.fbx", "Character 01", true, true);
 	tester->AddComponent<Texture3D>("M-Cos-16-Blue.png");
-	tester->GetComponent<MeshRenderer>().mpModel->mAnimationPlaytime = 0;
+	tester->GetComponent<MeshRenderer>().mpModel->animationPlaytime = 0;
 	tester->AddComponent<AnimationComponent>();
 	tester->AddComponent<AnimationComponent>().mpTargetAnimation = mpResourceManager->Get_Animation("Character@Mutant Run2.fbx");
 	tester->AddComponent<BoneGroupComponent>();
@@ -170,8 +170,8 @@ void AnimationTestScene::Update(float _dTime)
 	{
 		if (entity->GetName() == "tester") // 엔티티가 여러개가 된다면, 그 여러개에 따른 거 list 같은 거 만들어서 for문 돌리면 될 듯함.
 		{
-			interpolationTime = static_cast<float>(entity->GetComponent<MeshRenderer>().mpModel->mNextAnimationPlaytime);
-			animationPlaytime = static_cast<float>(entity->GetComponent<MeshRenderer>().mpModel->mAnimationPlaytime);
+			interpolationTime = static_cast<float>(entity->GetComponent<MeshRenderer>().mpModel->nextAnimationPlaytime);
+			animationPlaytime = static_cast<float>(entity->GetComponent<MeshRenderer>().mpModel->animationPlaytime);
 
 			// 연속 재생on/Off
 			if (mpInputManager->GetKeyDown(KEY::Q))

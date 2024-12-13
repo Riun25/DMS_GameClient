@@ -46,7 +46,7 @@ public:
 	unsigned int mNumMeshes;
 
 	//이 노드의 메쉬, 각 항목은 Model의 메쉬 목록에 대한 인덱스
-	unsigned int* mMeshes;
+	unsigned int* mpMeshes;
 };
 
 struct VertexWeight
@@ -64,7 +64,7 @@ public:
 
 public:
 	std::string mBoneName;		//본 이름
-	Node* mTargetNode;			//본 이름과 노드의 이름이 같을 경우 타겟 노드로 지정해준다. 그래야 노드의tranform을 가지고 올수 있기 때문
+	Node* mpTargetNode;			//본 이름과 노드의 이름이 같을 경우 타겟 노드로 지정해준다. 그래야 노드의tranform을 가지고 올수 있기 때문
 	unsigned int mNumWeight = 0;
 	VertexWeight* mpVertexWeight;
 	Matrix mOffsetMatrix;		//메쉬와 본사이의 오프셋 행렬 -> 본의 공간에서 메쉬의 정점들을 본의 로컬 공간으로 변환하는데 사용
@@ -86,15 +86,15 @@ public:
 	std::string mMeshName;				// 메쉬의 이름
 
 	unsigned int  mNumVertices;			// 버텍스의 수
-	Vertex* mVertices = nullptr;					// Vertex배열
+	Vertex* mpVertices = nullptr;					// Vertex배열
 
 	unsigned int mNumIndices;			// 인덱스의 수
-	unsigned int* mIndices = nullptr;				// Index 배열
+	unsigned int* mpIndices = nullptr;				// Index 배열
 
 	AABB mAABB;
 
 	unsigned int mNumBones;
-	Bone* mBone;						//메쉬에 해당하는 본
+	Bone* mpBone;						//메쉬에 해당하는 본
 };
 
 
@@ -117,13 +117,13 @@ public:
 	~NodeAnimation();
 public:
 	unsigned int mNumPosKeys;
-	VecKey* mPosKey;			//Positon Key
+	VecKey* mpPosKey;			//Positon Key
 
 	unsigned int mNumRotKeys;
-	QuatKey* mRotKey;			//Rotation Key
+	QuatKey* mpRotKey;			//Rotation Key
 
 	unsigned int mNumScaKeys;
-	VecKey* mScaKey;			//Scale Key
+	VecKey* mpScaKey;			//Scale Key
 
 	std::string mName;			//이 애니메이션의 영향을 받는 노드의 이름
 };
@@ -139,7 +139,7 @@ public:
 	double mTicksPerSecond;					//초당 틱, 가져온 파일에 지정되지 않은 경우 -> 0
 
 	unsigned int mNumChannels;				//본 애니메이션 채널 수
-	NodeAnimation* mChannels;				//노드 애니메이션의 채널, 객 채널의 단일 노드에 영향을 준다. 크기는 mNumChannels;
+	NodeAnimation* mpChannels;				//노드 애니메이션의 채널, 객 채널의 단일 노드에 영향을 준다. 크기는 mNumChannels;
 
 	///나중에 메시애니메이션을 추가하려면 여기다 추가하면된다.
 };
@@ -151,10 +151,10 @@ public:
 	Model();
 	~Model();
 public:
-	Node* mRootNode;
+	Node* mpRootNode;
 
 	unsigned int mNumMesh;
-	Mesh* mMeshData;
+	Mesh* mpMeshData;
 
 	//	std::string mBasePath;
 

@@ -5,8 +5,8 @@
 using Microsoft::WRL::ComPtr;
 struct CubeMapInfo
 {
-	ComPtr<ID3D11ShaderResourceView> mpCubeMapResourceView;
-	ComPtr<ID3D11PixelShader> mpPixelShader;
-	ComPtr<ID3D11VertexShader> mpVertexShader;
-	ComPtr<ID3D11InputLayout> mpInputLayout;
+	ComPtr<ID3D11ShaderResourceView> pCubeMapResourceView;
+	ComPtr<ID3D11PixelShader> pPixelShader;
+	ComPtr<ID3D11VertexShader> pVertexShader;
+	ComPtr<ID3D11InputLayout> pInputLayout;
 };

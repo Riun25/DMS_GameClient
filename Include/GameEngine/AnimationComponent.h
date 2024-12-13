@@ -57,10 +57,10 @@ public:
 //
 //void AnimationComponent::SetTargetAnimation(Animation* _targetAnimaion)
 //{
-//	mpTargetAnimation = _targetAnimaion;
+//	pTargetAnimation = _targetAnimaion;
 //}
 //
 //void AnimationComponent::SetNextTargetAnimation(Animation* _nextTargetAnimaion)
 //{
-//	mpNextTargetAnimation = _nextTargetAnimaion;
+//	pNextTargetAnimation = _nextTargetAnimaion;
 //}

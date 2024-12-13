@@ -87,7 +87,7 @@ float4 main(PixelShaderInput input) : SV_TARGET0
    float shadowMapDepth = shadowMaps[0].Sample(shadowPointSampler, shadowTexCoord).r;
 
    // 그림자 맵에서의 z 값과 비교
-   float bias = 0.001f; // 그림자 경계를 부드럽게 하기 위한 바이어스
+   float bias = 0.003f; // 그림자 경계를 부드럽게 하기 위한 바이어스
    float shadowFactor = (lightSpacePos.z - bias > shadowMapDepth) ? 0.7f : 1.0f;
 
    // 빛의 색과 그림자 효과 적용
@@ -106,6 +106,7 @@ float4 main(PixelShaderInput input) : SV_TARGET0
     
    float3 f = SchlickFresnel(material.fresnel, input.normal, toEye);
    specular.xyz *= f;
+
 
    //if (useTexture) /후에 추가할 것.
    diffuse *= g_texture0.Sample(linearWrapSampler, input.texcoord);

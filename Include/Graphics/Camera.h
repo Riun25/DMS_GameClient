@@ -39,7 +39,7 @@ public:
 	float mNearZ;
 	float mFarZ;
 
-	bool isPerspective;
+	bool mIsPerspective;
 public:
 	//[화면 너비, 화면 높이] 화면 비율 세팅-> 게임 엔진에서 바꾸기 때문에 카메라 멤버 변수 값도 바꾼다.
 	void SetAspectRatio(int _screenWidth, int _screenHeight);

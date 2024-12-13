@@ -25,32 +25,32 @@ public:
 
 	/// Window관련 함수
 private:
-	HWND m_hWnd;
-	int m_screenWidth;
-	int m_screenHeight;
+	HWND mHWnd;
+	int mScreenWidth;
+	int mScreenHeight;
 
 	//디바이스와 디바이스 컨텍스트는 중앙에서 관리하는게 좋다.
-	ComPtr<ID3D11Device> m_pDevice;										//디바이스
-	ComPtr<ID3D11DeviceContext> m_pDeviceContext;						//디바이스 컨텍스트
+	ComPtr<ID3D11Device> mpDevice;										//디바이스
+	ComPtr<ID3D11DeviceContext> mpDeviceContext;						//디바이스 컨텍스트
 
 public:
 	///렌더러를 가지고 있는 자료구조. 
 	Renderer* mpRenderer;
 
 	///UI 생성을 위한 2D 클래스
-	DearsImGui* m_pDearsImGui;
+	DearsImGui* mpDearsImGui;
 
 	///그래픽스 리소스 매니저
-	GraphicsResourceManager* m_pResourceManager;
+	GraphicsResourceManager* mpResourceManager;
 
 	AnimationHelper* mpAnimationHelper;
 	LightHelper* mpLightHelper;
 
 	///카메라, 이후 게임엔진과 그래픽스 엔진 모두 아는 라이브러리로 빼서 수정에 용이함을 둔다.
-	Camera* m_pTargetCamera;
+	Camera* mpTargetCamera;
 
 	///파티클 매니저
-	ParticleManager* m_pParticleManager;
+	ParticleManager* mpParticleManager;
 public:
 	//DX를 초기화한다.
 	void Initialize();
@@ -66,6 +66,8 @@ public:
 	void Finalize();
 
 	void RendParticle();
+
+	void RendPostProcessing();
 
 	// 화면의 가로길이를 가져온다.
 	int GetScreenWidth() const;
@@ -143,7 +145,7 @@ public:
 	template <typename T>
 	ComPtr<ID3D11Buffer> CreateConstantBuffer(T& _bufferData)
 	{
-		return RendererHelper::CreateConstantBuffer(m_pDevice, _bufferData);
+		return RendererHelper::CreateConstantBuffer(mpDevice, _bufferData);
 	}
 
 	// 공통 컨스턴트 버퍼를 업데이트한다.
@@ -209,13 +211,13 @@ public:
 	//렌더링에 필요한 카메라를 세팅한다.
 	void SetCamera(Camera* _pTargetCamera);
 
-	ModelBuffer* Debug_ModelBuffer;		///*임시*
+	ModelBuffer* mpDebugModelBuffer;		///*임시*
+	ModelBuffer* mpPostProcessingBuffer;
 
 
-
-	VSConstantBufferData m_VSConstantBufferData;
-	PSConstantBufferData m_PSConstantBufferData;
-	VSBoneConstantBufferData m_VSBoneConstantBufferData;
+	VSConstantBufferData mVSConstantBufferData;
+	PSConstantBufferData mPSConstantBufferData;
+	VSBoneConstantBufferData mVSBoneConstantBufferData;
 
 	/// UI 작업 -------------------------------------------------------------------------------------------------
 
@@ -348,6 +350,6 @@ public:
 template<typename ...Args>
 void DearsGraphicsEngine::UIDrawTextWithNum(Vector2 _posXY, const std::u8string _formatText, Vector4 _rgba, Args&& ...args)
 {
-	m_pDearsImGui->UIDrawTextWithNum(_posXY, m_pDearsImGui->ConvertUTF8String(_formatText), _rgba, std::forward<Args>(args)...);
+	mpDearsImGui->UIDrawTextWithNum(_posXY, mpDearsImGui->ConvertUTF8String(_formatText), _rgba, std::forward<Args>(args)...);
 }
 

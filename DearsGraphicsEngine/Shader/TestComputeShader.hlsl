@@ -34,10 +34,10 @@ struct Particle
 
 struct ParticleVertexInput
 {
-	matrix ScalexTrans;
-	matrix Rot;
+	matrix scalexTrans;
+	matrix rot;
     float3 color;
-    float Opacity;
+    float opacity;
 };
 
 
@@ -107,9 +107,9 @@ void main(int3 gID : SV_GroupID,                     //(0 ~ 3, 0, 0)
 		float4x4 translationMatrix = TranslationMatrix(p.pos);
 	 
 		// VertexInput에 월드 및 역월드 행렬 저장
-        InputVertexShader[dtID.x].ScalexTrans = mul(scaleMatrix, translationMatrix);;	//포지션 * 스케일 값을 매트릭스로 변환한다.	
-        InputVertexShader[dtID.x].Rot = rotationMatrix;									//회전 변환.
-        InputVertexShader[dtID.x].Opacity = p.Opacity;									//투명도
+        InputVertexShader[dtID.x].scalexTrans = mul(scaleMatrix, translationMatrix);;	//포지션 * 스케일 값을 매트릭스로 변환한다.	
+        InputVertexShader[dtID.x].rot = rotationMatrix;									//회전 변환.
+        InputVertexShader[dtID.x].opacity = p.Opacity;									//투명도
         InputVertexShader[dtID.x].color = p.color;										//색
 		
 		outputParticles[dtID.x].playTime += dt;

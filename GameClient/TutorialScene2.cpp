@@ -53,7 +53,7 @@ bool TutorialScene2::Initialize()
 	gs1->AddComponent<AnimationComponent>();
 	gs1->AddComponent<BoneGroupComponent>();
 	gs1->GetComponent<AnimationComponent>().mpTargetAnimation = mpResourceManager->Get_Animation("Character@Run Forward Bare Hands In Place.FBX");
-	gs1->GetComponent<MeshRenderer>().mpModel->mpTargetAnimation
+	gs1->GetComponent<MeshRenderer>().mpModel->pTargetAnimation
 		= mpRenderManager->Get_Animation("Character@Run Forward Bare Hands In Place.FBX");
 	mpPhysicsManager->AddPhysicsObject(gs1->GetUID(), TYPE_UNIT, ATTR_ALLY);
 

@@ -11,27 +11,27 @@ using Microsoft::WRL::ComPtr;
 class PipelineStateObject
 {
 public:
-	ComPtr<ID3D11InputLayout> m_pInputLayout;
-	ComPtr<ID3D11VertexShader> m_pVertexShader;
-	ComPtr<ID3D11PixelShader> m_pPixelShader;
+	ComPtr<ID3D11InputLayout> mpInputLayout;
+	ComPtr<ID3D11VertexShader> mpVertexShader;
+	ComPtr<ID3D11PixelShader> mpPixelShader;
 
-	ComPtr<ID3D11HullShader> m_pHullShader;
-	ComPtr<ID3D11DomainShader> m_pDomainShader;
-	ComPtr<ID3D11GeometryShader> m_pGeometryShader;
+	ComPtr<ID3D11HullShader> mpHullShader;
+	ComPtr<ID3D11DomainShader> mpDomainShader;
+	ComPtr<ID3D11GeometryShader> mpGeometryShader;
 
-	ComPtr<ID3D11BlendState> m_pBlendState;
+	ComPtr<ID3D11BlendState> mpBlendState;
 
-	ComPtr<ID3D11DepthStencilState> m_pDepthStencilState;
+	ComPtr<ID3D11DepthStencilState> mpDepthStencilState;
 
-	ComPtr<ID3D11RasterizerState> m_pRasterizerState;
+	ComPtr<ID3D11RasterizerState> mpRasterizerState;
 
-	ComPtr<ID3D11SamplerState> m_pSamplerState;	
+	ComPtr<ID3D11SamplerState> mpSamplerState;	
 
 
-	float m_blendFactor[4] = { 1.f, 1.f, 1.f, 1.f };		
-	UINT m_stencilRef = 0;								   //스탠실 참조값
+	float mBlendFactor[4] = { 1.f, 1.f, 1.f, 1.f };		
+	UINT mStencilRef = 0;								   //스탠실 참조값
 
-	D3D11_PRIMITIVE_TOPOLOGY m_primitiveTopology =
+	D3D11_PRIMITIVE_TOPOLOGY mPrimitiveTopology =
 		D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
 
 public:

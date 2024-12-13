@@ -105,7 +105,7 @@ template <typename T>
 void FBXLoadHelper::Copy_Index(const aiMesh* _aiMesh, T* _mesh)
 {
 	_mesh->mNumIndices = _aiMesh->mNumFaces * 3;	// 모든 면이 삼각형
-	_mesh->mIndices = new unsigned int[_mesh->mNumIndices];
+	_mesh->mpIndices = new unsigned int[_mesh->mNumIndices];
 
 	unsigned int index = 0;
 	for (unsigned int i = 0; i < _aiMesh->mNumFaces; i++)
@@ -115,7 +115,7 @@ void FBXLoadHelper::Copy_Index(const aiMesh* _aiMesh, T* _mesh)
 		{
 			if (index < _mesh->mNumIndices)		// 버퍼 오버런 방지
 			{
-				_mesh->mIndices[index++] = face.mIndices[j];
+				_mesh->mpIndices[index++] = face.mIndices[j];
 			}
 		}
 	}
@@ -128,10 +128,10 @@ void FBXLoadHelper::ProcessNode(const aiNode* _ainode, Node* _node)
 	Copy_Matrix(_ainode->mTransformation, _node->mTransformation);
 	_node->mNumNextNode = _ainode->mNumChildren;
 	_node->mNumMeshes = _ainode->mNumMeshes;
-	_node->mMeshes = new unsigned int[_node->mNumMeshes];
+	_node->mpMeshes = new unsigned int[_node->mNumMeshes];
 	for (int i = 0; i < _node->mNumMeshes; i++)
 	{
-		_node->mMeshes[i] = _ainode->mMeshes[i];
+		_node->mpMeshes[i] = _ainode->mMeshes[i];
 	}
 	if (_node->mNumNextNode)
 	{

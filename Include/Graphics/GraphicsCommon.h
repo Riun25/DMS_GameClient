@@ -14,70 +14,72 @@ namespace Dears {
 	namespace Graphics {
 
 		// Samplers
-		extern ComPtr<ID3D11SamplerState> linearWrapSS;
-		extern ComPtr<ID3D11SamplerState> linearClampSS;
-		extern ComPtr<ID3D11SamplerState> shadowPointSS;
-		extern ComPtr<ID3D11SamplerState> shadowCompareSS;
-		extern vector<ID3D11SamplerState*> sampleStates;
+		extern ComPtr<ID3D11SamplerState> gpLinearWrapSS;
+		extern ComPtr<ID3D11SamplerState> gpLinearClampSS;
+		extern ComPtr<ID3D11SamplerState> gpShadowPointSS;
+		extern ComPtr<ID3D11SamplerState> gpShadowCompareSS;
+		extern vector<ID3D11SamplerState*> gSampleStates;
 
 		// Rasterizer States
-		extern ComPtr<ID3D11RasterizerState> solidRS;
-		extern ComPtr<ID3D11RasterizerState> wireRS;
+		extern ComPtr<ID3D11RasterizerState> gpSolidRS;
+		extern ComPtr<ID3D11RasterizerState> gpWireRS;
 
 		// Depth Stencil States
-		extern ComPtr<ID3D11DepthStencilState> drawDSS; // 일반적으로 그리기
+		extern ComPtr<ID3D11DepthStencilState> gpDrawDSS; // 일반적으로 그리기
 
 		// Shaders
-		extern ComPtr<ID3D11VertexShader> basicVS;
-		extern ComPtr<ID3D11VertexShader> animeVS;
-		extern ComPtr<ID3D11VertexShader> equimentVS;
-		extern ComPtr<ID3D11VertexShader> skyboxVS;
-		extern ComPtr<ID3D11VertexShader> depthOnlyVS;
-		extern ComPtr<ID3D11VertexShader> depthAniOnlyVS;
-		extern ComPtr<ID3D11VertexShader> depthEquipOnlyVS;
-		extern ComPtr<ID3D11VertexShader> instanceBasicVS;
+		extern ComPtr<ID3D11VertexShader> gpBasicVS;
+		extern ComPtr<ID3D11VertexShader> gpAnimeVS;
+		extern ComPtr<ID3D11VertexShader> gpEquimentVS;
+		extern ComPtr<ID3D11VertexShader> gpSkyboxVS;
+		extern ComPtr<ID3D11VertexShader> gpDepthOnlyVS;
+		extern ComPtr<ID3D11VertexShader> gpDepthAniOnlyVS;
+		extern ComPtr<ID3D11VertexShader> gpDepthEquipOnlyVS;
+		extern ComPtr<ID3D11VertexShader> gpInstanceBasicVS;
 
-		extern ComPtr<ID3D11PixelShader> basicPS;
-		extern ComPtr<ID3D11PixelShader> skyboxPS;
+		extern ComPtr<ID3D11PixelShader> gpBasicPS;
+		extern ComPtr<ID3D11PixelShader> gpSkyboxPS;
 
 		//ComputeShader
-		extern ComPtr<ID3D11ComputeShader> particleComputeShader;
+		extern ComPtr<ID3D11ComputeShader> gpParticleComputeShader;
 
 
 		// Input Layouts
-		extern ComPtr<ID3D11InputLayout> basicIL;
-		extern ComPtr<ID3D11InputLayout> animeIL;
-		extern ComPtr<ID3D11InputLayout> skyboxIL;
-		extern ComPtr<ID3D11InputLayout> depthOnlyIL;
-		extern ComPtr<ID3D11InputLayout> depthAniOnlyIL;
-		extern ComPtr<ID3D11InputLayout> depthEquipOnlyIL;
+		extern ComPtr<ID3D11InputLayout> gpBasicIL;
+		extern ComPtr<ID3D11InputLayout> gpAnimeIL;
+		extern ComPtr<ID3D11InputLayout> gpSkyboxIL;
+		extern ComPtr<ID3D11InputLayout> gpDepthOnlyIL;
+		extern ComPtr<ID3D11InputLayout> gpDepthAniOnlyIL;
+		extern ComPtr<ID3D11InputLayout> gpDepthEquipOnlyIL;
 
-		extern ComPtr<ID3D11InputLayout> instanceBasicIL;
+		extern ComPtr<ID3D11InputLayout> gpInstanceBasicIL;
 
 
 		// Graphics Pipeline States
-		extern PipelineStateObject BasicGeometryPSO;
-		extern PipelineStateObject AnimeGeometryPSO;
-		extern PipelineStateObject EquipmentGeometryPSO;
-		extern PipelineStateObject DebugGeometryPSO;
-		extern PipelineStateObject CubeMapGeometryPSO;
-		extern PipelineStateObject depthOnlyPSO;
-		extern PipelineStateObject depthAniOnlyPSO;
-		extern PipelineStateObject depthEquipOnlyPSO;
-		extern PipelineStateObject OpacityPSO;
+		extern PipelineStateObject gBasicGeometryPSO;
+		extern PipelineStateObject gAnimeGeometryPSO;
+		extern PipelineStateObject gEquipmentGeometryPSO;
+		extern PipelineStateObject gDebugGeometryPSO;
+		extern PipelineStateObject gCubeMapGeometryPSO;
+		extern PipelineStateObject gDepthOnlyPSO;
+		extern PipelineStateObject gDepthAniOnlyPSO;
+		extern PipelineStateObject gDepthEquipOnlyPSO;
+		extern PipelineStateObject gOpacityPSO;
 
-		extern PipelineStateObject BasicInstancingPSO;
+		extern PipelineStateObject gBasicInstancingPSO;
 
-		extern PipelineStateObject PunchingPSO;
-		extern PipelineStateObject EdgePSO;
-		extern PipelineStateObject WaterPSO;
+		extern PipelineStateObject gPunchingPSO;
+		extern PipelineStateObject gEdgePSO;
+		extern PipelineStateObject gWaterPSO;
 		
-		extern PipelineStateObject TestPSO;
-		extern PipelineStateObject ParticlePSO;
-
+		extern PipelineStateObject gTestPSO;
+		extern PipelineStateObject gParticlePSO;
+		extern PipelineStateObject gSamplerPSO;
+		extern PipelineStateObject gPostEffectPSO;
 
 		// Blend States
-		extern ComPtr<ID3D11BlendState> OpacityBS;
+		extern ComPtr<ID3D11BlendState> gpOpacityBS;
+
 
 		void InitCommonStates(ComPtr<ID3D11Device>& device);
 

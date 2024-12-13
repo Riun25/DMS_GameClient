@@ -15,31 +15,31 @@ public:
 	ParticleManager() = delete;
 	ParticleManager(ComPtr<ID3D11Device> _pDevice, ComPtr<ID3D11DeviceContext> _pDeviceContext, unsigned int _scale);
 private:
-	ComPtr<ID3D11Device> m_pDevice;											//디바이스
-	ComPtr<ID3D11DeviceContext> m_pDeviceContext;							//디바이스 컨텍스트
-	//ComPtr<ID3D11DeviceContext1> m_pDeviceContext;						//디바이스 컨텍스트
+	ComPtr<ID3D11Device> mpDevice;											//디바이스
+	ComPtr<ID3D11DeviceContext> mpDeviceContext;							//디바이스 컨텍스트
+	//ComPtr<ID3D11DeviceContext1> mpDeviceContext;						//디바이스 컨텍스트
 public:
-	ObjectPool<CSParticleData>* m_pParticleObjectpool;
+	ObjectPool<CSParticleData>* mpParticleObjectpool;
 
-	ComPtr<ID3D11Buffer> m_pParticleStructedBuffer;				//파티클에 사용할 structedBuffer
-	ComPtr<ID3D11UnorderedAccessView> m_pParticleUAV;			//파티클에 사용할 UnorderedAccessView
-	ComPtr<ID3D11ShaderResourceView> m_pParticleSRV;			//파티클에 사용할 UnorderedAccessView
+	ComPtr<ID3D11Buffer> mpParticleStructedBuffer;				//파티클에 사용할 structedBuffer
+	ComPtr<ID3D11UnorderedAccessView> mpParticleUAV;			//파티클에 사용할 UnorderedAccessView
+	ComPtr<ID3D11ShaderResourceView> mpParticleSRV;			//파티클에 사용할 UnorderedAccessView
 
-	ComPtr<ID3D11Buffer> m_pParticleIndexBuffer;				//파티클에 사용할 IndexStructedBuffer
-	ComPtr<ID3D11UnorderedAccessView> m_pParticleIndexUAV;		//파티클에 사용할 UnorderedAccessView
-	ComPtr<ID3D11ShaderResourceView> m_pParticleIndexSRV;		//파티클에 사용할 UnorderedAccessView
+	ComPtr<ID3D11Buffer> mpParticleIndexBuffer;				//파티클에 사용할 IndexStructedBuffer
+	ComPtr<ID3D11UnorderedAccessView> mpParticleIndexUAV;		//파티클에 사용할 UnorderedAccessView
+	ComPtr<ID3D11ShaderResourceView> mpParticleIndexSRV;		//파티클에 사용할 UnorderedAccessView
 
 	
-	ComPtr<ID3D11Buffer> m_pParticleVertexinfoBuffer;
-	ComPtr<ID3D11UnorderedAccessView> m_pParticleVertexInfoUAV;
-	ComPtr<ID3D11ShaderResourceView> m_pParticleVertexInfoSRV;
+	ComPtr<ID3D11Buffer> mpParticleVertexinfoBuffer;
+	ComPtr<ID3D11UnorderedAccessView> mpParticleVertexInfoUAV;
+	ComPtr<ID3D11ShaderResourceView> mpParticleVertexInfoSRV;
 
 	//스테이징 버퍼들
-	ComPtr<ID3D11Buffer> m_pParticleInfoStagingBuffer;
-	ComPtr<ID3D11Buffer> m_pIndexStagingBuffer;
+	ComPtr<ID3D11Buffer> mpParticleInfoStagingBuffer;
+	ComPtr<ID3D11Buffer> mpIndexStagingBuffer;
 
-	ComPtr<ID3D11Buffer> mVertexBuffer;
-	ComPtr<ID3D11Buffer> mIndexBuffer;
+	ComPtr<ID3D11Buffer> mpVertexBuffer;
+	ComPtr<ID3D11Buffer> mpIndexBuffer;
 	unsigned int mNumIndices = 0;
 
 public:

@@ -21,17 +21,15 @@ public:
 	DearsImGui(HWND _hWnd, ComPtr<ID3D11Device>& _pDevice, ComPtr<ID3D11DeviceContext>& m_pDeviceContext, int _endScreenWidth, int _endScreenHeight, GraphicsResourceManager* _pResourceManager);
 	~DearsImGui();
 
-	InputManager* m_pInputManager;
+	InputManager* mpInputManager;
 
 private:
-	ComPtr<ID3D11Device> m_pDevice;					   // 그래픽스 엔진에서 디바이스를 받아온다.
-	GraphicsResourceManager* m_pResourceManager;	   // 리소스 매니저의 포인터를 디바이스에서 받아온다 -> 컨테이너에 접근하기 위해 호출
-	int m_endScreenWidth;							   // 스크린 가로 길이
-	int m_endScreenHeight;							   // 스크린 세로 길이
-	ImGuiWindow* window;							   // ImGui의 화면을 가리키는 변수
-	ImGuiIO* io;									   // 창을 초기화하거나 설정하는데 사용
-
-	Vector2 t_imagePos = Vector2(150, 600);			   // 지울 예정
+	ComPtr<ID3D11Device> mpDevice;					   // 그래픽스 엔진에서 디바이스를 받아온다.
+	GraphicsResourceManager* mpResourceManager;		   // 리소스 매니저의 포인터를 디바이스에서 받아온다 -> 컨테이너에 접근하기 위해 호출
+	int mEndScreenWidth;							   // 스크린 가로 길이
+	int mEndScreenHeight;							   // 스크린 세로 길이
+	ImGuiWindow* mpWindow;							   // ImGui의 화면을 가리키는 변수
+	ImGuiIO* mIO;									   // 창을 초기화하거나 설정하는데 사용
 
 public:
 	/// 초기화에 셋팅하는 부분 : 생성 후 세팅 (순서대로 세팅)

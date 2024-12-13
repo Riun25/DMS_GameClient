@@ -9,7 +9,7 @@
 #include <vector>
 using Microsoft::WRL::ComPtr;
 #include <iostream>
-
+#include <optional>
 #ifdef _DEBUG
 #define DEBUG_LOG(message) std::cout<<message<<std::endl
 #else
@@ -49,6 +49,7 @@ public:
 	static bool CreateRenderTargetView(ComPtr<ID3D11Device>& _pDevice,
 		ComPtr<IDXGISwapChain>& _pSwapChain,
 		ComPtr<ID3D11RenderTargetView>& _pRenderTargetView,
+		ComPtr < ID3D11Texture2D>& _pBuffer,
 		UINT _index = 0,
 		UINT _screenWidth = 0,
 		UINT _screenHeight = 0
@@ -99,8 +100,8 @@ public:
 	static ComPtr<ID3D11UnorderedAccessView> CreateUnorderedAccessView(ComPtr<ID3D11Device>& _pDevice, ComPtr<ID3D11Buffer> _structuredBuffer, unsigned int _count);
 
 	//SRV를 만든다
-	static ComPtr<ID3D11ShaderResourceView> CreateShaderResourceView(ComPtr<ID3D11Device>& _pDevice, ComPtr<ID3D11Buffer> _structuredBuffer, unsigned int _count);
-	
+	static ComPtr<ID3D11ShaderResourceView> CreateShaderResourceView(ComPtr<ID3D11Device>& _pDevice, ComPtr<ID3D11Buffer> _structuredBuffer, std::optional<unsigned int> _count = std::nullopt);
+
 	//스테이징 버퍼를 복사한다.
 	template<typename S_Struct>
 	static void CopyFromStagingBuffer(ComPtr<ID3D11DeviceContext>& context, ComPtr<ID3D11Buffer>& buffer, UINT _size, S_Struct* destination);

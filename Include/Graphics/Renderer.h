@@ -25,47 +25,53 @@ public:
 			ComPtr<ID3D11Device>& _pDevice, ComPtr<ID3D11DeviceContext> _pDeviceContext);
 	~Renderer();
 private:
-	HWND m_hWnd;				//핸들 윈도우
-	int m_startScreenWidth;		//화면의 시작(가로 픽셀)
-	int m_startScreenHeight;	//화면의 시작(세로 픽셀)
-	int m_endScreenWidth;		//화면의 끝(가로 픽셀)
-	int m_endScreenHeight;		//화면의 끝(세로 픽셀)
+	HWND mHWnd;				//핸들 윈도우
+	int mStartScreenWidth;		//화면의 시작(가로 픽셀)
+	int mStartScreenHeight;		//화면의 시작(세로 픽셀)
+	int mEndScreenWidth;		//화면의 끝(가로 픽셀)
+	int mEndScreenHeight;		//화면의 끝(세로 픽셀)
 
-	int m_ScreenWidth;
-	int m_ScreenHeight;
+	int mScreenWidth;
+	int mScreenHeight;
 
 	///D3D에서 쓸 기본적인 변수들
 public:
-	ComPtr<ID3D11Device> m_pDevice;										//디바이스
-	ComPtr<ID3D11DeviceContext> m_pDeviceContext;						//디바이스 컨텍스트
+	ComPtr<ID3D11Device> mpDevice;										//디바이스
+	ComPtr<ID3D11DeviceContext> mpDeviceContext;						//디바이스 컨텍스트
+
 
 	ComPtr<IDXGISwapChain> mpSwapChain;									//스왑체인
 
-	ComPtr<ID3D11RenderTargetView> m_pRenderTargetView;					//렌더링 타겟뷰  //디퍼드 렌더링 시 2개 이상 필요
-	ComPtr<ID3D11RenderTargetView> m_pTempRednerTargetview;				// 실험용 렌더타겟
-	
-	D3D11_VIEWPORT m_pD3dScreenViewport;								// 뷰 포트 공간을 정의하는 구조체
-	D3D11_VIEWPORT m_pD3dtempViewport;									// 실험용 뷰 포트 공간
+	ComPtr<ID3D11Texture2D> mpBackBuffer;								//백버퍼, 메인렌더타겟
+	ComPtr<ID3D11ShaderResourceView> mpMainRenderTargetSRV;				//메인렌더타겟(버퍼)의 SRV
+	ComPtr<ID3D11RenderTargetView> mpRenderTargetView;					//렌더링 타겟뷰  //디퍼드 렌더링 시 2개 이상 필요
+
+	ComPtr<ID3D11Texture2D> mpTempBuffer;								//실험용 버퍼
+	ComPtr<ID3D11ShaderResourceView> mpTempTargetSRV;					//실험용 버퍼의 SRV
+	ComPtr<ID3D11RenderTargetView> mpTempTargetView;					//실험용 버퍼의 렌더타겟
+
+	D3D11_VIEWPORT mD3dScreenViewport;								// 뷰 포트 공간을 정의하는 구조체
+	D3D11_VIEWPORT mD3dtempViewport;									// 실험용 뷰 포트 공간
 	
 	ComPtr<ID3D11DepthStencilView> mpDepthStencilView;					// 깊이 버퍼 스텐실 뷰
 	
-	UINT m_numQualityLevels;
+	UINT mNumQualityLevels;
 
 	ComPtr<ID3D11ShaderResourceView> mpCubeMapDiffuseResourceView;
 	ComPtr<ID3D11ShaderResourceView> mpCubeMapSpecularResourceView;
 
 	
 public:
-	GraphicsResourceManager* m_pResourceManager;
-	RendererHelper* m_pRenderHelper;
+	GraphicsResourceManager* mpResourceManager;
+	RendererHelper* mpRenderHelper;
 	Camera* mpTargetCamera;
 
 	// Depth buffer 관련
-	//ComPtr<ID3D11RenderTargetView> m_resolvedRTV;					//뎁스맵에서 사용하는 척하는 렌더링 타겟뷰
-	//ComPtr<ID3D11Texture2D> m_depthOnlyBuffer;  // No MSAA
-	ComPtr<ID3D11DepthStencilView> m_depthOnlyDSV; // No MSAA
-	//ComPtr<ID3D11DepthStencilView> m_depthStencilView; // use MSAA
-	ComPtr<ID3D11ShaderResourceView> m_depthOnlySRV;
+	//ComPtr<ID3D11RenderTargetView> mpResolvedRTV;					//뎁스맵에서 사용하는 척하는 렌더링 타겟뷰
+	//ComPtr<ID3D11Texture2D> mpDepthOnlyBuffer;  // No MSAA
+	ComPtr<ID3D11DepthStencilView> mpDepthOnlyDSV; // No MSAA
+	//ComPtr<ID3D11DepthStencilView> mpDepthStencilView; // use MSAA
+	ComPtr<ID3D11ShaderResourceView> mpDepthOnlySRV;
 
 	ComPtr<ID3D11Buffer> mpCommonConstantBuffer;
 
@@ -99,6 +105,8 @@ public:
 	void RenderEquipDepthMap(ModelBuffer* _modelbuffer);
 
 	void RenderEdge(ModelBuffer* _modelbuffer);
+	void RenderSampler(ModelBuffer* _modelbuffer);
+	void RenderPostProcessing(ModelBuffer* _modelbuffer);
 
 	void Rend_InstancedModels(ModelBuffer* _modelBuffers);
 
@@ -106,16 +114,8 @@ private:
 	bool InitalizeD3D();
 
 public:
-
-
-	// 뭔지 모르겠는 index...?
-	unsigned int objectIndex = 0;
-
-	// 임시 메쉬
-
-	//m_pDevice를 보내는 임시함수
-	ComPtr<ID3D11Device> GetDevice() const { return m_pDevice; }
-	
+	//mpDevice를 보내는 임시함수
+	ComPtr<ID3D11Device> GetDevice() const { return mpDevice; }
 };
 
 
