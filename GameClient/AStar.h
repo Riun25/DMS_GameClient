@@ -1,5 +1,5 @@
 #pragma once
-#pragma once
+#include <unordered_set>
 #include <directxTk/SimpleMath.h>
 #include <queue>
 #include <iostream>
@@ -87,6 +87,9 @@ private:
 
 	// 가장 기본적인 형태의 Astar 경로 반환 함수다.(A* 알고리즘 구현)
 	std::vector<Vector2>* BasicAstar(Vector2& _startPoint, Vector2& _goalPoint, const std::vector<Vector2>& obstacles, const Vector2& _mapStart, const Vector2& _mapEnd);
+
+	// 수정 중인 A* 경로 반환 함수
+	std::vector<Vector2>* ModifyAstar(Vector2& _startPoint, Vector2& _goalPoint, const std::vector<Vector2>& obstacles, const Vector2& _mapStart, const Vector2& _mapEnd);
 
 	// 클릭 위치가 사용가능한지 확인하기 위한 Astar맵
 	//std::vector<std::vector<int>>* mAstarMap;
