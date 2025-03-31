@@ -1,6 +1,4 @@
 #pragma once
-#include <any>
-#include <optional>
 #include <functional>
 #include <unordered_map>
 #include <string>
@@ -13,7 +11,7 @@
 #include "ProjectileComponent.h"
 #include "Transform.h"
 
-/// FSMÀÇ State¸¦ º¯°æÇÏ±â À§ÇÑ ÇÔ¼ö¸¦ °ü¸®ÇÏ´Â Å¬·¡½º
+/// FSMì˜ Stateë¥¼ ë³€ê²½í•˜ê¸° ìœ„í•œ í•¨ìˆ˜ë¥¼ ê´€ë¦¬í•˜ëŠ” í´ë˜ìŠ¤
 class CustomFunctions
 {
 public:
@@ -22,6 +20,6 @@ public:
 
 public:
 	float mTileScale = 1.0f;
-	std::unordered_map<std::string, std::function<bool(std::shared_ptr<Entity> _temp)>> mFuncMap; // ÇÔ¼ö¸¦ ´ã´Â ±×¸©ÀÌ´Ù. ÀÌ°ÍÀº ÃÖÁ¾ÀûÀ¸·Î ¾Æ¿¹ ¹Ù±ùÀ¸·Î ºüÁ®¼­ µ¹·Á¾µ °¡´É¼ºÀÌ ÀÖ´Ù.
+	std::unordered_map<std::string, std::function<bool(std::shared_ptr<Entity> _temp)>> mFuncMap; // í•¨ìˆ˜ë¥¼ ë‹´ëŠ” ê·¸ë¦‡ì´ë‹¤. ì´ê²ƒì€ ìµœì¢…ì ìœ¼ë¡œ ì•„ì˜ˆ ë°”ê¹¥ìœ¼ë¡œ ë¹ ì ¸ì„œ ëŒë ¤ì“¸ ê°€ëŠ¥ì„±ì´ ìˆë‹¤.
 };
 
